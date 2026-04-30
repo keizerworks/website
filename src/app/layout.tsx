@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import type { ReactNode } from "react";
-import Navbar from "~/components/ui/navbar";
 import { dmMono, spaceGrotesk } from "~/config/font";
-import FooterSection from "~/components/footer";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -14,17 +12,17 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_BASE_URL || "https://keizerworks.com",
   ),
-  title: "Keizer - Build. Grow. Connect.",
+  title: "Keizer - Invest In Future",
   description:
-    "Unleashing Creativity Across Digital Platforms. From stunning websites to immersive games and software solutions, we bring your vision to life with cutting-edge design and development.",
+    "We build with founders working on what matters. AI, Web3, mobile, scalable systems. Equity or fixed-price.",
   keywords: [
-    "web development",
-    "game development",
-    "motion graphics",
-    "digital agency",
-    "creative studio",
-    "design",
-    "development",
+    "startup studio",
+    "product engineering",
+    "AI development",
+    "Web3",
+    "mobile apps",
+    "MVP development",
+    "equity investment",
   ],
   authors: [{ name: "Keizer" }],
   creator: "Keizer",
@@ -33,29 +31,29 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://keizerworks.com",
-    title: "KeizerWorks - Build. Grow. Connect",
-    description: "Unleashing Creativity Across Digital Platforms",
+    title: "Keizer - Invest In Future",
+    description: "We build with founders working on what matters. Equity or fixed-price.",
     siteName: "Keizer",
     images: [
       {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Keizer Works",
+        alt: "Keizer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Keizer Works — BUILD | GROW | CONNECT",
-    description: "Unleashing Creativity Across Digital Platforms",
-    creator: "@keizer",
+    title: "Keizer - Invest In Future",
+    description: "We build with founders working on what matters. Equity or fixed-price.",
+    creator: "@keizerHq",
     images: [
       {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Keizer Works",
+        alt: "Keizer",
       },
     ],
   },
