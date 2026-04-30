@@ -59,28 +59,16 @@ const ProjectSection = () => {
       <div className="md:p-[100px] px-[24px] py-[60px] mx-auto max-w-[1536px] ">
         <div className=" tracking-[-1%] flex md:flex-row flex-col justify-between md:items-center">
           <div className="font-gb">
-            <p className="uppercase text-[16px] pb-[10px] font-semibold">
-              Our clients
-            </p>
-
-            <h2 className="md:text-[54px] tracking-tigh text-[32px] font-bold leading-[100%]">
-              We’re going to <br className="md:inline-block hidden" />
-              be partners <br className="md:inline-block hidden" />
-              for the long run.
+            <h2 className="md:text-[54px] tracking-tight text-[32px] font-bold leading-[100%]">
+              The portfolio.
             </h2>
           </div>
 
           <div className="md:w-[640px] font-sg w-full md:text-[20px] mt-[24px] md:leading-[24px] leading-[18px] md:mt-0 text-[15px]">
             <p>
-              Through innovative design and technology, we&nbsp;
-              <span className="font-bold">
-                deliver exceptional solutions{" "}
-              </span>{" "}
-              tailored to
-              <span className="font-bold">
-                &nbsp;create impactful experiences
-              </span>{" "}
-              that last a lifetime.
+              Our clients raised millions. Some shipped.
+              <br />
+              Some pivoted. All are still building.
             </p>
           </div>
         </div>

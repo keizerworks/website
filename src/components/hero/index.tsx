@@ -54,7 +54,6 @@ const AnimatedText = ({ text, delay = 0 }: AnimatedTextProps) => {
 
 const HeroSection = () => {
   const firstLineDelay = 0;
-  const secondLineDelay = 0.5;
   const firstLoadDelay = 2.4;
 
   const [allowUnderlineAnimation, setAllowUnderlineAnimation] =
@@ -66,7 +65,6 @@ const HeroSection = () => {
   const labelDelay = underlineDelay + 0.3;
 
   const visionControls = useAnimation();
-  const missionControls = useAnimation();
   const cursorPositionY = useMotionValue(60);
 
   useEffect(() => {
@@ -98,38 +96,12 @@ const HeroSection = () => {
     >
       <div className="font-gb relative text-white w-full">
         <h1
-          className="flex flex-col gap-2 items-start lg:text-8xl md:text-6xl text-5xl  leading-[1.2] relative"
-          onMouseEnter={async () => {
-            if (!allowUnderlineAnimation) return;
-            cursorPositionY.set(180);
-            await visionControls.start({
-              width: 0,
-              transition: { duration: 0.15 },
-            });
-            await missionControls.start({
-              width: "100%",
-              opacity: 1,
-              transition: { duration: 0.15 },
-            });
-          }}
-          onMouseLeave={async () => {
-            if (!allowUnderlineAnimation) return;
-            cursorPositionY.set(60);
-            await missionControls.start({
-              width: 0,
-              transition: { duration: 0.15 },
-            });
-            await visionControls.start({
-              width: "100%",
-              opacity: 1,
-              transition: { duration: 0.15 },
-            });
-          }}
+          className="flex flex-col gap-2 items-start lg:text-8xl md:text-6xl text-5xl leading-[1.2] relative"
         >
           <span>
-            <AnimatedText text="Your" delay={firstLineDelay} />{" "}
+            <AnimatedText text="Invest in" delay={firstLineDelay} />{" "}
             <span className="inline-block relative">
-              <AnimatedText text="Vision" delay={firstLineDelay + 0.2} />
+              <AnimatedText text="future tech." delay={firstLineDelay + 0.4} />
               <motion.span
                 className="absolute translate-y-1 inline-block left-0 bottom-0 bg-[#ff66ff] h-2"
                 initial={{ width: 0, opacity: 0 }}
@@ -140,21 +112,6 @@ const HeroSection = () => {
                 }}
               />
               <FloatingLabelNormal />
-            </span>
-          </span>
-          <span>
-            <AnimatedText text="Our " delay={secondLineDelay} />
-            <span className="inline-block relative">
-              <AnimatedText text="Mission" delay={secondLineDelay + 0.2} />
-              <motion.span
-                className="absolute translate-y-1 inline-block left-0 bottom-0 bg-[#ff66ff] h-2"
-                initial={{ width: 0, opacity: 0 }}
-                animate={missionControls}
-                transition={{
-                  duration: 0.15,
-                  ease: "easeOut",
-                }}
-              />
             </span>
           </span>
 
@@ -176,9 +133,9 @@ const HeroSection = () => {
           }}
           className="font-sg font-medium md:text-lg text-sm mt-8"
         >
-          We are the trusted partner for startups and businesses, offering{" "}
+          Keizerworks is a studio. We build with founders working on what matters.
           <br className="md:inline-block hidden" />
-          innovative solutions that turn your ideas into impactful realities
+          Equity (5–7%) or fixed price. Depends on the stage.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -223,7 +180,7 @@ const HeroSection = () => {
             href="#contact"
             className="relative inline-block transition-all  duration-300 z-20 group-active:-translate-x-1 group-active:translate-y-1"
           >
-            Request a Demo
+            Let's talk
           </a>
         </motion.button>
       </div>
