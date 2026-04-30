@@ -13,7 +13,7 @@ const formSchema = z.object({
   company: z.string().min(3, "Company is required"),
   project: z
     .string()
-    .min(40, "Please provide project description above 50 characters"),
+    .min(15, "Please provide project description above 15 characters"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -25,6 +25,8 @@ const ContactForm: React.FC = () => {
     company: "",
     project: "",
   });
+  const [honeypot, setHoneypot] = useState("");
+  const [formLoadTime] = useState(() => Date.now());
   const [sendingEmail, setSendingEmail] = useState<boolean>(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [submitStatus, setSubmitStatus] = useState<{
@@ -84,7 +86,11 @@ const ContactForm: React.FC = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            ...formData,
+            website: honeypot,
+            _timestamp: formLoadTime,
+          }),
         });
 
         const result = await response.json();
@@ -121,6 +127,19 @@ const ContactForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
+      {/* Honeypot field - hidden from users, traps bots */}
+      <div className="absolute -left-[9999px] opacity-0" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input
+          type="text"
+          id="website"
+          name="website"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       <div className="mb-6">
         <input
           name="name"
