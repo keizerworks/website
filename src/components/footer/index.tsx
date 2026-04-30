@@ -32,10 +32,9 @@ const FooterSection = () => {
               width={175}
               height={79.82}
               alt="keizer-brand-logo"
-              className="md:translate-x-0 translate-x-[-15px]"
             />
-            <p className="max-w-[350px] text-neutral-400 mt-4">
-              Empowering Visionaries, Scaling Ambitions.
+            <p className="max-w-[350px] text-neutral-400 mt-4 ml-2">
+              Invest in future.
             </p>
           </div>
 

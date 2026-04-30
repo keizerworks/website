@@ -1,22 +1,22 @@
 [
   {
     "question": "What does an MVP include?",
-    "answer": "Our MVPs are designed to help you launch quickly and effectively. They include full-stack development services, starting from a custom design and front-end prototype to a fully functional, customer-ready product. We focus on building scalable, high-quality solutions tailored to your business goals. This ensures your product is ready to test in the market with core features while leaving room for future enhancements."
+    "answer": "Whatever ships. We don't sell scope, we sell outcomes. You get a working product, not a deck of features."
   },
   {
     "question": "What are the intellectual property rights?",
-    "answer": "At Keizer, we believe in empowering our clients. All intellectual property created during the project, including designs, code, and documentation, will belong to you upon completion of the project and final payment. We provide all the necessary files and access to ensure you have full control over your product without any restrictions or hidden terms."
+    "answer": "You own everything we build for you. We hold equity if that's the deal. Otherwise, the code and IP are yours, full stop."
   },
   {
     "question": "How do we communicate during the project?",
-    "answer": "We ensure seamless communication throughout the project to keep you informed and involved. Our process includes regular updates, milestone reviews, and dedicated points of contact for any queries or feedback. We typically use tools like email, video calls, and project management platforms to ensure transparency and timely updates. Your input is integral to achieving the best results, and we make collaboration a priority."
+    "answer": "Async-first. Slack or Discord. Daily updates. Weekly syncs. No status meetings nobody needs."
   },
   {
     "question": "What if I need more features than the MVP includes?",
-    "answer": "We understand that businesses evolve and so do their needs. If you require more features beyond the MVP scope, we are happy to accommodate them. We work closely with you to plan and prioritize additional features, ensuring they align with your business objectives. This flexibility allows us to scale your product as your startup grows, without compromising on quality or timelines."
+    "answer": "We add them. Either as a new sprint or as an extension of the equity deal. Whatever makes sense."
   },
   {
     "question": "What if I'm not satisfied with the product?",
-    "answer": "Your satisfaction is our top priority. Throughout the development process, we incorporate your feedback and provide revisions to ensure the product meets your expectations. In the unlikely event that you’re not satisfied with the final delivery, we are open to discussing adjustments or providing partial refunds in accordance with our policy. Our goal is to deliver a product that truly adds value to your business."
+    "answer": "Then we didn't do our job. Tell us, we fix it. We're not here to ship and ghost."
   }
 ]

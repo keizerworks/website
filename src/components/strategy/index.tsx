@@ -1,56 +1,27 @@
-import Link from "next/link";
-import { Button } from "../ui/button";
-import { ArrowRight } from "lucide-react";
+
 import StrategyCard from "./strategy-card";
 
 const strategies = [
   {
     number: "1",
     label: "BUILD",
-    title: "End-to-End Application Development",
+    title: "Full-stack product engineering.",
     description:
-      "From concept to launch, we build high-quality full-stack applications tailored to your startup's needs.",
-    linkHref: "/application-development",
+      "Web. Desktop. iOS. Android. AI agents. Simulation engines. Complex systems most teams say no to.",
   },
   {
     number: "2",
-    label: "GROW",
-    title: "Marketing & Growth Strategy",
+    label: "DESIGN",
+    title: "Brand, product, and UX.",
     description:
-      "Leverage branding, SEO, and user acquisition strategies to expand your reach and maximize engagement.",
-    linkHref: "/marketing-strategy",
+      "Identity systems, product UI, motion, and the small details that make the difference between \"made by an agency\" and \"made by people who care.\"",
   },
   {
     number: "3",
-    label: "CONNECT",
-    title: "Funding & Investor Network",
+    label: "BACK",
+    title: "Equity or fixed-price.",
     description:
-      "Gain access to venture capitalists and investors to secure the financial boost your startup needs.",
-    linkHref: "/funding-support",
-  },
-  {
-    number: "4",
-    label: "PRODUCT DESIGN",
-    title: "User Experience & Interface Design",
-    description:
-      "Create intuitive, engaging user experiences that enhance usability and increase conversion rates.",
-    linkHref: "/ux-ui-design",
-  },
-  {
-    number: "5",
-    label: "TECH INNOVATION",
-    title: "Scalable Software Architecture",
-    description:
-      "Develop robust, scalable systems to support your startup's growth and evolving business needs.",
-    linkHref: "/software-architecture",
-  },
-  {
-    number: "6",
-    label: "SMART SOLUTIONS",
-    title: "AI & Machine Learning Integration",
-    description:
-      "Enhance decision-making and automate processes with AI-powered solutions tailored to your business.",
-    linkHref: "/ai-ml-integration",
+      "We pick founders we believe in. We take equity (5-7%) when it's the right bet. Fixed-price when it isn't. Always honest about which.",
   },
 ];
 
@@ -82,15 +53,19 @@ const StrategySection = () => {
               Keizer Works
             </p>
 
-            <h2 className="md:text-[50px] w-fit font-gb text-nowrap text-[32px] mt-[24px] font-bold leading-tight">
-              Empowering startups &nbsp;
-              <br className="md:block hidden" />
-              to build, grow, &nbsp;
-              <br className="md:block hidden" />
-              and connect with &nbsp;
-              <br className="md:block hidden" />
-              the right resources.&nbsp;
+            <h2 className="md:text-[50px] w-fit font-gb text-[32px] font-bold leading-tight">
+              We build what most
+              <br />
+              studios won't touch.
             </h2>
+
+            <p className="font-sg text-[15px] md:text-[18px] mt-6 text-white/80 leading-relaxed">
+              Desktop, web, mobile, AI, simulation engines.
+              <br />
+              If it's complex, new, or hasn't been built yet
+              <br />
+              that's where we come in.
+            </p>
           </div>
 
           <button className="font-sg translate-x-1 mt-8 group relative text-black font-semibold px-4 text-lg py-2">
@@ -100,13 +75,13 @@ const StrategySection = () => {
               href="#contact"
               className="relative inline-block transition-all  duration-300 z-20 group-active:-translate-x-1 group-active:translate-y-1"
             >
-              Contact now
+              Let's talk
             </a>
           </button>
         </div>
 
-        <div className="lg:w-[600px] flex-1 flex-shrink-0 lg:pt-[0px] pt-[50px] w-full ">
-          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-[60px] gap-[30px] w-fit  ">
+        <div className="lg:w-[500px] flex-1 flex-shrink-0 lg:pt-[0px] pt-[50px] w-full lg:ml-auto">
+          <div className="flex flex-col gap-[40px]">
             {strategies.map((strategy, index) => (
               <StrategyCard
                 key={index}

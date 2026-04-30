@@ -30,12 +30,25 @@ const AboutSection = () => {
           alt="keizer-grid"
         />
 
-        <div className="xl:mt-[80px] md:w-1/3 relative z-40 mt-[33px] md:text-[20px] text-[15px]">
+        <div className="xl:mt-[80px] md:w-1/3 relative z-40 mt-[33px] md:text-[16px] text-[14px] space-y-4 text-white/80">
           <p>
-            We help your startup grow by leveraging smart marketing strategies
-            designed to reach the right audience and scale effectively. From
-            branding to performance marketing, we ensure that your product gains
-            the visibility and traction it deserves.
+            Startups fail when the build is slow, the design is off, the team is stretched. Most studios make it worse.
+          </p>
+          <p className="font-semibold text-white">We fix that.</p>
+          <p>
+            Early involvement. Fast shipping. Equity when it matters.
+          </p>
+          <p>
+            Built by{" "}
+            <a
+              href="https://x.com/rahulsainlll"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-white hover:text-[#ff66ff] transition-colors"
+            >
+              Rahul Sain
+            </a>
+            .
           </p>
         </div>
       </div>

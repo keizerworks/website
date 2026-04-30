@@ -5,7 +5,7 @@ import {
   useMotionValue,
   useSpring,
   useAnimation,
-  MotionValue,
+  type MotionValue,
 } from "motion/react";
 import { useEffect, useState } from "react";
 import CursorIcon from "../assets/cursor-icon";
