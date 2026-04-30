@@ -10,8 +10,12 @@ const ContactFormSchema = z.object({
   project: z
     .string()
     .trim()
-    .min(50, "Project description must be at least 50 characters"),
+    .min(15, "Project description must be at least 15 characters"),
+  website: z.string().optional(), // Honeypot field
+  _timestamp: z.number().optional(), // Form load timestamp
 });
+
+const MIN_SUBMIT_TIME_MS = 3000; // Minimum 3 seconds to fill form
 
 const rateLimiter = new RateLimiterMemory({
   points: 3,
@@ -32,7 +36,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ errors: errorMessages }, { status: 400 });
     }
 
-    const { name, email, company, project } = result.data;
+    const { name, email, company, project, website, _timestamp } = result.data;
+
+    // Spam check 1: Honeypot - if filled, it's a bot
+    if (website && website.length > 0) {
+      // Return fake success to not alert the bot
+      return NextResponse.json(
+        { message: "Project inquiry sent successfully" },
+        { status: 200 },
+      );
+    }
+
+    // Spam check 2: Time-based - if submitted too fast, it's a bot
+    if (_timestamp) {
+      const timeTaken = Date.now() - _timestamp;
+      if (timeTaken < MIN_SUBMIT_TIME_MS) {
+        return NextResponse.json(
+          { error: "Please take your time filling the form" },
+          { status: 400 },
+        );
+      }
+    }
 
     const transporter = nodemailer.createTransport({
       service: "gmail",

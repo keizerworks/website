@@ -118,7 +118,7 @@ export default function Component() {
         <div className="text-center mb-4 leading-tight">
           <p className="text-[14px] md:text-[16px] font-semibold text-gray-600 mb-4">Inviting you to join keizer</p>
           <h1 className="text-[28px] md:text-[40px] font-bold mb-4">
-            Summer 2025
+            Summer 2026
             <br />
             <span className="font-semibold text-[28px] md:text-[40px]">APPLICATIONS</span>
             <br />
