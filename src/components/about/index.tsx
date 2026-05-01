@@ -4,7 +4,7 @@ const AboutSection = () => {
       <div className="max-w-[1536px] flex flex-col xl:gap-0 mx-auto relative md:p-[100px] px-[24px] py-[60px]">
         <header className="w-full relative">
           <span className="text-[15px] uppercase">About us</span>
-          <h2 className="relative font-gb capitalize sm:pt-[0px] pt-[10px] lg:text-[96px] z-50 md:text-[70px] text-[45px] lg:leading-[100px] md:leading-[80px] leading-[50px] font-bold  ">
+          <h2 className="relative font-gb capitalize sm:pt-[0px] pt-[10px] z-50 font-bold text-[clamp(1.5rem,5vw,5rem)] leading-[1.1] xl:max-w-[55%]">
             <span className="relative z-10">
               We save <br />
               businesses <br /> from ineffective <br /> & ugly designs.
