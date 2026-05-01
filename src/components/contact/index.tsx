@@ -24,7 +24,7 @@ const ContactSection = () => {
         <div className="w-full h-[1px] bg-white" />
 
         <p className="max-w-[716px]">
-          Get your MVP to market—fast. We help startups build, scale, and launch
+          Get your product to market fast. We help startups build, scale, and launch
           with the right strategy, resources, and execution.
         </p>
         <ContactForm />

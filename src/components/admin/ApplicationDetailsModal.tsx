@@ -1,7 +1,7 @@
 'use client'
 
 import { Download, Mail, Github, ExternalLink, User, Calendar, School, FileText } from 'lucide-react'
-import { type Application } from '~/lib/supabase'
+import type { Application } from '~/lib/supabase'
 import { getResumeUrl } from '~/lib/applicationService'
 import Modal from '~/components/ui/modal'
 

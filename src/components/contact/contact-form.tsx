@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { z } from "zod";
 import { AnimatePresence, motion } from "motion/react";
-import { Button } from "../ui/button";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),

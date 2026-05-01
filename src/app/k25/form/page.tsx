@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import type React from "react";
+import { useState, useRef } from "react";
 import { Upload, FileText, Github, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { submitApplication, type FormData as ApplicationFormData } from "../../../lib/applicationService";
