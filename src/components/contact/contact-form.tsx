@@ -23,6 +23,8 @@ const ContactForm: React.FC = () => {
     email: "",
     company: "",
     project: "",
+    earlyMarketValidation: false,
+    earlyUserTalks: false,
   });
   const [honeypot, setHoneypot] = useState("");
   const [formLoadTime] = useState(() => Date.now());
@@ -36,8 +38,11 @@ const ContactForm: React.FC = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, type, value } = e.target;
+    const nextValue =
+      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+
+    setFormData((prev) => ({ ...prev, [name]: nextValue }));
   };
 
   useEffect(() => {
@@ -100,6 +105,8 @@ const ContactForm: React.FC = () => {
             email: "",
             company: "",
             project: "",
+            earlyMarketValidation: false,
+            earlyUserTalks: false,
           });
           setSubmitStatus({
             message: result.message || "Message sent successfully!",
@@ -147,10 +154,10 @@ const ContactForm: React.FC = () => {
           type="text"
           placeholder="Enter your name"
           disabled={sendingEmail}
-          className="w-full md:py-[30px] py-[20px] placeholder:text-white/50 bg-transparent border-b border-white text-white placeholder-white focus:outline-none"
+          className="w-full md:py-[30px] py-[20px] bg-transparent border-b border-[#111111] text-[#07070A] placeholder:text-[#11111166] focus:outline-none"
         />
         {errors.name && (
-          <p className="text-white text-sm flex items-center gap-3 pt-2  mt-1">
+          <p className="text-red-600 text-sm flex items-center gap-3 pt-2  mt-1">
             <span className="h-[10px] aspect-square rounded-full bg-red-500 w-[10px] inline-block"></span>
             {errors.name}
           </p>
@@ -164,10 +171,10 @@ const ContactForm: React.FC = () => {
           type="email"
           placeholder="Enter your email"
           disabled={sendingEmail}
-          className="w-full md:py-[30px] py-[20px] bg-transparent border-b placeholder:text-white/50 border-white text-white placeholder-white focus:outline-none"
+          className="w-full md:py-[30px] py-[20px] bg-transparent border-b border-[#111111] text-[#07070A] placeholder:text-[#11111166] focus:outline-none"
         />
         {errors.email && (
-          <p className="text-white text-sm  flex items-center gap-3 pt-2 mt-1">
+          <p className="text-red-600 text-sm  flex items-center gap-3 pt-2 mt-1">
             <span className="h-[10px] aspect-square rounded-full bg-red-500 w-[10px] inline-block"></span>
             {errors.email}
           </p>
@@ -179,12 +186,12 @@ const ContactForm: React.FC = () => {
           onChange={handleChange}
           value={formData.company}
           type="text"
-          placeholder="Enter your company name"
+          placeholder="Company name"
           disabled={sendingEmail}
-          className="w-full md:py-[30px] py-[20px] bg-transparent border-b placeholder:text-white/50 border-white text-white placeholder-white focus:outline-none"
+          className="w-full md:py-[30px] py-[20px] bg-transparent border-b border-[#111111] text-[#07070A] placeholder:text-[#11111166] focus:outline-none"
         />
         {errors.company && (
-          <p className="text-white text-sm  flex items-center gap-3 pt-2 mt-1">
+          <p className="text-red-600 text-sm  flex items-center gap-3 pt-2 mt-1">
             <span className="h-[10px] aspect-square rounded-full bg-red-500 w-[10px] inline-block"></span>
             {errors.company}
           </p>
@@ -195,18 +202,55 @@ const ContactForm: React.FC = () => {
           name="project"
           onChange={handleChange}
           value={formData.project}
-          placeholder="Enter your project name"
+          placeholder="Describe your idea"
           rows={1}
           disabled={sendingEmail}
-          className="w-full md:py-[30px] py-[20px] pr-[20px] bg-transparent border-b placeholder:text-white/50 border-white text-white placeholder-white focus:outline-none"
+          className="w-full md:py-[30px] py-[20px] pr-[20px] bg-transparent border-b border-[#111111] text-[#07070A] placeholder:text-[#11111166] focus:outline-none"
         />
         {errors.project && (
-          <p className="text-white text-sm flex items-center gap-3 pt-2  mt-1">
+          <p className="text-red-600 text-sm flex items-center gap-3 pt-2  mt-1">
             <span className="h-[10px] aspect-square rounded-full bg-red-500 w-[10px] inline-block"></span>
             {errors.project}
           </p>
         )}
       </div>
+      {/* <div className="mt-8 mb-2 space-y-4 font-sg text-sm md:text-base">
+        <label className="flex items-start gap-3 text-[#07070A]">
+          <input
+            name="earlyMarketValidation"
+            type="checkbox"
+            checked={formData.earlyMarketValidation}
+            onChange={handleChange}
+            disabled={sendingEmail}
+            className="mt-1 h-4 w-4 shrink-0 accent-[#2D2DC3]"
+          />
+          <span>Yes, we have early market validation.</span>
+        </label>
+        {errors.earlyMarketValidation && (
+          <p className="text-red-600 text-sm flex items-center gap-3">
+            <span className="h-[10px] aspect-square rounded-full bg-red-500 w-[10px] inline-block"></span>
+            {errors.earlyMarketValidation}
+          </p>
+        )}
+
+        <label className="flex items-start gap-3 text-[#07070A]">
+          <input
+            name="earlyUserTalks"
+            type="checkbox"
+            checked={formData.earlyUserTalks}
+            onChange={handleChange}
+            disabled={sendingEmail}
+            className="mt-1 h-4 w-4 shrink-0 accent-[#2D2DC3]"
+          />
+          <span>Yes, we have talked to early users.</span>
+        </label>
+        {errors.earlyUserTalks && (
+          <p className="text-red-600 text-sm flex items-center gap-3">
+            <span className="h-[10px] aspect-square rounded-full bg-red-500 w-[10px] inline-block"></span>
+            {errors.earlyUserTalks}
+          </p>
+        )}
+      </div> */}
       {submitStatus && (
         <div
           className={`
@@ -227,9 +271,9 @@ const ContactForm: React.FC = () => {
         disabled={sendingEmail}
         className="font-sg translate-x-1 font-medium mt-8 group relative text-white px-4 text-lg py-2"
       >
-        <div className="absolute -bottom-1 -left-1 w-full h-full bg-white z-0"></div>
-        <div className="absolute group-active:translate-y-1 group-active:-translate-x-1 transition-all inset-0 bg-black z-10"></div>
-        <div className="flex items-center text-neutral-300">
+        <div className="absolute -bottom-1 -left-1 w-full h-full bg-black z-0"></div>
+        <div className="absolute group-active:translate-y-1 group-active:-translate-x-1 transition-all inset-0 bg-[#2D2DC3] z-10"></div>
+        <div className="flex items-center text-white">
           <span className="relative inline-block transition-all  duration-300 z-20 group-active:-translate-x-1 group-active:translate-y-1">
             {sendingEmail ? "Sending" : "Send"}
           </span>

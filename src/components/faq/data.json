@@ -1,22 +1,26 @@
 [
   {
-    "question": "What does an MVP include?",
-    "answer": "Whatever ships. We don't sell scope, we sell outcomes. You get a working product, not a deck of features."
+    "question": "What is the entry requirement to work with KZR?",
+    "answer": "Two LOIs from real users or real organizations. We partner with founders who already have market signal, not idea-stage projects. If you have two signed letters of intent, we are ready to talk."
   },
   {
-    "question": "What are the intellectual property rights?",
-    "answer": "You own everything we build for you. We hold equity if that's the deal. Otherwise, the code and IP are yours, full stop."
+    "question": "What exactly does KZR own once we partner?",
+    "answer": "The entire technical function of your company. Product strategy and roadmap, engineering hiring and management, architecture and infrastructure, brand and design, marketing execution, and internal operations. You focus on distribution and customer relationships. We own everything else."
   },
   {
-    "question": "How do we communicate during the project?",
-    "answer": "Async-first. Slack or Discord. Daily updates. Weekly syncs. No status meetings nobody needs."
+    "question": "How is KZR different from hiring a CTO or using an agency?",
+    "answer": "An agency delivers work; they do not own outcomes. A CTO hire takes months to find and rarely has full-stack coverage across engineering, design, and ops. KZR comes in as a complete technical co-founding team: equity-aligned, long-term, and accountable for the entire technical operation from day one."
   },
   {
-    "question": "What if I need more features than the MVP includes?",
-    "answer": "We add them. Either as a new sprint or as an extension of the equity deal. Whatever makes sense."
+    "question": "What does the deal look like?",
+    "answer": "An equity stake between 3 and 7 percent, plus a base retainer that covers the full technical operation. One number. No separate billing for design, no overages for hiring, no scope-creep invoices. The retainer is the deal."
   },
   {
-    "question": "What if I'm not satisfied with the product?",
-    "answer": "Then we didn't do our job. Tell us, we fix it. We're not here to ship and ghost."
+    "question": "How long does the partnership last?",
+    "answer": "We are long-term partners. We do not take on engagements we are not prepared to fully commit to. We stick with you until you make it."
+  },
+  {
+    "question": "Who owns the intellectual property?",
+    "answer": "All IP belongs to you once the product reaches 1,000 active users. We are here to build things that reach people. If the product does not get to market, the IP stays with KZR. This is not a clause buried in fine print; it is the standard we hold every engagement to. We build to distribute, not to sit on shelves."
   }
 ]

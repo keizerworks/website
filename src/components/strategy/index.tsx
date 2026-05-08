@@ -40,7 +40,7 @@ const StrategySection = () => {
         }}
       />
 
-      <div className="max-w-[1536px] relative mx-auto md:px-[100px] px-[24px] md:py-[150px] gap-[50px] py-[60px] grid-cols-1 grid md:grid-cols-2">
+      <div className="max-w-[1536px] relative mx-auto md:px-24 px-4 md:py-[150px] gap-[50px] py-[60px] grid-cols-1 grid md:grid-cols-2">
         <img
           className="absolute z-[0] top-[68%] lg:block hidden left-[118px] scale-[1.05] -translate-y-1/2 "
           src="/assets/decoration/decoration-text.svg"

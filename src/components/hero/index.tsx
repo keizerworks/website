@@ -99,10 +99,10 @@ const HeroSection = () => {
           className="flex flex-col gap-2 items-start lg:text-7xl md:text-5xl text-4xl leading-[1.2] relative"
         >
           <span>
-            <AnimatedText text="Always make" delay={firstLineDelay} />{" "}
+            <AnimatedText text="Your human" delay={firstLineDelay} />{" "}
             <span className="inline-block relative">
               <AnimatedText
-                text="noticeable difference."
+                text="founding team."
                 delay={firstLineDelay + 0.4}
               />
               <motion.span
