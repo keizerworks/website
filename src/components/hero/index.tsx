@@ -96,12 +96,15 @@ const HeroSection = () => {
     >
       <div className="font-gb relative text-white w-full">
         <h1
-          className="flex flex-col gap-2 items-start lg:text-8xl md:text-6xl text-5xl leading-[1.2] relative"
+          className="flex flex-col gap-2 items-start lg:text-7xl md:text-5xl text-4xl leading-[1.2] relative"
         >
           <span>
-            <AnimatedText text="Invest in" delay={firstLineDelay} />{" "}
+            <AnimatedText text="Always make" delay={firstLineDelay} />{" "}
             <span className="inline-block relative">
-              <AnimatedText text="future tech." delay={firstLineDelay + 0.4} />
+              <AnimatedText
+                text="noticeable difference."
+                delay={firstLineDelay + 0.4}
+              />
               <motion.span
                 className="absolute translate-y-1 inline-block left-0 bottom-0 bg-[#ff66ff] h-2"
                 initial={{ width: 0, opacity: 0 }}
@@ -131,11 +134,13 @@ const HeroSection = () => {
             damping: 12,
             mass: 0.1,
           }}
-          className="font-sg font-medium md:text-lg text-sm mt-8"
+          className="font-sg font-medium md:text-base text-sm mt-8"
         >
-          Keizerworks is a studio. We build with founders working on what matters.
+          You bring the market. KZR brings the machine. Equity (3-7%) + base
+          retainer
           <br className="md:inline-block hidden" />
-          Equity (5–7%) or fixed price. Depends on the stage.
+          that funds the full technical org. One partnership. No projects, no
+          hours.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -280,7 +285,7 @@ const FloatingLabel: React.FC<FloatingLabelProps> = ({
     
     const handleMouseMove = (e: MouseEvent) => {
       const deltaX = (e.clientX - window.innerWidth / 2) * 0.02;
-      mouseX.set(500 + deltaX);
+      mouseX.set(630 + deltaX);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -305,7 +310,7 @@ const FloatingLabel: React.FC<FloatingLabelProps> = ({
       }}
       animate={{
         opacity: [0, 1, 1],
-        x: [randomStart.x, randomStart.x, 500],
+        x: [randomStart.x, randomStart.x, 630],
         y: [randomStart.y, randomStart.y, 60],
       }}
       transition={{

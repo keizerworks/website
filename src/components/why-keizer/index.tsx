@@ -15,7 +15,7 @@ const WhyKeizer = () => {
 
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12">
           {/* Left side - Text content */}
-          <div className="lg:w-1/2 lg:pr-8">
+          <div className="lg:w-1/2 lg:pr-8 lg:pl-12">
             <header className="flex flex-col font-gb">
               <span className="font-semibold text-xl">Why</span>
               <h2 className="relative md:text-6xl text-5xl mt-2 text-black w-fit inline-block">
