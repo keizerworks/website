@@ -48,6 +48,15 @@ const AboutSection = () => {
             >
               Rahul Sain
             </a>
+            {" "}and{" "}
+            <a
+              href="https://www.linkedin.com/in/mayank-dhokal-5a11a7327/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-white hover:text-[#ff66ff] transition-colors"
+            >
+              Mayank Dhokal
+            </a>
             .
           </p>
         </div>

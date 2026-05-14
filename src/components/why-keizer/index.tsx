@@ -74,7 +74,7 @@ const WhyKeizer = () => {
               <div className="absolute inset-0 bg-[#1e96fc] translate-x-1.5 translate-y-1.5 md:translate-x-2 md:translate-y-2" />
               <div className="relative bg-white px-4 py-6 md:px-8 md:py-8 flex flex-col items-center text-center">
                 <span className="font-gb text-3xl md:text-5xl font-bold text-black">
-                  2
+                  3
                 </span>
                 <span className="font-sg text-xs md:text-sm mt-2 text-black/60">
                   Continents

@@ -19,9 +19,9 @@ const strategies = [
   {
     number: "3",
     label: "BACK",
-    title: "Equity or fixed-price.",
+    title: "Fee-based or equity-backed.",
     description:
-      "We pick founders we believe in. We take equity (5-7%) when it's the right bet. Fixed-price when it isn't. Always honest about which.",
+      "Most work is fee-based. When the full build amount is not possible, we can selectively reduce the fee for 3-7% equity.",
   },
 ];
 

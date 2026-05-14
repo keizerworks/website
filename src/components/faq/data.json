@@ -1,26 +1,26 @@
 [
   {
-    "question": "What is the entry requirement to work with KZR?",
-    "answer": "Two LOIs from real users or real organizations. We partner with founders who already have market signal, not idea-stage projects. If you have two signed letters of intent, we are ready to talk."
+    "question": "What is Keizerworks?",
+    "answer": "Keizerworks is a software development company and product studio that helps startups and growth-stage companies design, build, and maintain digital products."
   },
   {
-    "question": "What exactly does KZR own once we partner?",
-    "answer": "The entire technical function of your company. Product strategy and roadmap, engineering hiring and management, architecture and infrastructure, brand and design, marketing execution, and internal operations. You focus on distribution and customer relationships. We own everything else."
+    "question": "What services does Keizerworks provide?",
+    "answer": "Keizerworks works across web apps, mobile apps, SaaS products, AI products, Web3 products, UI/UX design, MVP development, full-stack engineering, product strategy, and product maintenance."
+  },
+  {
+    "question": "Who does Keizerworks work with?",
+    "answer": "We work with startup founders, growth-stage companies, and teams building serious digital products. The best fit is a founder or company with a clear problem, strong intent, and the ability to move fast on users, sales, or distribution."
   },
   {
     "question": "How is KZR different from hiring a CTO or using an agency?",
-    "answer": "An agency delivers work; they do not own outcomes. A CTO hire takes months to find and rarely has full-stack coverage across engineering, design, and ops. KZR comes in as a complete technical co-founding team: equity-aligned, long-term, and accountable for the entire technical operation from day one."
+    "answer": "An agency usually delivers scoped work. A CTO hire takes time and may not cover design, engineering, product, and maintenance together. KZR comes in as a product team that can design, build, and maintain the product with a systematic process."
   },
   {
     "question": "What does the deal look like?",
-    "answer": "An equity stake between 3 and 7 percent, plus a base retainer that covers the full technical operation. One number. No separate billing for design, no overages for hiring, no scope-creep invoices. The retainer is the deal."
-  },
-  {
-    "question": "How long does the partnership last?",
-    "answer": "We are long-term partners. We do not take on engagements we are not prepared to fully commit to. We stick with you until you make it."
+    "answer": "Most projects are fee-based. If a founder or company cannot pay the full build amount upfront, Keizerworks can selectively reduce the fee in exchange for 3-7% equity, depending on fit, stage, scope, and long-term upside."
   },
   {
     "question": "Who owns the intellectual property?",
-    "answer": "All IP belongs to you once the product reaches 1,000 active users. We are here to build things that reach people. If the product does not get to market, the IP stays with KZR. This is not a clause buried in fine print; it is the standard we hold every engagement to. We build to distribute, not to sit on shelves."
+    "answer": "The client owns the intellectual property for the product Keizerworks builds for them."
   }
 ]

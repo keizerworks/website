@@ -134,13 +134,9 @@ const HeroSection = () => {
             damping: 12,
             mass: 0.1,
           }}
-          className="font-sg font-medium md:text-base text-sm mt-8"
+          className="font-sg font-medium md:text-lg text-base mt-8"
         >
-          You bring the market. KZR brings the machine. Equity (3-7%) + base
-          retainer
-          <br className="md:inline-block hidden" />
-          that funds the full technical org. One partnership. No projects, no
-          hours.
+          We design, build, and maintain while you sell.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -266,12 +262,11 @@ const HeroSection = () => {
   );
 };
 
-const FloatingLabel: React.FC<FloatingLabelProps> = ({
+const FloatingLabel = ({
   labelDelay = 0,
   cursorY,
-}) => {
+}: FloatingLabelProps) => {
   const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
   const x = useSpring(mouseX, { damping: 25, stiffness: 150 });
   const y = useSpring(cursorY, { damping: 25, stiffness: 150 });
 
