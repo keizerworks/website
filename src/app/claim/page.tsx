@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
 import Image from "next/image";
 
 const socialPlatforms = [
@@ -21,7 +20,6 @@ const goals = [
 type AuditType = "social" | "website" | "both";
 
 export default function ClaimAuditForm() {
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState<"standard" | "priority" | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [auditType, setAuditType] = useState<AuditType>("social");
@@ -212,7 +210,7 @@ export default function ClaimAuditForm() {
 
           <a
             href="mailto:biz@keizerworks.com"
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm lg:text-[17px] font-medium"
+            className="flex items-center gap-2 px-3 py-1.5 text-sm lg:text-[17px] font-medium"
           >
             Need help?
             <span className="bg-black px-2 lg:px-3 py-1.5 lg:py-2 rounded-lg">
@@ -225,28 +223,7 @@ export default function ClaimAuditForm() {
               />
             </span>
           </a>
-
-          <button
-            className="sm:hidden p-2"
-            onClick={() => setShowMobileMenu(!showMobileMenu)}
-          >
-            {showMobileMenu ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
-
-        {showMobileMenu && (
-          <div className="sm:hidden mt-4 p-4 bg-white rounded-lg shadow-lg">
-            <a
-              href="mailto:biz@keizerworks.com"
-              className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium w-full"
-            >
-              Need help? Contact us
-              <span className="bg-black px-2 py-1.5 rounded-lg">
-                <Image src={"/assets/k25/k.svg"} alt="k" width={16} height={24} />
-              </span>
-            </a>
-          </div>
-        )}
       </header>
 
       <div className="max-w-4xl lg:pl-[151px] px-4 sm:px-6 py-8 mx-auto">
