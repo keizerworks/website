@@ -3,18 +3,21 @@ import nodemailer from "nodemailer";
 import { z } from "zod";
 import { RateLimiterMemory } from "rate-limiter-flexible";
 
+const PlatformLinkSchema = z.object({
+  id: z.string(),
+  url: z.string(),
+});
+
 const AuditFormSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  platforms: z.array(z.string()).min(1, "Select at least one platform"),
-  socialLinks: z.string().trim().min(10, "Please provide your social links"),
+  auditType: z.enum(["social", "website", "both"]),
+  platformLinks: z.array(PlatformLinkSchema).optional(),
+  websiteUrl: z.string().optional(),
   mainGoal: z.string().min(1, "Please select your main goal"),
-  focusArea: z.string().optional(),
-  struggles: z.string().optional(),
-  responsePreference: z.enum(["email", "discord"]),
+  note: z.string().optional(),
   plan: z.enum(["standard", "priority"]),
-  website: z.string().optional(), // Honeypot field
-  _timestamp: z.number().optional(), // Form load timestamp
+  _timestamp: z.number().optional(),
 });
 
 const MIN_SUBMIT_TIME_MS = 3000; // Minimum 3 seconds to fill form
@@ -41,25 +44,16 @@ export async function POST(request: Request) {
     const {
       name,
       email,
-      platforms,
-      socialLinks,
+      auditType,
+      platformLinks,
+      websiteUrl,
       mainGoal,
-      focusArea,
-      struggles,
-      responsePreference,
+      note,
       plan,
-      website,
       _timestamp,
     } = result.data;
 
-    // Spam check 1: Honeypot - if filled, it's a bot
-    if (website && website.length > 0) {
-      return NextResponse.json(
-        { message: "Audit request submitted successfully" },
-        { status: 200 }
-      );
-    }
-
+    
     // Spam check 2: Time-based - if submitted too fast, it's a bot
     if (_timestamp) {
       const timeTaken = Date.now() - _timestamp;
@@ -80,55 +74,69 @@ export async function POST(request: Request) {
 
     const planLabel = plan === "priority" ? "Priority ($5)" : "Standard ($1)";
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL,
-        pass: process.env.EMAIL_APP_PASSWORD,
-      },
-    });
+    // Try to send email, but don't fail if it doesn't work
+    try {
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.EMAIL_APP_PASSWORD,
+        },
+      });
 
-    await transporter.sendMail({
-      from: `"Social Audit Request" <${process.env.EMAIL}>`,
-      to: process.env.EMAIL,
-      replyTo: email,
-      subject: `[${planLabel}] Social Audit Request from ${name}`,
-      text: `
-        Name: ${name}
-        Email: ${email}
-        Plan: ${planLabel}
-        Response Preference: ${responsePreference}
+      const auditTypeLabel = auditType === "both" ? "Social + Website" : auditType === "website" ? "Website" : "Social Media";
 
-        Platforms: ${platforms.join(", ")}
+      const platformLabels: Record<string, string> = {
+        linkedin: "LinkedIn",
+        twitter: "Twitter/X",
+        instagram: "Instagram",
+        youtube: "YouTube",
+        reddit: "Reddit",
+      };
 
-        Social Links:
-        ${socialLinks}
+      const platformLinksText = platformLinks && platformLinks.length > 0
+        ? platformLinks.map(p => `${platformLabels[p.id] || p.id}: ${p.url}`).join("\n")
+        : "";
 
-        Main Goal: ${goalLabels[mainGoal] || mainGoal}
+      const platformLinksHtml = platformLinks && platformLinks.length > 0
+        ? platformLinks.map(p => `<p><strong>${platformLabels[p.id] || p.id}:</strong> <a href="${p.url}">${p.url}</a></p>`).join("")
+        : "";
 
-        Focus Area: ${focusArea || "Not specified"}
-
-        Struggles: ${struggles || "Not specified"}
-      `,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1>New Social Audit Request</h1>
-          <div style="background: ${plan === "priority" ? "#3d6bbc" : "#000"}; color: white; padding: 8px 16px; border-radius: 4px; display: inline-block; margin-bottom: 16px;">
-            ${planLabel}
+      await transporter.sendMail({
+        from: `"Audit Request" <${process.env.EMAIL}>`,
+        to: process.env.EMAIL,
+        replyTo: email,
+        subject: `[${planLabel}] ${auditTypeLabel} Audit Request from ${name}`,
+        text: `
+          Name: ${name}
+          Email: ${email}
+          Plan: ${planLabel}
+          Audit Type: ${auditTypeLabel}
+          ${platformLinksText ? `Social Profiles:\n${platformLinksText}` : ""}
+          ${websiteUrl ? `Website: ${websiteUrl}` : ""}
+          Main Goal: ${goalLabels[mainGoal] || mainGoal}
+          ${note ? `Note: ${note}` : ""}
+        `,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h1>New ${auditTypeLabel} Audit Request</h1>
+            <div style="background: ${plan === "priority" ? "#3d6bbc" : "#000"}; color: white; padding: 8px 16px; border-radius: 4px; display: inline-block; margin-bottom: 16px;">
+              ${planLabel}
+            </div>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Audit Type:</strong> ${auditTypeLabel}</p>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+            ${platformLinksHtml ? `<p><strong>Social Profiles:</strong></p>${platformLinksHtml}` : ""}
+            ${websiteUrl ? `<p><strong>Website:</strong> <a href="${websiteUrl}">${websiteUrl}</a></p>` : ""}
+            <p><strong>Main Goal:</strong> ${goalLabels[mainGoal] || mainGoal}</p>
+            ${note ? `<p><strong>Note:</strong> ${note}</p>` : ""}
           </div>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Response Preference:</strong> ${responsePreference === "discord" ? "Discord" : "Email"}</p>
-          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
-          <p><strong>Platforms:</strong> ${platforms.join(", ")}</p>
-          <p><strong>Social Links:</strong></p>
-          <pre style="background: #f5f5f5; padding: 12px; border-radius: 4px;">${socialLinks}</pre>
-          <p><strong>Main Goal:</strong> ${goalLabels[mainGoal] || mainGoal}</p>
-          <p><strong>Focus Area:</strong> ${focusArea || "Not specified"}</p>
-          <p><strong>Struggles:</strong> ${struggles || "Not specified"}</p>
-        </div>
-      `,
-    });
+        `,
+      });
+    } catch (emailError) {
+      console.error("Email sending failed (continuing anyway):", emailError);
+    }
 
     return NextResponse.json(
       { message: "Audit request submitted successfully" },

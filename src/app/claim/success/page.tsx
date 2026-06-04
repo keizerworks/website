@@ -1,122 +1,243 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
+
+type AuditType = "social" | "website" | "both";
 
 export default function ClaimSuccessPage() {
-  const [planType, setPlanType] = useState<string | null>(null);
+  const [plan, setPlan] = useState<string | null>(null);
+  const [auditType, setAuditType] = useState<AuditType | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+  const [firstName, setFirstName] = useState<string | null>(null);
 
   useEffect(() => {
-    // Get plan type from URL or localStorage
     const params = new URLSearchParams(window.location.search);
-    const plan = params.get("plan") || localStorage.getItem("audit_plan");
-    setPlanType(plan);
+    const planParam = params.get("plan") || localStorage.getItem("audit_plan");
+    setPlan(planParam);
 
-    // Clean up localStorage
+    try {
+      const raw = localStorage.getItem("audit_form_data");
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (data.auditType) setAuditType(data.auditType);
+        if (data.email) setEmail(data.email);
+        if (data.name) setFirstName(String(data.name).trim().split(" ")[0]);
+      }
+    } catch {
+      // ignore malformed storage
+    }
+
     localStorage.removeItem("audit_plan");
     localStorage.removeItem("audit_form_data");
   }, []);
 
+  const isPriority = plan === "priority";
+  const deliveryTime = isPriority ? "within 48 hours" : "within 5 business days";
+
+  const auditLabel =
+    auditType === "website"
+      ? "website audit"
+      : auditType === "both"
+        ? "full audit"
+        : auditType === "social"
+          ? "social audit"
+          : "audit";
+
+  const reviewTarget =
+    auditType === "website"
+      ? "your website"
+      : auditType === "both"
+        ? "your profiles and website"
+        : auditType === "social"
+          ? "your social profiles"
+          : "everything you submitted";
+
+  const steps = [
+    {
+      title: "Request received",
+      desc: "Your audit is in the queue. No action is needed from you.",
+    },
+    {
+      title: "We get to work",
+      desc: `Our team reviews ${reviewTarget} by hand, with no automated scores.`,
+    },
+    {
+      title: "Your audit arrives",
+      desc: `Your personalized report and payment receipt land in your inbox ${deliveryTime}.`,
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50 text-black">
-      {/* Desktop Sidebar - Hidden on mobile */}
-      <div className="hidden lg:block fixed left-0 top-0 w-[151px] h-screen z-10">
-        <Image
-          src={"/assets/k25/side.svg"}
-          alt="side"
-          fill
-          className="object-cover"
-        />
+    <div className="bg-gray-50 text-black min-h-screen flex flex-col">
+      <div className="hidden lg:block fixed left-0 top-0 bottom-0 w-[151px] z-10">
+        <Image src={"/assets/k25/side.svg"} alt="side" fill className="object-cover" />
       </div>
 
-      {/* Header */}
       <header className="px-4 sm:px-6 lg:px-24 py-3 lg:pl-[171px]">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center">
-            <Link href="/">
-              <Image
-                src={"/assets/logos/keizer-logo-name.svg"}
-                alt="Keizer"
-                width={120}
-                height={40}
-                className="invert"
-              />
-            </Link>
-          </div>
+          <Link href="/" className="flex items-center">
+            <Image
+              src={"/assets/logos/keizer-logo-name.svg"}
+              alt="Keizer"
+              width={120}
+              height={40}
+              className="invert"
+            />
+          </Link>
         </div>
       </header>
 
-      <div className="max-w-2xl lg:pl-[151px] px-4 sm:px-6 py-16 mx-auto text-center">
-        <div className="bg-white rounded-2xl shadow-lg p-8 sm:p-12">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Check className="w-8 h-8 text-green-600" />
-          </div>
-
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
-            Payment Successful!
-          </h1>
-
-          <p className="text-gray-600 mb-8">
-            {planType === "priority"
-              ? "Your priority audit is confirmed. We'll review your profiles within 24 hours."
-              : "Your audit request is confirmed. We'll review your profiles within 48 hours."
-            }
-          </p>
-
-          <div className="bg-gray-50 rounded-xl p-6 mb-8">
-            <h2 className="font-semibold text-gray-900 mb-4">What's next?</h2>
-            <div className="space-y-4 text-left">
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-medium shrink-0">
-                  1
-                </div>
-                <p className="text-gray-600 text-sm">
-                  We'll analyze your social profiles based on your goals
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-medium shrink-0">
-                  2
-                </div>
-                <p className="text-gray-600 text-sm">
-                  You'll receive a detailed audit via your preferred method (email or Discord)
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-medium shrink-0">
-                  3
-                </div>
-                <p className="text-gray-600 text-sm">
-                  Join our community to discuss and get ongoing tips
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <a
-              href="https://discord.gg/kzr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-[#5865F2] text-white font-semibold rounded-full hover:bg-[#4752c4] transition-colors"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+      <div className="flex-1 lg:pl-[151px] px-4 sm:px-6 lg:px-12 py-10 sm:py-14 flex items-center justify-center">
+        <div className="relative w-full max-w-lg">
+          {/* Card */}
+          <div className="success-card relative bg-white rounded-3xl px-6 py-10 sm:px-10 sm:py-12 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.25)] border border-gray-100">
+            {/* Checkmark */}
+            <div className="success-check w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 ring-8 ring-green-500/10">
+              <svg
+                className="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
               </svg>
-              Join KZR Community
-            </a>
+            </div>
 
-            <Link
-              href="/"
-              className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-gray-100 text-gray-700 font-semibold rounded-full hover:bg-gray-200 transition-colors"
-            >
-              Back to Home
-            </Link>
+            {/* Heading */}
+            <div className="text-center">
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+                {firstName ? `You're all set, ${firstName}!` : "You're all set!"}
+              </h1>
+              <p className="text-gray-500 mt-3 text-base sm:text-lg">
+                Your {auditLabel} request is in. We've got it from here.
+              </p>
+            </div>
+
+            {/* Email callout */}
+            <div className="mt-6 flex items-start gap-3 rounded-xl bg-gray-50 border border-gray-100 px-4 py-3.5 text-left">
+              <svg
+                className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                We'll deliver it {deliveryTime}
+                {email ? (
+                  <>
+                    {" "}to <span className="font-semibold text-gray-900">{email}</span>.
+                  </>
+                ) : (
+                  <> to the email you provided.</>
+                )}
+                {" "}Keep an eye on your inbox (and spam, just in case).
+              </p>
+            </div>
+
+            {/* What happens next */}
+            <div className="mt-8">
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">
+                What happens next
+              </p>
+              <ol className="space-y-4">
+                {steps.map((step, i) => (
+                  <li key={step.title} className="flex gap-3.5">
+                    <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gray-900 text-white text-sm font-semibold flex items-center justify-center">
+                      {i + 1}
+                    </span>
+                    <div className="text-left">
+                      <p className="text-sm font-semibold text-gray-900">{step.title}</p>
+                      <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* CTAs */}
+            <div className="mt-8 space-y-3">
+              <button
+                data-cal-link="rahulsain/15min"
+                data-cal-namespace="15min"
+                data-cal-config='{"layout":"month_view"}'
+                className="w-full bg-gray-900 text-white px-6 py-3.5 rounded-xl font-semibold hover:bg-gray-800 transition-colors"
+              >
+                Book a free strategy call
+              </button>
+              <Link
+                href="/"
+                className="flex items-center justify-center w-full px-6 py-3.5 rounded-xl font-semibold text-gray-700 border border-gray-200 hover:bg-gray-50 transition-colors"
+              >
+                Explore Keizerworks
+              </Link>
+            </div>
+
+            {/* Support note */}
+            <p className="mt-6 text-center text-xs text-gray-400">
+              Questions? Email us at{" "}
+              <a href="mailto:biz@keizerworks.com" className="font-medium text-gray-600 hover:text-gray-900">
+                biz@keizerworks.com
+              </a>
+            </p>
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes successCardIn {
+          0% { opacity: 0; transform: translateY(16px) scale(0.98); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes successCheckPop {
+          0% { transform: scale(0); }
+          60% { transform: scale(1.15); }
+          100% { transform: scale(1); }
+        }
+        .success-card { animation: successCardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+        .success-check { animation: successCheckPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+        @media (prefers-reduced-motion: reduce) {
+          .success-card, .success-check { animation: none; opacity: 1; }
+        }
+      `}</style>
+
+      <Script id="cal-popup" strategy="afterInteractive">
+        {`
+          (function (C, A, L) {
+            let p = function (a, ar) { a.q.push(ar); };
+            let d = C.document;
+            C.Cal = C.Cal || function () {
+              let cal = C.Cal;
+              let ar = arguments;
+              if (!cal.loaded) {
+                cal.ns = {};
+                cal.q = cal.q || [];
+                d.head.appendChild(d.createElement("script")).src = A;
+                cal.loaded = true;
+              }
+              if (ar[0] === L) {
+                const api = function () { p(api, arguments); };
+                const namespace = ar[1];
+                api.q = api.q || [];
+                if (typeof namespace === "string") {
+                  cal.ns[namespace] = cal.ns[namespace] || api;
+                  p(cal.ns[namespace], ar);
+                  p(cal, ["initNamespace", namespace]);
+                } else p(cal, ar);
+                return;
+              }
+              p(cal, ar);
+            };
+          })(window, "https://app.cal.com/embed/embed.js", "init");
+
+          Cal("init", "15min", { origin: "https://app.cal.com" });
+          Cal.ns["15min"]("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
+        `}
+      </Script>
     </div>
   );
 }

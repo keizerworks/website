@@ -11,6 +11,12 @@ const ContactFormSchema = z.object({
     .string()
     .trim()
     .min(15, "Project description must be at least 15 characters"),
+  earlyMarketValidation: z
+    .boolean()
+    .refine((value) => value, "Please confirm early market validation"),
+  earlyUserTalks: z
+    .boolean()
+    .refine((value) => value, "Please confirm early user talks"),
   website: z.string().optional(), // Honeypot field
   _timestamp: z.number().optional(), // Form load timestamp
 });
@@ -36,7 +42,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ errors: errorMessages }, { status: 400 });
     }
 
-    const { name, email, company, project, website, _timestamp } = result.data;
+    const {
+      name,
+      email,
+      company,
+      project,
+      earlyMarketValidation,
+      earlyUserTalks,
+      website,
+      _timestamp,
+    } = result.data;
 
     // Spam check 1: Honeypot - if filled, it's a bot
     if (website && website.length > 0) {
@@ -75,6 +90,8 @@ export async function POST(request: Request) {
         Name: ${name}
         Email: ${email}
         Company: ${company}
+        Early Market Validation: ${earlyMarketValidation ? "Yes" : "No"}
+        Early User Talks: ${earlyUserTalks ? "Yes" : "No"}
         Project Details: ${project}
       `,
       html: `
@@ -83,6 +100,8 @@ export async function POST(request: Request) {
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Company:</strong> ${company}</p>
+          <p><strong>Early Market Validation:</strong> ${earlyMarketValidation ? "Yes" : "No"}</p>
+          <p><strong>Early User Talks:</strong> ${earlyUserTalks ? "Yes" : "No"}</p>
           <p><strong>Project Details:</strong></p>
           <blockquote>${project}</blockquote>
         </div>
