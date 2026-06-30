@@ -1,7 +1,5 @@
-# keizer-web
+# Keizerworks
 
-official keizerworks website
+The Keizerworks website.
 
-## Contributing
-
-Take a look at the [contributing guidelines](CONTRIBUTING.md) for this project.
+Built with Next.js, React, TypeScript, and Tailwind CSS.
