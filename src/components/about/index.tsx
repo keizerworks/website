@@ -33,11 +33,12 @@ const AboutSection = () => {
 
         <div className="xl:mt-[80px] md:w-1/3 relative z-40 mt-[33px] md:text-[16px] text-[14px] space-y-4 text-white/80">
           <p>
-            Startups fail when the build is slow, the design is off, the team is stretched. Most studios make it worse.
+            Startups struggle when the build is slow, the design is off, and
+            the team is stretched.
           </p>
           <p className="font-semibold text-white">We fix that.</p>
           <p>
-            Early involvement. Fast shipping. We stay after it ships.
+            Early involvement. Fast shipping. We stay after launch.
           </p>
           <p>
             Built by{" "}
