@@ -1,5 +1,4 @@
 import HeroSection from "~/components/hero";
-import ProjectSection from "~/components/projects";
 import StrategySection from "~/components/strategy";
 import NewsSection from "~/components/news";
 import AboutSection from "~/components/about";

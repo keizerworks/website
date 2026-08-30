@@ -26,12 +26,11 @@ const WhyKeizer = () => {
             </header>
             <div className="mt-8 text-sm md:text-xl">
               <p className="leading-relaxed">
-                We don't take every project.
-                <br />
-                We pick the ones we'd want to build ourselves.
+                Built to ship. Proven in the real world.
               </p>
               <p className="mt-6 text-white/80">
-                If your idea is in AI, Web3, or future-shaped, talk to us.
+                We help founders and teams turn ambitious ideas into products
+                that ship, scale, and perform.
               </p>
             </div>
             <button className="font-sg translate-x-1 font-medium mt-8 group relative text-white px-4 md:text-lg py-2">
@@ -66,7 +65,7 @@ const WhyKeizer = () => {
                   $24M+
                 </span>
                 <span className="font-sg text-xs md:text-sm mt-2 text-black/60">
-                  Valuation
+                  built
                 </span>
               </div>
             </div>

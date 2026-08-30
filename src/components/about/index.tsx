@@ -4,10 +4,11 @@ const AboutSection = () => {
       <div className="max-w-[1536px] flex flex-col xl:gap-0 mx-auto relative md:p-[100px] px-[24px] py-[60px]">
         <header className="w-full relative">
           <span className="text-[15px] uppercase">About us</span>
-          <h2 className="relative font-gb capitalize sm:pt-[0px] pt-[10px] z-50 font-bold text-[clamp(1.5rem,5vw,5rem)] leading-[1.1] xl:max-w-[55%]">
+          <h2 className="relative font-gb sm:pt-[0px] pt-[10px] z-50 font-bold text-[clamp(1.5rem,5vw,5rem)] leading-[1.1] xl:max-w-[55%]">
             <span className="relative z-10">
-              We save <br />
-              businesses <br /> from ineffective <br /> & ugly designs.
+              We build with founders,
+              <br />
+              not around them.
             </span>
 
             <img
@@ -36,7 +37,7 @@ const AboutSection = () => {
           </p>
           <p className="font-semibold text-white">We fix that.</p>
           <p>
-            Early involvement. Fast shipping. Equity when it matters.
+            Early involvement. Fast shipping. We stay after it ships.
           </p>
           <p>
             Built by{" "}
@@ -48,7 +49,7 @@ const AboutSection = () => {
             >
               Rahul Sain
             </a>
-            {" "}and{" "}
+            {", "}
             <a
               href="https://www.linkedin.com/in/mayank-dhokal-5a11a7327/"
               target="_blank"
@@ -56,6 +57,15 @@ const AboutSection = () => {
               className="underline text-white hover:text-[#ff66ff] transition-colors"
             >
               Mayank Dhokal
+            </a>
+            {", and "}
+            <a
+              href="https://www.linkedin.com/in/yukti222/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-white hover:text-[#ff66ff] transition-colors"
+            >
+              Yukti
             </a>
             .
           </p>

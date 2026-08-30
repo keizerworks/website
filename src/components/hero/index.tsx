@@ -95,27 +95,44 @@ const HeroSection = () => {
       className="md:max-h-[800px] md:h-screen overflow-hidden relative flex md:flex-row flex-col items-start md:max-w-[1536px] mx-auto md:pt-[200px] pt-[100px] pb-[100px] md:px-24 px-4  bg-black w-full"
     >
       <div className="font-gb relative text-white w-full">
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.2,
+            type: "spring",
+            stiffness: 100,
+            damping: 12,
+            mass: 0.1,
+          }}
+          className="font-sg font-medium md:text-base text-sm text-white/70 mb-5"
+        >
+          For founders of SaaS and AI products.
+        </motion.p>
         <h1
           className="flex flex-col gap-2 items-start lg:text-7xl md:text-5xl text-4xl leading-[1.2] relative"
         >
           <span>
-            <AnimatedText text="Your human" delay={firstLineDelay} />{" "}
-            <span className="inline-block relative">
-              <AnimatedText
-                text="founding team."
-                delay={firstLineDelay + 0.4}
-              />
-              <motion.span
-                className="absolute translate-y-1 inline-block left-0 bottom-0 bg-[#ff66ff] h-2"
-                initial={{ width: 0, opacity: 0 }}
-                animate={visionControls}
-                transition={{
-                  duration: 0.3,
-                  ease: "easeOut",
-                }}
-              />
-              <FloatingLabelNormal />
-            </span>
+            <AnimatedText
+              text="We design & build"
+              delay={firstLineDelay}
+            />
+          </span>
+          <span className="inline-block relative">
+            <AnimatedText
+              text="while you sell"
+              delay={firstLineDelay + 0.4}
+            />
+            <motion.span
+              className="absolute translate-y-1 inline-block left-0 bottom-0 bg-[#ff66ff] h-2"
+              initial={{ width: 0, opacity: 0 }}
+              animate={visionControls}
+              transition={{
+                duration: 0.3,
+                ease: "easeOut",
+              }}
+            />
+            <FloatingLabelNormal />
           </span>
 
           <FloatingLabel labelDelay={labelDelay} cursorY={cursorPositionY} />
@@ -134,9 +151,9 @@ const HeroSection = () => {
             damping: 12,
             mass: 0.1,
           }}
-          className="font-sg font-medium md:text-lg text-base mt-8"
+          className="font-sg font-medium md:text-lg text-base mt-8 text-white/80"
         >
-          We design, build, and maintain while you sell.
+          10+ companies · $24M+ · 3 continents
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 50 }}

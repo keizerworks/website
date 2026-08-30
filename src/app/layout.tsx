@@ -83,17 +83,6 @@ const organizationJsonLd = {
         serviceType: "Software development",
       },
     },
-    {
-      "@type": "Offer",
-      name: "Equity product partnership",
-      description:
-        "Keizerworks can selectively reduce the fee in exchange for 3-7% equity when a founder or company cannot pay the full build amount upfront.",
-      itemOffered: {
-        "@type": "Service",
-        name: "Equity-based product studio partnership",
-        serviceType: "Startup studio",
-      },
-    },
   ],
 };
 
@@ -131,7 +120,6 @@ export const metadata: Metadata = {
     "MVP development",
     "UI/UX design",
     "product strategy",
-    "equity product studio",
   ],
   authors: [{ name: "Keizerworks", url: siteUrl }],
   creator: "Keizerworks",
@@ -146,7 +134,7 @@ export const metadata: Metadata = {
     url: siteUrl,
     title: "Keizerworks - Design, Build, and Maintain Products",
     description:
-      "A software company and product studio for startups building products that matter. Equity partnerships or fee-based builds.",
+      "A software company and product studio for founders building SaaS and AI products.",
     siteName: "Keizerworks",
     images: [
       {

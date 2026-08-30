@@ -14,7 +14,7 @@ const StrategyCard = ({
   description,
 }: StrategyCardProps) => {
   return (
-    <div className="relative md:w-[284px] w-full mx-auto flex flex-col justify-between">
+    <div className="relative w-full flex flex-col justify-between">
       <span className="text-white/80 text-[14px] pb-[20px] font-medium border-b border-neutral-600 tracking-wide">
         {number}. {label}
       </span>

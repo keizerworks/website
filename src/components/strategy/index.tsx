@@ -5,23 +5,23 @@ const strategies = [
   {
     number: "1",
     label: "BUILD",
-    title: "Full-stack product engineering.",
+    title: "The product goes live.",
     description:
-      "Web. Desktop. iOS. Android. AI agents. Simulation engines. Complex systems most teams say no to.",
+      "From first screen to a production-ready product customers can use and pay for.",
   },
   {
     number: "2",
     label: "DESIGN",
     title: "Brand, product, and UX.",
     description:
-      "Identity systems, product UI, motion, and the small details that make the difference between \"made by an agency\" and \"made by people who care.\"",
+      "Interfaces and experiences built around how people actually use the product.",
   },
   {
     number: "3",
-    label: "BACK",
-    title: "Fee-based or equity-backed.",
+    label: "MAINTAIN",
+    title: "We stay after it ships.",
     description:
-      "Most work is fee-based. When the full build amount is not possible, we can selectively reduce the fee for 3-7% equity.",
+      "Fixes, improvements, infrastructure, and the next version.",
   },
 ];
 
@@ -40,31 +40,26 @@ const StrategySection = () => {
         }}
       />
 
-      <div className="max-w-[1536px] relative mx-auto md:px-24 px-4 md:py-[150px] gap-[50px] py-[60px] grid-cols-1 grid md:grid-cols-2">
+      <div className="max-w-[1536px] relative mx-auto md:px-24 px-4 md:py-[150px] gap-12 lg:gap-[50px] py-[60px] grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)]">
         <img
           className="absolute z-[0] top-[68%] lg:block hidden left-[118px] scale-[1.05] -translate-y-1/2 "
           src="/assets/decoration/decoration-text.svg"
           alt="decoration-text"
         />
 
-        <div className="w-fit">
-          <div className="w-fit">
+        <div className="w-full min-w-0">
+          <div className="w-full min-w-0">
             <p className="uppercase font-gb text-[16px] font-semibold pb-[10px]">
-              Keizer Works
+              How we work
             </p>
 
-            <h2 className="md:text-[50px] w-fit font-gb text-[32px] font-bold leading-tight">
-              We build what most
-              <br />
-              studios won't touch.
+            <h2 className="font-gb font-bold leading-[1.1] text-[clamp(1.75rem,4.5vw,3.125rem)] max-w-[15em]">
+              We build products that people can use, pay for, and come back to.
             </h2>
 
-            <p className="font-sg text-[15px] md:text-[18px] mt-6 text-white/80 leading-relaxed">
-              Desktop, web, mobile, AI, simulation engines.
-              <br />
-              If it's complex, new, or hasn't been built yet
-              <br />
-              that's where we come in.
+            <p className="font-sg text-[15px] md:text-[18px] mt-6 max-w-[34rem] text-white/80 leading-relaxed">
+              Design, development, AI systems, and ongoing product engineering
+              from first screen to production.
             </p>
           </div>
 
@@ -75,12 +70,12 @@ const StrategySection = () => {
               href="#contact"
               className="relative inline-block transition-all  duration-300 z-20 group-active:-translate-x-1 group-active:translate-y-1"
             >
-              Let's talk
+              Start a project →
             </a>
           </button>
         </div>
 
-        <div className="lg:w-[500px] flex-1 flex-shrink-0 lg:pt-[0px] pt-[50px] w-full lg:ml-auto">
+        <div className="w-full min-w-0 lg:pt-0 pt-[50px]">
           <div className="flex flex-col gap-[40px]">
             {strategies.map((strategy, index) => (
               <StrategyCard
