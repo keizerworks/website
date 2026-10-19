@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { type FormEvent, useState } from "react";
+import { sectionTitle } from "~/components/studio-services";
+import { inter } from "~/config/font";
+import { cn } from "~/lib/utils";
 
-const NewsLetter = () => {
+// Newsletter signup, in the same style as the other home sections.
+export default function NewsLetter() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{
@@ -11,66 +15,77 @@ const NewsLetter = () => {
     type: "success" | "error";
   } | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
     if (!email) return;
-
     setLoading(true);
     setStatus(null);
-
     try {
       const response = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-
-      const result = await response.json();
-
+      const result = await response.json().catch(() => ({}));
       if (response.ok) {
         setEmail("");
-        setStatus({ message: result.message, type: "success" });
+        setStatus({
+          message: result.message || "You're in. Thanks for subscribing.",
+          type: "success",
+        });
       } else {
         setStatus({
-          message: result.error || "Failed to subscribe",
+          message: result.error || "Couldn't subscribe. Try again?",
           type: "error",
         });
       }
     } catch {
-      setStatus({ message: "Something went wrong", type: "error" });
+      setStatus({ message: "Couldn't subscribe. Try again?", type: "error" });
     } finally {
       setLoading(false);
-      setTimeout(() => setStatus(null), 5000);
     }
-  };
+  }
 
   return (
-    <section id="newsLetter" className="md:pt-[100px] pt-[60px]">
-      <div className="flex border-b border-neutral-600 md:pb-[100px] pb-[60px] md:flex-row flex-col gap-[24px] lg:items-center items-start justify-between max-w-[1536px] mx-auto md:px-24 px-4">
-        <p className="text-[24px] leading-[100%] font-bold">
-          Join our newsletter <br className="lg:block md:hidden block" />
-          to stay up to date with us
-        </p>
+    <section
+      id="newsletter"
+      className={cn(
+        inter.className,
+        "mx-auto w-full max-w-[1536px] px-4 pt-16 text-[#ebebeb] md:px-24 md:pt-[100px]",
+      )}
+    >
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <h2 className={cn(sectionTitle, "mb-0")}>Notes from the studio</h2>
+          <p className="mt-2 max-w-[440px] text-[15px] leading-[1.55] text-[#ebebeb]/55">
+            What we're building, shipping, and learning. No spam, unsubscribe
+            any time.
+          </p>
+        </div>
 
         <form
           onSubmit={handleSubmit}
-          className="w-full sm:max-w-[450px] flex flex-col gap-2"
+          className="flex w-full flex-col gap-2 lg:max-w-[440px]"
         >
-          <div className="flex items-center bg-[#151616] rounded-lg overflow-hidden">
+          <div className="flex items-center gap-2 rounded-lg bg-white/[0.06] p-1.5 ring-1 ring-inset ring-white/10 transition-shadow duration-150 focus-within:ring-white/40">
+            <label htmlFor="newsletter-email" className="sr-only">
+              Email
+            </label>
             <input
-              className="w-full relative py-[14px] pl-[24px] pr-[12px] text-white bg-transparent focus:outline-none outline-none"
+              id="newsletter-email"
+              className="w-full bg-transparent px-3 py-2 text-[15px] text-[#ebebeb] outline-none placeholder:text-[#ebebeb]/40"
               type="email"
+              autoComplete="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email."
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="you@company.com"
               disabled={loading}
               required
             />
-
             <button
               type="submit"
               disabled={loading}
-              className="text-[14px] py-[14px] pl-[12px] pr-[24px] text-white/60 hover:text-white active:text-white transition-all ease-in-out duration-300 disabled:opacity-50"
+              className="flex h-9 shrink-0 items-center justify-center rounded bg-white px-4 text-sm font-medium text-black transition-[background-color,transform] duration-150 hover:bg-[#ff66ff] active:scale-[0.97] disabled:opacity-60"
             >
               {loading ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -79,12 +94,15 @@ const NewsLetter = () => {
               )}
             </button>
           </div>
-
           {status && (
             <p
-              className={`text-sm ${
-                status.type === "success" ? "text-green-500" : "text-red-500"
-              }`}
+              role="status"
+              className={cn(
+                "text-[14px]",
+                status.type === "success"
+                  ? "text-[#ebebeb]/70"
+                  : "text-[#ff66ff]",
+              )}
             >
               {status.message}
             </p>
@@ -93,6 +111,4 @@ const NewsLetter = () => {
       </div>
     </section>
   );
-};
-
-export default NewsLetter;
+}

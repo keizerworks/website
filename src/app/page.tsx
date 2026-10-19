@@ -44,8 +44,11 @@ export default function Home() {
       {/* Replaced by ClientNotes above. */}
       {/* <Testimonials /> */}
       <FAQ />
-      <NewsLetter />
-      <FooterSection />
+      {/* Textured band so the end of the page isn't another flat black. */}
+      <div className="texture-weave">
+        <NewsLetter />
+        <FooterSection />
+      </div>
     </main>
   );
 }
