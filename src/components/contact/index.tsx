@@ -1,36 +1,44 @@
-import ContactForm from "./contact-form";
+import BookCallLink from "~/components/book-call-link";
+import { inter } from "~/config/font";
+import { cn } from "~/lib/utils";
 
-const ContactSection = () => {
+// Closing call to action on the home page: one button to the booking page,
+// and the email for anyone who'd rather write.
+export default function ContactSection() {
   return (
-    <section className="project bg-[#F7F8FF] text-[#07070A]" id="contact">
-      <div className="max-w-[1536px] flex flex-col gap-[36px] mx-auto md:p-[100px] px-[24px] py-[60px]">
-        <div className="flex items-center w-full justify-between">
-          <header className="font-gb">
-            <span className="uppercase font-semibold text-xs">
-              Collaboration
-            </span>
-            <h2 className="md:text-[48px] leading-[32px] mt-8 px-2 pb-4 relative font-bold pt-[15px] text-[30px] md:leading-[102%]">
-              <span className="relative z-40 text-white">
-                Have a Vision?
-                <br />
-                Time to make it a reality
-              </span>
-              <div className="inset-0 absolute bg-[#2D2DC3] z-20" />
-              <div className="inset-0 absolute bg-[#1e96fc] -translate-x-2 translate-y-2 z-10" />
-            </h2>
-          </header>
+    <section
+      id="contact"
+      className={cn(
+        inter.className,
+        "mx-auto w-full max-w-[1536px] scroll-mt-[100px] bg-black px-4 py-16 text-[#ebebeb] md:px-24 md:py-[100px]",
+      )}
+    >
+      <div className="flex flex-col gap-8 border-t border-white/10 pt-12 md:flex-row md:items-end md:justify-between md:pt-16">
+        <div>
+          <h2 className="max-w-[720px] text-[32px] leading-[1.1] tracking-[-0.02em] [text-wrap:balance] md:text-[48px]">
+            Have something in mind?{" "}
+            <span className="inline text-[#ff66ff]">Let's talk.</span>
+          </h2>
+          <p className="mt-4 text-[15px] text-[#ebebeb]/60">
+            Or email{" "}
+            <a
+              href="mailto:biz@keizerworks.com"
+              className="inline text-[#ebebeb] underline decoration-white/25 underline-offset-4 transition-colors duration-150 hover:decoration-[#ff66ff]"
+            >
+              biz@keizerworks.com
+            </a>
+          </p>
         </div>
 
-        <div className="w-full h-[1px] bg-black" />
-
-        <p className="max-w-[716px]">
-          Get your product to market fast. We help startups build, scale, and launch
-          with the right strategy, resources, and execution.
-        </p>
-        <ContactForm />
+        <div className="flex flex-wrap gap-3">
+          <BookCallLink
+            from="home-closing"
+            className="whitespace-nowrap rounded bg-white px-5 py-3 text-base font-medium leading-none text-black shadow-[0_0_0_4px_rgba(250,250,253,0.12)] transition-[background-color,transform] duration-200 hover:bg-[#ff66ff] active:scale-[0.97]"
+          >
+            Book a call
+          </BookCallLink>
+        </div>
       </div>
     </section>
   );
-};
-
-export default ContactSection;
+}

@@ -91,6 +91,9 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// GA4 measurement ID, e.g. G-XXXXXXXXXX. Set it in the environment.
+const gaId = process.env.NEXT_PUBLIC_GA_ID;
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || siteUrl),
   title: {
@@ -193,6 +196,28 @@ export default function RootLayout({
             __html: JSON.stringify(organizationJsonLd),
           }}
         />
+        {/* Google Analytics 4. Off until NEXT_PUBLIC_GA_ID is set. */}
+        {gaId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script
+              id="ga4"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  window.gtag = gtag;
+                  gtag('js', new Date());
+                  gtag('config', '${gaId}');
+                `,
+              }}
+            />
+          </>
+        )}
         <Script
           id="apollo-tracker"
           strategy="afterInteractive"

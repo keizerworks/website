@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
+import BookCallLink from "~/components/book-call-link";
 import Navbar from "~/components/ui/navbar";
 import { inter } from "~/config/font";
 import { cn } from "~/lib/utils";
@@ -53,18 +54,18 @@ export default function StudioPage({
                 </li>
               ))}
             </ul>
-            <Link
-              href="/#contact"
+            <BookCallLink
+              from="info-sidebar"
               className="group flex items-center justify-between rounded bg-[#ff66ff] px-3 py-2.5 text-black shadow-[0_0_0_4px_rgba(255,102,255,0.15)] transition-transform duration-150 active:scale-[0.97]"
             >
-              Start a project
+              Book a call
               <span
                 aria-hidden="true"
                 className="transition-transform duration-200 group-hover:translate-x-1"
               >
                 →
               </span>
-            </Link>
+            </BookCallLink>
           </div>
 
           <div className="flex flex-col gap-4 text-[#ebebeb]/80">
