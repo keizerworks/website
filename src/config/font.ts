@@ -37,5 +37,7 @@ export const inter = Inter({
 export const serif = Source_Serif_4({
   subsets: ["latin"],
   weight: ["400"],
+  // Real italic for the case study headline accents (no faux slant).
+  style: ["normal", "italic"],
   display: "swap",
 });

@@ -12,8 +12,7 @@ const links = [
   { label: "Home", href: "/#hero" },
   { label: "Info", href: "/v2/info" },
   { label: "Services", href: "/#services" },
-  // Hidden with the Selected Work section.
-  // { label: "Work", href: "/#work" },
+  { label: "Work", href: "/v2/work" },
   { label: "Blogs", href: "/#news" },
 ];
 

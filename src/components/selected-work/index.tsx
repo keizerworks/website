@@ -23,7 +23,7 @@ const projects: Project[] = [
       "A simulation engine that predicts unseen chemical reactions at 94.84% accuracy. Live at 3 institutions.",
   },
   {
-    name: "Permaweb",
+    name: "Plobbo",
     tag: "AI marketing · MVP",
     summary:
       "Designed and shipped the MVP of an AI platform that distributes content across every channel automatically.",
