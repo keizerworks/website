@@ -1,4 +1,9 @@
-import { DM_Mono, Inter, Space_Grotesk } from "next/font/google";
+import {
+  DM_Mono,
+  Inter,
+  Source_Serif_4,
+  Space_Grotesk,
+} from "next/font/google";
 import localFont from "next/font/local";
 
 export const spaceGrotesk = Space_Grotesk({
@@ -25,5 +30,12 @@ export const gotham_font = localFont({
 export const inter = Inter({
   subsets: ["latin"],
   weight: ["500", "600"],
+  display: "swap",
+});
+
+// Large pull quotes in Client Notes.
+export const serif = Source_Serif_4({
+  subsets: ["latin"],
+  weight: ["400"],
   display: "swap",
 });
