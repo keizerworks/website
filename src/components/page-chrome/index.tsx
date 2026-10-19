@@ -104,8 +104,14 @@ function GitHubGlyph({ className }: Glyph) {
   );
 }
 
-const tile =
-  "flex size-11 items-center justify-center rounded-xl bg-black/[0.06] text-black/40 transition-[color,background-color,transform] duration-150 hover:bg-black/[0.1] hover:text-black/70 active:scale-[0.95]";
+const tiles = {
+  light:
+    "bg-black/[0.06] text-black/40 hover:bg-black/[0.1] hover:text-black/70",
+  dark: "bg-white/[0.07] text-white/45 hover:bg-white/[0.12] hover:text-white/80",
+};
+
+const tileBase =
+  "flex size-11 items-center justify-center rounded-xl transition-[color,background-color,transform] duration-150 active:scale-[0.95]";
 
 const socials = [
   { label: "Email", href: "mailto:biz@keizerworks.com", icon: MailGlyph },
@@ -129,12 +135,20 @@ const socials = [
 
 // LCA-style sign-off: back, ways to reach us, copyright.
 export function PageFooter({
+  tone = "light",
   back,
-}: { back: { href: string; label: string } }) {
+}: {
+  tone?: "light" | "dark";
+  back: { href: string; label: string };
+}) {
   return (
     <footer className="mt-24 flex flex-col items-center gap-5">
       <nav aria-label="Keizerworks links" className="flex gap-2">
-        <Link href={back.href} aria-label={back.label} className={tile}>
+        <Link
+          href={back.href}
+          aria-label={back.label}
+          className={cn(tileBase, tiles[tone])}
+        >
           <ArrowLeft className="size-[22px]" strokeWidth={2.5} />
         </Link>
         {socials.map(({ label, href, icon: Icon }) => (
@@ -142,7 +156,7 @@ export function PageFooter({
             key={label}
             href={href}
             aria-label={label}
-            className={tile}
+            className={cn(tileBase, tiles[tone])}
             {...(href.startsWith("http")
               ? { target: "_blank", rel: "noreferrer" }
               : {})}
@@ -151,7 +165,12 @@ export function PageFooter({
           </a>
         ))}
       </nav>
-      <p className="text-[15px] text-black/50">
+      <p
+        className={cn(
+          "text-[15px]",
+          tone === "light" ? "text-black/50" : "text-white/45",
+        )}
+      >
         © Keizerworks {new Date().getFullYear()}
       </p>
     </footer>

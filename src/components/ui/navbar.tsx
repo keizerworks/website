@@ -27,6 +27,16 @@ const tones = {
     menu: "bg-black text-[#ebebeb]",
     rule: "border-white/10",
   },
+  // Dark pages on the woven texture: the bar shares the same fixed texture,
+  // so it reads as part of the page.
+  woven: {
+    bar: "texture-weave border-white/[0.08] text-[#ebebeb]",
+    logo: "",
+    link: "hover:bg-[#ff66ff]/[0.12] hover:text-[#ff66ff]",
+    cta: "bg-white text-black shadow-[0_0_0_4px_rgba(250,250,253,0.12)] hover:bg-[#ff66ff]",
+    menu: "texture-weave text-[#ebebeb]",
+    rule: "border-white/10",
+  },
   light: {
     bar: "border-black/[0.06] bg-[#fafafd]/85 text-[#111] backdrop-blur-md",
     // The logo file is white; invert it to black.
@@ -135,9 +145,9 @@ const Navbar = ({ tone = "dark" }: { tone?: keyof typeof tones }) => {
                 onClick={() => setOpen(false)}
                 className={cn(
                   "block py-3 text-2xl leading-none",
-                  tone === "dark"
-                    ? "hover:text-[#ff66ff]"
-                    : "hover:text-[#2D2DC3]",
+                  tone === "light"
+                    ? "hover:text-[#2D2DC3]"
+                    : "hover:text-[#ff66ff]",
                 )}
               >
                 {link.label}

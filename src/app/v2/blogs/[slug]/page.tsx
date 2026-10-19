@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageFooter } from "~/components/page-chrome";
+import Contents from "~/components/reading/contents";
 import { inter } from "~/config/font";
 import {
   type Block,
@@ -15,7 +16,6 @@ import {
 } from "~/data/posts";
 import { getProject } from "~/data/work";
 import { cn } from "~/lib/utils";
-import Contents from "./contents";
 
 type Props = { params: Promise<{ slug: string }> };
 
