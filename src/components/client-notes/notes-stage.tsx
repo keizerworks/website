@@ -14,6 +14,9 @@ export type Note = {
 };
 
 const EASE_OUT = "cubic-bezier(0.23, 1, 0.32, 1)";
+// For the panel morphing out of its card: quick start, but no long tail,
+// so the last few pixels don't creep in and show the cards' edges.
+const EASE_MORPH = "cubic-bezier(0.2, 0.8, 0.2, 1)";
 
 function splitOnHighlight(note: Note) {
   const start = note.quote.indexOf(note.highlight);
@@ -161,7 +164,7 @@ export default function NotesStage({
       } else {
         panel.animate(
           [{ clipPath: cardInset(active) }, { clipPath: "inset(0 round 8px)" }],
-          { duration: 420, easing: EASE_OUT },
+          { duration: 340, easing: EASE_MORPH },
         );
       }
     }
@@ -177,7 +180,7 @@ export default function NotesStage({
               { clipPath: "inset(0 round 8px)" },
               { clipPath: cardInset(shown) },
             ],
-            { duration: 220, easing: EASE_OUT },
+            { duration: 220, easing: EASE_MORPH },
           );
       animation.onfinish = () => {
         // A re-hover during the shrink reopens, so only hide if still closed.
@@ -298,7 +301,7 @@ export default function NotesStage({
             )}
           >
             “{before}
-            <mark className="bg-[linear-gradient(#ff66ff,#ff66ff)] bg-no-repeat px-1 text-black [background-size:100%_100%] [box-decoration-break:clone]">
+            <mark className="bg-transparent bg-[linear-gradient(#ff66ff,#ff66ff)] bg-no-repeat px-1 text-black [background-size:100%_100%] [box-decoration-break:clone]">
               {highlight}
             </mark>
             {after}”
