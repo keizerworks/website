@@ -3,6 +3,13 @@
 
 export type WorkTag = "Product" | "Web" | "AI" | "Mobile" | "Brand";
 
+export type Visual = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
 export type Project = {
   slug: string;
   name: string;
@@ -22,8 +29,47 @@ export type Project = {
   whatWeDid: string;
   services: string[];
   results: { value: string; label: string }[];
-  quote?: { text: string; highlight: string; name: string; detail: string };
+  quote?: {
+    text: string;
+    highlight: string;
+    name: string;
+    detail: string;
+    // Stand-in until the client's real words arrive. Kept out of the
+    // structured data, so search engines never see it as a real review.
+    placeholder?: boolean;
+  };
   url?: string;
+  // Hand-written search and link-preview copy. Projects without it get a
+  // plain title and description; we write these one project at a time.
+  seo?: {
+    title: string;
+    description: string;
+    keywords: string[];
+  };
+  // Optional long-form case study copy. Sections without it show placeholders.
+  story?: {
+    // Paragraphs under the Vision statement.
+    vision: string[];
+    // "What we built": one statement, the main parts, and notable features.
+    built: {
+      // Chapter name, LCA-style (e.g. "One platform, four workspaces").
+      title?: string;
+      statement: string;
+      // Short paragraphs on the hard parts, shown under the statement.
+      notes?: string[];
+      parts: { title: string; body: string }[];
+      highlights: string[];
+    };
+    // Real images for each part of the page; missing ones stay placeholders.
+    visuals?: {
+      vision?: [Visual, Visual];
+      built?: Visual;
+      // Brand, marketing, and social work, shown as a gallery.
+      brand?: Visual[];
+    };
+    // One line above the result numbers.
+    result: string;
+  };
 };
 
 const TODO_PROBLEM = "The problem statement for this project is coming soon.";
@@ -32,41 +78,270 @@ const TODO_PROBLEM = "The problem statement for this project is coming soon.";
 // (e.g. samriddh-cover.png is the Edulume icon), so each path is checked by eye.
 export const projects: Project[] = [
   {
+    // Source: notion_edulume_portfolio.pdf
     slug: "edulume",
     name: "Edulume",
     headline: "building a multi-tenant, AI-native learning platform",
     tags: ["AI", "Product", "Brand"],
+    year: "2024",
     icon: "/assets/portfolio/samriddh-cover.png",
     coverColor: "blue",
-    coverImage: "/assets/work/edulume-cover.png",
-    coverImageBg: "#f3f2ef",
-    problem: TODO_PROBLEM,
+    coverImage: "/assets/work/edulume/site.webp",
+    coverImageBg: "#ffffff",
+    url: "https://edulume.com",
+    seo: {
+      title: "Edulume case study: building an AI-native LMS for 1,000 schools",
+      description:
+        "How Keizerworks designed, built, and scaled Edulume, a multi-tenant AI-native learning platform, from idea to production in 18 months, with schools onboarded in about four hours.",
+      keywords: [
+        "Edulume",
+        "Edulume case study",
+        "AI LMS",
+        "AI-native learning platform",
+        "multi-tenant LMS",
+        "school management system",
+        "AI course generation",
+        "EdTech product development",
+        "CBSE NCERT RAG",
+        "Keizerworks case study",
+        "startup product studio",
+      ],
+    },
+    problem:
+      "Turn a one-page idea into an AI-native LMS any school can run, then make it ready for a thousand of them.",
     whatWeDid:
-      "We build Edulume's multi-tenant, AI-native learning platform end to end, from branding and product design to development, and run the engineering team behind it.",
-    services: ["Brand", "Product Design", "Development", "Engineering Team"],
-    results: [],
+      "Edulume wanted to rebuild the school LMS around AI. We joined at the idea stage and became their product team. What does learning look like when every school gets its own AI-native platform?",
+    services: [
+      "Product Strategy",
+      "Brand",
+      "UX/UI Design",
+      "Engineering",
+      "Infrastructure",
+      "AI",
+    ],
+    results: [
+      { value: "1,000", label: "schools the platform is built for" },
+      { value: "~4 hrs", label: "to onboard a new school" },
+      { value: "8", label: "specialists on the dedicated team" },
+      { value: "18 mo", label: "of partnership, and counting" },
+    ],
     quote: {
       text: "Working with Keizerworks felt like having an in-house product and engineering team. From branding and product design to development and long-term execution, they handled everything end-to-end and helped turn Edulume into a real, scalable platform.",
       highlight: "felt like having an in-house product and engineering team",
-      name: "Edulume",
+      name: "COO, Edulume",
       detail: "Full Product Development & Brand Partnership",
+    },
+    story: {
+      vision: [
+        "Edulume came to us with a concept, not a codebase. They needed one partner to own product, brand, design, engineering, and AI, and to stay for the long run.",
+        "The brief was big from day one: a multi-tenant architecture for up to 1,000 schools, roles flexible enough for any institution, and AI that writes course content and lifts learning outcomes.",
+      ],
+      built: {
+        title: "One platform, four workspaces",
+        statement:
+          "From the console that onboards a school to the student's AI study partner, every workspace runs on one multi-tenant core.",
+        notes: [
+          "The hardest part was permissions. Every school organises itself differently, so we designed one rule: principal + role + scope = access. Institutions create unlimited custom roles without a line of new code.",
+          "AI runs through all of it. Curriculum-aware RAG on CBSE and NCERT content keeps generated lessons on syllabus, and a routing layer picks OpenAI, Gemini, or Groq for each task.",
+        ],
+        parts: [
+          {
+            title: "Console",
+            body: "One place to onboard and manage every school on the platform.",
+          },
+          {
+            title: "School administration",
+            body: "Institution-level administration and day-to-day operations.",
+          },
+          {
+            title: "Teacher workspace",
+            body: "Classrooms, content delivery, grading, and collaboration.",
+          },
+          {
+            title: "Student workspace",
+            body: "Personalized, AI-assisted learning for every student.",
+          },
+        ],
+        highlights: [
+          "AI course and chapter generation",
+          "Curriculum-aware RAG on CBSE and NCERT content",
+          "Quiz and assignment generation from documents",
+          "Multi-model routing across OpenAI, Gemini, and Groq",
+          "Personalized learner profiles and adaptive roadmaps",
+          "Gamification with XP, progress, and leaderboards",
+          "Custom roles: principal + role + scope",
+          "Auto-generated OpenAPI documentation",
+        ],
+      },
+      result:
+        "In 18 months Edulume went from a pitch to a production platform, and a new school now goes live in about four hours.",
+      visuals: {
+        vision: [
+          {
+            src: "/assets/work/edulume/course-builder-chat.jpg",
+            alt: "Edulume's AI assistant building a quantum physics course and quiz",
+            width: 1280,
+            height: 1282,
+          },
+          {
+            src: "/assets/work/edulume/learner-profile.jpg",
+            alt: "A learner profile overlay listing recent activity and progress",
+            width: 1080,
+            height: 1087,
+          },
+        ],
+        built: {
+          src: "/assets/work/edulume/analytics.jpg",
+          alt: "Edulume analytics: courses, quizzes, assignments, and wikis tracked over time",
+          width: 1280,
+          height: 519,
+        },
+        brand: [
+          {
+            src: "/assets/work/edulume/hero-banner.jpg",
+            alt: "Edulume banner: AI platform that transforms how you learn",
+            width: 1280,
+            height: 571,
+          },
+          {
+            src: "/assets/work/edulume/poster-illustration.jpg",
+            alt: "Edulume poster with an illustrated student at a computer",
+            width: 1228,
+            height: 1536,
+          },
+          {
+            src: "/assets/work/edulume/more-than-a-teacher.jpg",
+            alt: "Edulume social post: More than a teacher, no less than a friend",
+            width: 1280,
+            height: 1282,
+          },
+          {
+            src: "/assets/work/edulume/learning-fun.jpg",
+            alt: "Edulume banner: Learning should be fun, not forced",
+            width: 1280,
+            height: 520,
+          },
+        ],
+      },
     },
   },
   {
+    slug: "tael",
+    name: "Tael",
+    headline: "agent payments on Stellar, with no KYC",
+    tags: ["AI", "Product"],
+    coverColor: "black",
+    coverImage: "/assets/work/tael-cover.webp",
+    coverImageBg: "#151515",
+    url: "https://taelprotocol.xyz",
+    problem: TODO_PROBLEM,
+    // TODO: describe our role on Tael; this line describes the product.
+    whatWeDid:
+      "Tael lets AI agents pay, run capabilities, and swap on-chain instantly. Connect a Stellar wallet or passkey, fund with USDC, and you're set. No KYC.",
+    services: ["Product Design", "Development"],
+    results: [],
+  },
+  {
+    // Source: notion_chem0.pdf
     slug: "chem0",
     name: "Chem0",
     headline: "a chemistry engine that predicts reactions no one has run yet",
-    tags: ["AI", "Product"],
+    tags: ["AI", "Product", "Brand"],
+    year: "2024–2026",
     icon: "/assets/portfolio/edulume-cover.png",
     coverColor: "black",
-    problem: TODO_PROBLEM,
+    url: "https://chem0.com",
+    seo: {
+      title:
+        "Chem0 case study: an AI chemistry platform for pharmaceutical research",
+      description:
+        "How Keizerworks designed, built, and scaled Chem0, an AI chemistry simulation platform with Graph Neural Network models that reach 94.84% prediction accuracy, now live with three research and industry institutions.",
+      keywords: [
+        "Chem0",
+        "Chem0 case study",
+        "AI chemistry platform",
+        "chemistry simulation software",
+        "molecular prediction",
+        "reaction prediction AI",
+        "Graph Neural Networks chemistry",
+        "pharmaceutical R&D software",
+        "formulation stability prediction",
+        "cheminformatics platform",
+        "Keizerworks case study",
+        "startup product studio",
+      ],
+    },
+    problem:
+      "Give chemists a way to test a reaction before they run it, in one platform that works for both labs and pharma.",
     whatWeDid:
-      "We built a chemistry simulation engine capable of predicting previously unseen reactions, and took it live with research institutions.",
-    services: ["AI", "Product Development"],
-    results: [
-      { value: "94.84%", label: "model accuracy" },
-      { value: "3", label: "institutions live" },
+      "Chem0 started as a research idea. We joined as their product, design, and AI team for two years. What if a researcher could see a reaction's risk, stability, and outcome before touching a single compound?",
+    services: [
+      "Product Strategy",
+      "Brand",
+      "UX/UI Design",
+      "Engineering",
+      "Machine Learning",
+      "Infrastructure",
     ],
+    results: [
+      { value: "94.84%", label: "peak prediction accuracy" },
+      { value: "3", label: "research and industry institutions live" },
+      { value: "50,000+", label: "validated chemical combinations" },
+      { value: "7", label: "specialists on the dedicated team" },
+    ],
+    quote: {
+      // TODO: replace with the real testimonial from Chem0's co-founder.
+      text: "We came to Keizerworks with a research idea and left with a platform chemists actually trust. They built the models, the product, and the brand as one team, and we had a Letter of Intent before we'd even finished building.",
+      highlight: "a platform chemists actually trust",
+      name: "Co-founder, Chem0",
+      placeholder: true,
+      detail: "Full Product, AI & Brand Partnership",
+    },
+    story: {
+      vision: [
+        "Chem0 came to us with a vision, not a product: modernise chemistry research by putting molecular intelligence, machine learning, and visualisation in one place.",
+        "They needed a long-term partner to build it from scratch, from the brand and the interface to the AI models and the cloud they run on, for pharma companies, R&D labs, and universities alike.",
+      ],
+      built: {
+        title: "Three models, one molecular core",
+        statement:
+          "Instead of one model that guesses everything, we built three engines, each trained for a single scientific question.",
+        notes: [
+          "The hardest part was trust. Chemists won't act on a black box, so every engine shows its inputs, from pH and humidity to functional groups and pKa, and returns a score a researcher can reason about.",
+          "Underneath, Graph Neural Networks learn how structure, physicochemical properties, and conditions interact. That lets Chem0 predict chemical interactions it has never seen, where rule-based systems stop.",
+        ],
+        parts: [
+          {
+            title: "Chemical Stability Engine",
+            body: "Scores how stable a combination stays across pH, temperature, and humidity. About 92% accurate.",
+          },
+          {
+            title: "Reaction Risk Engine",
+            body: "Rates mixing compounds as low, medium, or high risk. Trained on 50,000+ combinations, up to 98% accurate.",
+          },
+          {
+            title: "Reaction Classification Engine",
+            body: "Predicts the most likely reaction type, including no reaction at all. About 94% accurate.",
+          },
+          {
+            title: "Molecular intelligence engine",
+            body: "The GNN core: descriptors, LogP, TPSA, pKa, and hydrogen bonding, feeding every model.",
+          },
+        ],
+        highlights: [
+          "Prediction of previously unseen chemical interactions",
+          "AI chemistry assistant for scientific exploration",
+          "Interactive 2D and 3D molecular visualisation",
+          "Batch prediction APIs for large-scale workflows",
+          "Multi-model inference architecture",
+          "Enterprise-ready APIs with interactive documentation",
+          "Research journeys designed for labs and institutions",
+          "Complete brand, marketing site, and dashboard",
+        ],
+      },
+      result:
+        "Chem0 grew from a research idea into an investor-ready platform, earned a Letter of Intent from Strausswell Organics after beta, and drew acquisition offers while still in development.",
+    },
   },
   {
     slug: "arlink",
@@ -77,6 +352,7 @@ export const projects: Project[] = [
     coverColor: "pink",
     coverImage: "/assets/work/arlink-cover.png",
     coverImageBg: "#141414",
+    url: "https://arlink.ar.io",
     problem: TODO_PROBLEM,
     whatWeDid:
       "We redesigned Arlink's product experience and brand at a critical stage, ahead of their fundraising milestone.",
@@ -108,6 +384,9 @@ export const projects: Project[] = [
     tags: ["AI", "Product"],
     icon: "/assets/portfolio/voice-cover.png",
     coverColor: "black",
+    coverImage: "/assets/work/student-intelligence-tutor.webp",
+    coverImageBg: "#f6f6f3",
+    url: "https://studentintelligence.ai",
     problem: TODO_PROBLEM,
     whatWeDid: "We're building the voice infrastructure for learning.",
     services: ["AI", "Infrastructure"],
@@ -139,6 +418,7 @@ export const projects: Project[] = [
     coverColor: "blue",
     coverImage: "/assets/work/betteridea-cover.png",
     coverImageBg: "#ffffff",
+    url: "https://betteridea.dev",
     problem: TODO_PROBLEM,
     whatWeDid:
       "We helped BetterIDEa launch their social and content presence while they were heading into an acquisition.",

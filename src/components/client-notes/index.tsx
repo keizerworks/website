@@ -2,13 +2,13 @@ import { inter } from "~/config/font";
 import { cn } from "~/lib/utils";
 import NotesStage, { type Note } from "./notes-stage";
 
-// From the testimonial.to submissions. The Edulume note has no name attached yet.
+// From the testimonial.to submissions.
 const notes: Note[] = [
   {
     quote:
       "Working with Keizerworks felt like having an in-house product and engineering team. From branding and product design to development and long-term execution, they handled everything end-to-end and helped turn Edulume into a real, scalable platform.",
     highlight: "felt like having an in-house product and engineering team",
-    name: "Edulume",
+    name: "COO, Edulume",
     detail: "Full Product Development & Brand Partnership",
   },
   {

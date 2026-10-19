@@ -10,7 +10,6 @@ import { cn } from "~/lib/utils";
 // Home-page sections use "/#id" so they also work from other pages.
 const links = [
   { label: "Home", href: "/#hero" },
-  { label: "Info", href: "/v2/info" },
   { label: "Services", href: "/#services" },
   { label: "Work", href: "/v2/work" },
   { label: "Blogs", href: "/#news" },

@@ -92,9 +92,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL || siteUrl,
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || siteUrl),
   title: {
     default: "Keizerworks - Design, Build, and Maintain Products",
     template: "%s | Keizerworks",
@@ -179,7 +177,12 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${dmMono.variable}`}>
+    <html
+      lang="en"
+      // Keeps smooth scrolling for #anchors, but page changes jump to the top.
+      data-scroll-behavior="smooth"
+      className={`${spaceGrotesk.variable} ${dmMono.variable}`}
+    >
       <body className="font-sans antialiased dark bg-background">
         {children}
         <Script
