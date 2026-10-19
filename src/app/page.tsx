@@ -29,7 +29,7 @@ export default function Home() {
       {/* <StrategySection /> */}
       <section
         id="services"
-        className={`${inter.className} mx-auto w-full max-w-[1536px] scroll-mt-[100px] bg-black px-4 py-[100px] text-[#ebebeb] md:px-24`}
+        className={`${inter.className} mx-auto w-full max-w-[1536px] scroll-mt-[100px] bg-black px-4 py-16 text-[#ebebeb] md:px-24 md:py-[100px]`}
       >
         <StudioIntro />
         <div className="mt-20">

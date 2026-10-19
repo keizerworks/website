@@ -59,10 +59,30 @@ export default function StringList({ items }: { items: string[] }) {
     window.addEventListener("pointerdown", unlock);
     window.addEventListener("keydown", unlock);
 
+    // Scrolling slides rows under a still cursor without any pointermove,
+    // so remember where the mouse is and check again on every scroll frame.
+    const pointer = { x: 0, y: 0, mouse: false };
+    const trackPointer = (event: PointerEvent) => {
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+      pointer.mouse = event.pointerType === "mouse";
+    };
+    // Browsers already fire scroll at most once per frame, so no extra throttle.
+    const onScroll = () => {
+      if (!pointer.mouse) return;
+      const index = rowAt(pointer.x, pointer.y);
+      if (index === null) lastRow.current = null;
+      else pluck(index);
+    };
+    window.addEventListener("pointermove", trackPointer, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
       query.removeEventListener("change", update);
       window.removeEventListener("pointerdown", unlock);
       window.removeEventListener("keydown", unlock);
+      window.removeEventListener("pointermove", trackPointer);
+      window.removeEventListener("scroll", onScroll);
       ctxRef.current?.close();
     };
   }, []);
@@ -93,27 +113,46 @@ export default function StringList({ items }: { items: string[] }) {
     source.start();
   }
 
+  // Moving fast (or scrolling) can jump past rows between frames; strum the
+  // skipped ones in quick succession so no string is silently missed.
   function pluck(index: number) {
-    if (lastRow.current === index) return;
+    const from = lastRow.current;
+    if (from === index) return;
     lastRow.current = index;
+    if (from === null || Math.abs(index - from) === 1) {
+      strike(index);
+      return;
+    }
+    const direction = index > from ? 1 : -1;
+    for (let i = from + direction, step = 0; ; i += direction, step++) {
+      const row = i;
+      setTimeout(() => strike(row), step * 25);
+      if (row === index) break;
+    }
+  }
+
+  function strike(index: number) {
     playNote(index);
 
     const row = rows.current[index];
-    if (!row) return;
+    // Only the outline vibrates; the label stays put so it stays readable.
+    const frame = row?.querySelector<HTMLElement>("[data-frame]");
+    if (!row || !frame) return;
     // WAAPI keeps it on the compositor and restarts cleanly on a re-pluck.
     if (!reduceMotion.current) {
-      row.animate(wobble, {
+      frame.animate(wobble, {
         duration: 450,
         easing: "cubic-bezier(0.23, 1, 0.32, 1)",
       });
     }
-    row.animate(
-      [
-        { borderColor: "#ff66ff", color: "#ff66ff" },
-        { borderColor: "rgb(217 217 217 / 0.8)", color: "#ebebeb" },
-      ],
+    frame.animate(
+      [{ borderColor: "#ff66ff" }, { borderColor: "rgb(217 217 217 / 0.8)" }],
       { duration: 500, easing: "ease-out" },
     );
+    row.animate([{ color: "#ff66ff" }, { color: "#ebebeb" }], {
+      duration: 500,
+      easing: "ease-out",
+    });
   }
 
   function rowAt(x: number, y: number) {
@@ -149,8 +188,13 @@ export default function StringList({ items }: { items: string[] }) {
             ref={(el) => {
               rows.current[index] = el;
             }}
-            className="flex select-none items-center justify-between border border-[#d9d9d9]/80 px-2 py-2.5 text-xl leading-5"
+            className="relative flex select-none items-center justify-between px-2 py-2.5 text-xl leading-5"
           >
+            <span
+              data-frame
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 border border-[#d9d9d9]/80"
+            />
             <span>{item}</span>
             <span className="tabular-nums">
               {String(index + 1).padStart(2, "0")}

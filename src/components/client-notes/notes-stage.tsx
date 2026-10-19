@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { serif } from "~/config/font";
 import { cn } from "~/lib/utils";
+import { sectionTitle } from "../studio-services";
 
 export type Note = {
   quote: string;
@@ -21,7 +22,52 @@ function splitOnHighlight(note: Note) {
   return [note.quote.slice(0, start), note.highlight, note.quote.slice(end)];
 }
 
-export default function NotesStage({ notes }: { notes: Note[] }) {
+// In cards the highlight shows on phones only; on desktop it's saved for
+// the expanded view.
+function QuoteText({ note }: { note: Note }) {
+  const [before, highlight, after] = splitOnHighlight(note);
+  return (
+    <>
+      “{before}
+      <mark className="bg-[#ff66ff] text-black [box-decoration-break:clone] md:bg-transparent">
+        {highlight}
+      </mark>
+      {after}”
+    </>
+  );
+}
+
+function Chevron({ flip }: { flip?: boolean }) {
+  return (
+    <svg
+      aria-hidden="true"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      className={flip ? "rotate-180" : undefined}
+    >
+      <path
+        d="M14.5 18L8.5 12L14.5 6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="square"
+      />
+    </svg>
+  );
+}
+
+// 44px touch targets, quiet on black; disabled fades instead of turning grey.
+const arrow =
+  "flex size-11 items-center justify-center rounded bg-white/10 text-white transition-[transform,opacity,background-color] duration-150 active:scale-[0.97] active:bg-white/20 disabled:pointer-events-none disabled:opacity-30";
+
+export default function NotesStage({
+  title,
+  notes,
+}: {
+  title: string;
+  notes: Note[];
+}) {
   const stage = useRef<HTMLDivElement>(null);
   const overlay = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
@@ -33,6 +79,37 @@ export default function NotesStage({ notes }: { notes: Note[] }) {
   const [enabled, setEnabled] = useState(false);
   const reduceMotion = useRef(false);
   const wasOpen = useRef(false);
+  // Mobile carousel state.
+  const track = useRef<HTMLUListElement>(null);
+  const [atStart, setAtStart] = useState(true);
+  const [atEnd, setAtEnd] = useState(false);
+
+  useEffect(() => {
+    const el = track.current;
+    if (!el) return;
+    const update = () => {
+      setAtStart(el.scrollLeft <= 1);
+      setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 1);
+    };
+    update();
+    el.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      el.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
+  function step(direction: 1 | -1) {
+    const el = track.current;
+    const card = cards.current[0];
+    if (!el || !card) return;
+    // One card plus the 12px gap.
+    el.scrollBy({
+      left: direction * (card.offsetWidth + 12),
+      behavior: "smooth",
+    });
+  }
 
   // Only on wide screens with a real pointer; touch and phones get the grid.
   useEffect(() => {
@@ -151,7 +228,35 @@ export default function NotesStage({ notes }: { notes: Note[] }) {
         if (event.key === "Escape") setActive(null);
       }}
     >
-      <ul className="grid gap-4 md:grid-cols-2">
+      <div className="mb-6 flex items-end justify-between">
+        <h2 className={cn(sectionTitle, "mb-0")}>{title}</h2>
+        <div className="flex gap-1.5 md:hidden">
+          <button
+            type="button"
+            aria-label="Previous note"
+            disabled={atStart}
+            onClick={() => step(-1)}
+            className={arrow}
+          >
+            <Chevron />
+          </button>
+          <button
+            type="button"
+            aria-label="Next note"
+            disabled={atEnd}
+            onClick={() => step(1)}
+            className={arrow}
+          >
+            <Chevron flip />
+          </button>
+        </div>
+      </div>
+
+      {/* Swipeable row on phones, 2x2 grid from md up. */}
+      <ul
+        ref={track}
+        className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 [scrollbar-width:none] md:mx-0 md:grid md:gap-4 md:px-0 md:grid-cols-2 md:overflow-visible [&::-webkit-scrollbar]:hidden"
+      >
         {notes.map((note, index) => (
           <li
             key={note.name}
@@ -163,10 +268,10 @@ export default function NotesStage({ notes }: { notes: Note[] }) {
             onPointerEnter={() => open(index)}
             onFocus={() => open(index)}
             tabIndex={enabled ? 0 : undefined}
-            className="flex flex-col justify-between gap-8 rounded-lg bg-white p-5 text-black outline-none focus-visible:ring-2 focus-visible:ring-[#ff66ff]"
+            className="flex w-[85%] shrink-0 snap-start flex-col justify-between gap-6 rounded-lg bg-white p-5 md:w-auto md:gap-8 text-black outline-none focus-visible:ring-2 focus-visible:ring-[#ff66ff]"
           >
-            <blockquote className="text-xl leading-7">
-              “{note.quote}”
+            <blockquote className="text-[17px] leading-[1.55] md:text-xl md:leading-7">
+              <QuoteText note={note} />
             </blockquote>
             <div className="text-sm">
               <p>{note.name}</p>

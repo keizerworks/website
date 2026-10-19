@@ -1,6 +1,5 @@
 import { inter } from "~/config/font";
 import { cn } from "~/lib/utils";
-import { sectionTitle } from "../studio-services";
 import NotesStage, { type Note } from "./notes-stage";
 
 // From the testimonial.to submissions. The Edulume note has no name attached yet.
@@ -29,7 +28,8 @@ const notes: Note[] = [
   {
     quote:
       "Loved working with the team. We were heading into an acquisition at the time, and they helped us a ton with launching our social and content game. Absolutely recommended and will work with them again.",
-    highlight: "Absolutely recommended and will work with them again.",
+    highlight:
+      "We were heading into an acquisition at the time, and they helped us a ton",
     name: "Ankush Kun",
     detail: "BetterIDEa · Social & Content Launch",
   },
@@ -41,11 +41,10 @@ export default function ClientNotes() {
       id="client-notes"
       className={cn(
         inter.className,
-        "mx-auto w-full max-w-[1536px] scroll-mt-[100px] bg-black px-4 py-[100px] text-[#ebebeb] md:px-24",
+        "mx-auto w-full max-w-[1536px] scroll-mt-[100px] bg-black px-4 py-16 md:py-[100px] text-[#ebebeb] md:px-24",
       )}
     >
-      <h2 className={sectionTitle}>Client Notes</h2>
-      <NotesStage notes={notes} />
+      <NotesStage title="Client Notes" notes={notes} />
     </section>
   );
 }
