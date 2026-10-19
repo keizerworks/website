@@ -1,12 +1,18 @@
-import { ArrowLeft, CornerUpLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
+import ImageCarousel from "~/components/image-carousel";
+import { BackLink, Headline, PageFooter } from "~/components/page-chrome";
 import Navbar from "~/components/ui/navbar";
 import { inter, serif } from "~/config/font";
-import { type Project, type Visual, getProject, projects } from "~/data/work";
+import {
+  type Project,
+  type StoryChapter,
+  type Visual,
+  getProject,
+  projects,
+} from "~/data/work";
 import { cn } from "~/lib/utils";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -19,10 +25,10 @@ const siteUrl = "https://keizerworks.com";
 
 // Best image for link previews: the cover, else the first real visual.
 function seoImage(project: Project) {
-  const visual = project.story?.visuals?.built;
   if (project.coverImage) return project.coverImage;
-  if (visual) return visual.src;
-  return "/opengraph-image.png";
+  const visual = project.story?.chapters.find((c) => c.visuals?.length)
+    ?.visuals?.[0];
+  return visual?.src ?? "/opengraph-image.png";
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -219,16 +225,20 @@ function ClientMark({ project }: { project: Project }) {
   );
 }
 
-// Editorial chapter: small label in a left rail, content on the right.
-// Body copy is left-aligned; centred paragraphs are hard to read.
-function Chapter({
-  title,
-  statement,
+const prose =
+  "flex flex-col gap-4 text-[17px] leading-[1.65] text-black/65 [text-wrap:pretty]";
+
+// Editorial chapter: number and label in a left rail, the statement and
+// copy on the right. Body copy is left-aligned; centred paragraphs are hard
+// to read.
+function ChapterText({
+  number,
+  label: title,
   children,
 }: {
-  title: string;
-  statement?: string;
-  children?: ReactNode;
+  number: number;
+  label: string;
+  children: ReactNode;
 }) {
   return (
     <section
@@ -237,32 +247,172 @@ function Chapter({
         "mt-24 grid gap-4 border-t border-black/[0.07] pt-8 md:mt-32 md:grid-cols-[200px_1fr] md:gap-10",
       )}
     >
-      <h2 className={cn(label, "md:pt-2")}>{title}</h2>
-      <div className="max-w-[720px]">
-        {statement ? (
-          <p className="text-[24px] leading-[1.3] tracking-[-0.015em] [text-wrap:balance] md:text-[30px]">
-            {statement}
-          </p>
-        ) : (
-          <TextPlaceholder lines={2} />
-        )}
-        {children}
-      </div>
+      <h2 className="flex items-baseline gap-3 md:flex-col md:gap-1.5 md:pt-2">
+        <span className="text-xs font-medium tabular-nums text-[#2D2DC3]">
+          {String(number).padStart(2, "0")}
+        </span>
+        <span className={label}>{title}</span>
+      </h2>
+      <div className="max-w-[720px]">{children}</div>
     </section>
   );
 }
 
-// The last two words get the italic serif accent, LCA-style.
-function Headline({ text }: { text: string }) {
-  const sentence = text.charAt(0).toUpperCase() + text.slice(1);
-  const words = sentence.split(" ");
+// Copy marks its key phrase with **double asterisks**. Statements show it
+// by contrast (the rest fades back); body copy gets a pink highlighter.
+function Rich({ text, tone }: { text: string; tone: "statement" | "body" }) {
+  // Non-breaking hyphens keep words like "AI-native" on one line.
+  const parts = text.replace(/(\w)-(\w)/g, "$1\u2011$2").split(/\*\*(.+?)\*\*/);
+  return parts.map((part, i) =>
+    // Odd indexes are the captured **phrases**.
+    i % 2 === 1 ? (
+      <mark
+        key={i}
+        className={cn(
+          "text-[#111] [box-decoration-break:clone]",
+          tone === "statement"
+            ? "bg-transparent"
+            : "rounded-[3px] bg-[#ff66ff]/30 px-0.5",
+        )}
+      >
+        {part}
+      </mark>
+    ) : (
+      part
+    ),
+  );
+}
+
+function Statement({ text }: { text: string }) {
+  // Fully black when nothing is marked; otherwise the mark carries it.
+  const marked = text.includes("**");
   return (
-    <h1 className="mx-auto max-w-[900px] text-[36px] leading-[1.1] tracking-[-0.025em] [text-wrap:balance] md:text-[56px]">
-      {words.slice(0, -2).join(" ")}{" "}
-      <em className={cn(serif.className, "italic tracking-normal")}>
-        {words.slice(-2).join(" ")}
-      </em>
-    </h1>
+    <p
+      className={cn(
+        "text-[24px] leading-[1.3] tracking-[-0.015em] [text-wrap:balance] md:text-[30px]",
+        marked && "text-black/40",
+      )}
+    >
+      <Rich text={text} tone="statement" />
+    </p>
+  );
+}
+
+// Screens sit in the text column, not the full page width.
+const wide = "(min-width: 1040px) 1000px, 100vw";
+const half = "(min-width: 768px) 500px, 100vw";
+
+// A screen with its caption, so every image says what it shows.
+function Figure({ visual, sizes }: { visual: Visual; sizes: string }) {
+  return (
+    <figure>
+      <Shot visual={visual} sizes={sizes} />
+      {visual.caption && (
+        <figcaption className="mt-3 text-[14px] leading-snug text-black/50">
+          {visual.caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+// The chapter's screens, right under its text.
+function ChapterVisuals({ chapter }: { chapter: StoryChapter }) {
+  const visuals = chapter.visuals ?? [];
+  if (visuals.length === 0) return null;
+  const layout = chapter.layout ?? "stack";
+
+  if (layout === "carousel") {
+    return (
+      <div className={column}>
+        <ImageCarousel visuals={visuals} label={chapter.label} />
+      </div>
+    );
+  }
+
+  if (layout === "stack") {
+    return (
+      <div className={cn(column, "mt-12 flex flex-col gap-10")}>
+        {visuals.map((visual) => (
+          <Figure key={visual.src} visual={visual} sizes={wide} />
+        ))}
+      </div>
+    );
+  }
+
+  // pair: two per row. gallery: first (and a lone last) full width.
+  return (
+    <div
+      className={cn(
+        column,
+        "mt-12 grid items-start gap-x-4 gap-y-10 md:grid-cols-2",
+      )}
+    >
+      {visuals.map((visual, i) => {
+        const full =
+          layout === "gallery" &&
+          (i === 0 || (i === visuals.length - 1 && i % 2 === 1));
+        return (
+          <div key={visual.src} className={cn(full && "md:col-span-2")}>
+            <Figure visual={visual} sizes={full ? wide : half} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Chapter({
+  chapter,
+  number,
+}: {
+  chapter: StoryChapter;
+  number: number;
+}) {
+  return (
+    <>
+      <ChapterText number={number} label={chapter.label}>
+        <Statement text={chapter.statement} />
+        {chapter.paragraphs && (
+          <div className={cn(prose, "mt-6")}>
+            {chapter.paragraphs.map((paragraph) => (
+              <p key={paragraph}>
+                <Rich text={paragraph} tone="body" />
+              </p>
+            ))}
+          </div>
+        )}
+        {chapter.cards && (
+          <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+            {chapter.cards.map((card) => (
+              <li
+                key={card.title}
+                className="rounded-xl bg-black/[0.03] p-5 ring-1 ring-inset ring-black/[0.04]"
+              >
+                <h3 className="font-semibold">{card.title}</h3>
+                <p className="mt-1.5 text-[15px] leading-[1.55] text-black/65">
+                  {card.body}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+        {chapter.bullets && (
+          <ul className="mt-8 grid gap-x-8 gap-y-3 text-[15px] leading-snug text-black/75 sm:grid-cols-2">
+            {chapter.bullets.map((item) => (
+              <li key={item} className="flex gap-3">
+                <span
+                  aria-hidden="true"
+                  className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[#2D2DC3]"
+                />
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
+      </ChapterText>
+      <ChapterVisuals chapter={chapter} />
+    </>
   );
 }
 
@@ -280,108 +430,6 @@ function MetaItem({ title, children }: { title: string; children: ReactNode }) {
 // Matches the TODO text in ~/data/work until real problem statements land.
 const TODO_PROBLEM_PREFIX = "The problem statement";
 
-// Solid glyphs, like LCA's footer (lucide only draws outlines).
-type Glyph = { className?: string };
-
-function MailGlyph({ className }: Glyph) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path
-        fillRule="evenodd"
-        d="M2 4.5h20v15H2zM4.2 7l7.8 5.4L19.8 7v2.5L12 14.9 4.2 9.5z"
-      />
-    </svg>
-  );
-}
-
-function XGlyph({ className }: Glyph) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
-    </svg>
-  );
-}
-
-function LinkedInGlyph({ className }: Glyph) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <circle cx="4.5" cy="4.5" r="2.4" />
-      <path d="M2.5 8.8h4v12.7h-4zM9 8.8h3.8v1.8c.6-1.1 2-2.1 4.1-2.1 3.9 0 4.6 2.5 4.6 5.8v7.2h-4v-6.4c0-1.5 0-3.4-2.1-3.4s-2.4 1.6-2.4 3.3v6.5H9z" />
-    </svg>
-  );
-}
-
-function InstagramGlyph({ className }: Glyph) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path
-        fillRule="evenodd"
-        d="M8 2h8a6 6 0 0 1 6 6v8a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6V8a6 6 0 0 1 6-6Zm4 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 2.6a2.4 2.4 0 1 1 0 4.8 2.4 2.4 0 0 1 0-4.8ZM17.6 5a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 0 0 0-2.8Z"
-      />
-    </svg>
-  );
-}
-
-function GitHubGlyph({ className }: Glyph) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-    </svg>
-  );
-}
-
-const tile =
-  "flex size-11 items-center justify-center rounded-xl bg-black/[0.06] text-black/40 transition-[color,background-color,transform] duration-150 hover:bg-black/[0.1] hover:text-black/70 active:scale-[0.95]";
-
-const socials = [
-  { label: "Email", href: "mailto:biz@keizerworks.com", icon: MailGlyph },
-  { label: "X", href: "https://x.com/keizerHq", icon: XGlyph },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/company/keizerworks",
-    icon: LinkedInGlyph,
-  },
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/keizerworks/",
-    icon: InstagramGlyph,
-  },
-  {
-    label: "GitHub",
-    href: "https://github.com/keizerworks",
-    icon: GitHubGlyph,
-  },
-];
-
-// LCA-style sign-off: back to work, ways to reach us, copyright.
-function PageFooter() {
-  return (
-    <footer className="mt-24 flex flex-col items-center gap-5">
-      <nav aria-label="Keizerworks links" className="flex gap-2">
-        <Link href="/v2/work" aria-label="Back to Work" className={tile}>
-          <ArrowLeft className="size-[22px]" strokeWidth={2.5} />
-        </Link>
-        {socials.map(({ label, href, icon: Icon }) => (
-          <a
-            key={label}
-            href={href}
-            aria-label={label}
-            className={tile}
-            {...(href.startsWith("http")
-              ? { target: "_blank", rel: "noreferrer" }
-              : {})}
-          >
-            <Icon className="size-[22px]" />
-          </a>
-        ))}
-      </nav>
-      <p className="text-[15px] text-black/50">
-        © Keizerworks {new Date().getFullYear()}
-      </p>
-    </footer>
-  );
-}
-
 export default async function ProjectPage({ params }: Props) {
   const project = getProject((await params).slug);
   if (!project) notFound();
@@ -389,8 +437,6 @@ export default async function ProjectPage({ params }: Props) {
   const quote = project.quote;
   const [before, after] = quote ? quote.text.split(quote.highlight) : ["", ""];
   const story = project.story;
-  const visuals = story?.visuals;
-  const brand = visuals?.brand ?? [];
   const problem = project.problem.startsWith(TODO_PROBLEM_PREFIX)
     ? undefined
     : project.problem;
@@ -400,21 +446,12 @@ export default async function ProjectPage({ params }: Props) {
       className={cn(inter.className, "min-h-screen bg-[#fafafd] text-[#111]")}
     >
       {project.seo && <JsonLd project={project} seo={project.seo} />}
-      <Navbar />
+      <Navbar tone="light" />
 
       <div className="mx-auto max-w-[1200px] px-5 pb-24 pt-[96px] md:pt-[120px]">
-        <Link
-          href="/v2/work"
-          className="group inline-flex items-center gap-2 text-[15px] text-black/45 transition-colors duration-150 hover:text-black/80 active:scale-[0.97]"
-        >
-          <span
-            aria-hidden="true"
-            className="flex size-6 items-center justify-center rounded-full bg-black/45 text-[#fafafd] transition-colors duration-150 group-hover:bg-black/80"
-          >
-            <CornerUpLeft className="size-3" strokeWidth={2.75} />
-          </span>
-          Back to Work
-        </Link>
+        <div className={column}>
+          <BackLink href="/v2/work" label="Back to Work" />
+        </div>
 
         <header className="mt-14 text-center md:mt-20">
           <Headline text={project.headline} />
@@ -454,8 +491,9 @@ export default async function ProjectPage({ params }: Props) {
           </MetaItem>
         </dl>
 
-        {/* Hero visual: the real cover when there is one, else a soft block. */}
-        <div className="mt-10">
+        {/* Hero visual: the real cover when there is one, else a soft block.
+            Same column as the text and screens below. */}
+        <div className={cn(column, "mt-10")}>
           {project.coverImage ? (
             <div
               style={{ backgroundColor: project.coverImageBg }}
@@ -466,7 +504,7 @@ export default async function ProjectPage({ params }: Props) {
                 alt={`${project.name} cover`}
                 fill
                 priority
-                sizes="(min-width: 1240px) 1160px, 100vw"
+                sizes="(min-width: 1040px) 1000px, 100vw"
                 className="object-contain"
               />
             </div>
@@ -475,121 +513,30 @@ export default async function ProjectPage({ params }: Props) {
           )}
         </div>
 
-        <Chapter title="Vision" statement={problem}>
-          <div className="mt-6">
-            {story ? (
-              <div className="flex flex-col gap-4 text-[17px] leading-[1.65] text-black/65 [text-wrap:pretty]">
-                {story.vision.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </div>
-            ) : (
-              <TextPlaceholder lines={3} />
-            )}
-          </div>
-        </Chapter>
-        <div className="mt-12 grid items-start gap-4 md:grid-cols-2">
-          {visuals?.vision ? (
-            visuals.vision.map((visual) => (
-              <Shot
-                key={visual.src}
-                visual={visual}
-                sizes="(min-width: 768px) 580px, 100vw"
-              />
-            ))
-          ) : (
-            <>
-              <VisualPlaceholder className="aspect-[4/3]" />
-              <VisualPlaceholder className="aspect-[4/3]" />
-            </>
-          )}
-        </div>
-
-        <Chapter
-          title={story?.built.title ?? "What we built"}
-          statement={story?.built.statement}
-        >
-          {story && (
-            <>
-              {story.built.notes && (
-                <div className="mt-6 flex flex-col gap-4 text-[17px] leading-[1.65] text-black/65 [text-wrap:pretty]">
-                  {story.built.notes.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                </div>
-              )}
-              <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-                {story.built.parts.map((part) => (
-                  <li
-                    key={part.title}
-                    className="rounded-xl bg-black/[0.03] p-5 ring-1 ring-inset ring-black/[0.04]"
-                  >
-                    <h3 className="font-semibold">{part.title}</h3>
-                    <p className="mt-1.5 text-[15px] leading-[1.55] text-black/65">
-                      {part.body}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-              <ul className="mt-8 grid gap-x-8 gap-y-3 text-[15px] leading-snug text-black/75 sm:grid-cols-2">
-                {story.built.highlights.map((item) => (
-                  <li key={item} className="flex gap-3">
-                    <span
-                      aria-hidden="true"
-                      className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[#2D2DC3]"
-                    />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-          <ul className="mt-8 flex flex-wrap gap-2">
-            {project.services.map((service) => (
-              <li
-                key={service}
-                className="rounded-full bg-black/[0.05] px-3 py-1 text-sm text-black/70"
-              >
-                {service}
-              </li>
-            ))}
-          </ul>
-        </Chapter>
-        <div className="mt-12">
-          {visuals?.built ? (
-            <Shot
-              visual={visuals.built}
-              sizes="(min-width: 1240px) 1160px, 100vw"
-            />
-          ) : (
-            <VisualPlaceholder className="aspect-[21/9]" />
-          )}
-        </div>
-
-        {brand.length > 0 && (
+        {story ? (
+          story.chapters.map((chapter, i) => (
+            <Chapter key={chapter.label} chapter={chapter} number={i + 1} />
+          ))
+        ) : (
+          // Draft projects: the same shape, with soft placeholders.
           <>
-            <Chapter
-              title="Brand & social"
-              statement="A brand to match the product, carried through the site, launch banners, and social posts."
-            />
-            {/* First and last run full width; the ones between pair up. */}
-            <div className="mt-12 grid items-start gap-4 md:grid-cols-2">
-              {brand.map((visual, i) => {
-                const full = i === 0 || (i === brand.length - 1 && i % 2 === 1);
-                return (
-                  <div key={visual.src} className={cn(full && "md:col-span-2")}>
-                    <Shot
-                      visual={visual}
-                      sizes={
-                        full
-                          ? "(min-width: 1240px) 1160px, 100vw"
-                          : "(min-width: 768px) 580px, 100vw"
-                      }
-                    />
-                  </div>
-                );
-              })}
-            </div>
+            <ChapterText number={1} label="The brief">
+              {problem ? (
+                <Statement text={problem} />
+              ) : (
+                <TextPlaceholder lines={2} />
+              )}
+              <div className="mt-6">
+                <TextPlaceholder lines={3} />
+              </div>
+            </ChapterText>
+            <ChapterText number={2} label="What we built">
+              <TextPlaceholder lines={2} />
+              <div className="mt-6">
+                <TextPlaceholder lines={3} />
+              </div>
+            </ChapterText>
+            <VisualPlaceholder className={cn(column, "mt-12 aspect-[21/9]")} />
           </>
         )}
 
@@ -598,8 +545,13 @@ export default async function ProjectPage({ params }: Props) {
           <p className={label}>Result</p>
           <div className="mx-auto mt-4 max-w-[620px]">
             {story?.result ? (
-              <p className="text-[24px] leading-[1.3] tracking-[-0.01em] [text-wrap:balance] md:text-[28px]">
-                {story.result}
+              <p
+                className={cn(
+                  "text-[24px] leading-[1.3] tracking-[-0.01em] [text-wrap:balance] md:text-[28px]",
+                  story.result.includes("**") && "text-black/40",
+                )}
+              >
+                <Rich text={story.result} tone="statement" />
               </p>
             ) : (
               <TextPlaceholder lines={2} center />
@@ -645,7 +597,7 @@ export default async function ProjectPage({ params }: Props) {
           </figure>
         )}
 
-        <PageFooter />
+        <PageFooter back={{ href: "/v2/work", label: "Back to Work" }} />
       </div>
     </main>
   );

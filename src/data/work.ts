@@ -8,6 +8,27 @@ export type Visual = {
   alt: string;
   width: number;
   height: number;
+  // Short line under the image saying what it shows.
+  caption?: string;
+};
+
+// One step of the story: what we say, then the screens that prove it,
+// right underneath. Chapters are numbered on the page in this order.
+export type StoryChapter = {
+  // Short rail label, e.g. "For teachers".
+  label: string;
+  // The one sentence the chapter is about.
+  statement: string;
+  paragraphs?: string[];
+  // Named pieces, shown as cards.
+  cards?: { title: string; body: string }[];
+  // Feature list, shown as a dotted two-column list.
+  bullets?: string[];
+  visuals?: Visual[];
+  // stack: full width, one per row. pair: two per row.
+  // gallery: first full width, the rest in pairs.
+  // carousel: one swipeable row at a single height.
+  layout?: "stack" | "pair" | "gallery" | "carousel";
 };
 
 export type Project = {
@@ -46,27 +67,9 @@ export type Project = {
     description: string;
     keywords: string[];
   };
-  // Optional long-form case study copy. Sections without it show placeholders.
+  // Long-form case study. Projects without it show placeholder chapters.
   story?: {
-    // Paragraphs under the Vision statement.
-    vision: string[];
-    // "What we built": one statement, the main parts, and notable features.
-    built: {
-      // Chapter name, LCA-style (e.g. "One platform, four workspaces").
-      title?: string;
-      statement: string;
-      // Short paragraphs on the hard parts, shown under the statement.
-      notes?: string[];
-      parts: { title: string; body: string }[];
-      highlights: string[];
-    };
-    // Real images for each part of the page; missing ones stay placeholders.
-    visuals?: {
-      vision?: [Visual, Visual];
-      built?: Visual;
-      // Brand, marketing, and social work, shown as a gallery.
-      brand?: Visual[];
-    };
+    chapters: StoryChapter[];
     // One line above the result numbers.
     result: string;
   };
@@ -132,97 +135,148 @@ export const projects: Project[] = [
       detail: "Full Product Development & Brand Partnership",
     },
     story: {
-      vision: [
-        "Edulume came to us with a concept, not a codebase. They needed one partner to own product, brand, design, engineering, and AI, and to stay for the long run.",
-        "The brief was big from day one: a multi-tenant architecture for up to 1,000 schools, roles flexible enough for any institution, and AI that writes course content and lifts learning outcomes.",
-      ],
-      built: {
-        title: "One platform, four workspaces",
-        statement:
-          "From the console that onboards a school to the student's AI study partner, every workspace runs on one multi-tenant core.",
-        notes: [
-          "The hardest part was permissions. Every school organises itself differently, so we designed one rule: principal + role + scope = access. Institutions create unlimited custom roles without a line of new code.",
-          "AI runs through all of it. Curriculum-aware RAG on CBSE and NCERT content keeps generated lessons on syllabus, and a routing layer picks OpenAI, Gemini, or Groq for each task.",
-        ],
-        parts: [
-          {
-            title: "Console",
-            body: "One place to onboard and manage every school on the platform.",
-          },
-          {
-            title: "School administration",
-            body: "Institution-level administration and day-to-day operations.",
-          },
-          {
-            title: "Teacher workspace",
-            body: "Classrooms, content delivery, grading, and collaboration.",
-          },
-          {
-            title: "Student workspace",
-            body: "Personalized, AI-assisted learning for every student.",
-          },
-        ],
-        highlights: [
-          "AI course and chapter generation",
-          "Curriculum-aware RAG on CBSE and NCERT content",
-          "Quiz and assignment generation from documents",
-          "Multi-model routing across OpenAI, Gemini, and Groq",
-          "Personalized learner profiles and adaptive roadmaps",
-          "Gamification with XP, progress, and leaderboards",
-          "Custom roles: principal + role + scope",
-          "Auto-generated OpenAPI documentation",
-        ],
-      },
-      result:
-        "In 18 months Edulume went from a pitch to a production platform, and a new school now goes live in about four hours.",
-      visuals: {
-        vision: [
-          {
-            src: "/assets/work/edulume/course-builder-chat.jpg",
-            alt: "Edulume's AI assistant building a quantum physics course and quiz",
-            width: 1280,
-            height: 1282,
-          },
-          {
-            src: "/assets/work/edulume/learner-profile.jpg",
-            alt: "A learner profile overlay listing recent activity and progress",
-            width: 1080,
-            height: 1087,
-          },
-        ],
-        built: {
-          src: "/assets/work/edulume/analytics.jpg",
-          alt: "Edulume analytics: courses, quizzes, assignments, and wikis tracked over time",
-          width: 1280,
-          height: 519,
+      chapters: [
+        {
+          label: "The brief",
+          statement:
+            "Turn a one-page idea into **an AI-native LMS any school can run**, then make it ready for a thousand of them.",
+          paragraphs: [
+            "Edulume came to us with **a concept, not a codebase**. They needed one partner to own product, brand, design, engineering, and AI, and to stay for the long run.",
+            "The brief was big from day one: a multi-tenant architecture for **up to 1,000 schools**, roles flexible enough for any institution, and AI that writes course content and lifts learning outcomes.",
+          ],
         },
-        brand: [
-          {
-            src: "/assets/work/edulume/hero-banner.jpg",
-            alt: "Edulume banner: AI platform that transforms how you learn",
-            width: 1280,
-            height: 571,
-          },
-          {
-            src: "/assets/work/edulume/poster-illustration.jpg",
-            alt: "Edulume poster with an illustrated student at a computer",
-            width: 1228,
-            height: 1536,
-          },
-          {
-            src: "/assets/work/edulume/more-than-a-teacher.jpg",
-            alt: "Edulume social post: More than a teacher, no less than a friend",
-            width: 1280,
-            height: 1282,
-          },
-          {
-            src: "/assets/work/edulume/learning-fun.jpg",
-            alt: "Edulume banner: Learning should be fun, not forced",
-            width: 1280,
-            height: 520,
-          },
-        ],
-      },
+        {
+          label: "The platform",
+          statement:
+            "**One multi-tenant core**, with a workspace on top for everyone who runs, teaches, or learns at a school.",
+          paragraphs: [
+            "The hardest part was permissions. Every school organises itself differently, so we designed one rule: **principal + role + scope = access**. Schools create as many custom roles as they need, with no new code.",
+          ],
+          cards: [
+            {
+              title: "Console",
+              body: "Where we onboard and manage every school on the platform.",
+            },
+            {
+              title: "School administration",
+              body: "Staff, roles, and day-to-day operations for each institution.",
+            },
+            {
+              title: "Teacher workspace",
+              body: "Building courses, delivering content, grading, and collaboration.",
+            },
+            {
+              title: "Student workspace",
+              body: "Personalised, AI-assisted learning on the web and on mobile.",
+            },
+          ],
+        },
+        {
+          label: "For schools",
+          statement:
+            "School leaders see **every course, quiz, assignment, and wiki** across the institution in one view.",
+          paragraphs: [
+            "A new school goes from the console to **live in about four hours**. From there, custom roles decide who creates, publishes, and reviews content.",
+          ],
+          visuals: [
+            {
+              src: "/assets/work/edulume/analytics.jpg",
+              alt: "Edulume analytics: courses, quizzes, assignments, and wikis tracked over time",
+              caption:
+                "Analytics: everything a school has created, over time and by type.",
+              width: 1280,
+              height: 519,
+            },
+          ],
+        },
+        {
+          label: "For teachers",
+          statement:
+            "Teachers build a course **by describing it**. Edulume drafts the chapters, quizzes, and assignments.",
+          paragraphs: [
+            "Generation runs on curriculum-aware RAG over CBSE and NCERT content, so **drafts stay on syllabus**. Teachers can turn any document into a quiz, and open a student's profile to see how they're doing.",
+          ],
+          visuals: [
+            {
+              src: "/assets/work/edulume/course-builder-chat.jpg",
+              alt: "Edulume's AI assistant building a quantum physics course and quiz",
+              caption:
+                "AI course builder: a course and its quiz from one prompt.",
+              width: 1280,
+              height: 1282,
+            },
+            {
+              src: "/assets/work/edulume/learner-profile.jpg",
+              alt: "A learner profile overlay listing recent activity and progress",
+              caption:
+                "Learner profile: recent activity and progress at a glance.",
+              width: 1080,
+              height: 1087,
+            },
+          ],
+          layout: "pair",
+        },
+        {
+          label: "For students",
+          statement:
+            "Students get **one home for everything they're learning**, on the web and on their phone.",
+          paragraphs: [
+            "Progress, time spent, points, and a leaderboard give students **a reason to come back**. Personalised learner profiles and adaptive roadmaps decide what comes next.",
+          ],
+          visuals: [
+            {
+              src: "/assets/work/edulume/learner-dashboard.webp",
+              alt: "Edulume learner dashboard: activity tracker, course progress, time spent, student spotlight, and leaderboard",
+              caption:
+                "Web dashboard: activity, course progress, time spent, and the leaderboard.",
+              width: 1958,
+              height: 1000,
+            },
+            {
+              src: "/assets/work/edulume/learner-mobile.webp",
+              alt: "Edulume mobile app: learner home, all content, profile menu, and notifications",
+              caption:
+                "Mobile app: home, all content, profile menu, and notifications.",
+              width: 1840,
+              height: 800,
+            },
+          ],
+        },
+        {
+          label: "Brand & social",
+          statement:
+            "**A brand to match the product**, carried through the site, launch banners, and social posts.",
+          visuals: [
+            {
+              src: "/assets/work/edulume/hero-banner.jpg",
+              alt: "Edulume banner: AI platform that transforms how you learn",
+              width: 1280,
+              height: 571,
+            },
+            {
+              src: "/assets/work/edulume/poster-illustration.jpg",
+              alt: "Edulume poster with an illustrated student at a computer",
+              width: 1228,
+              height: 1536,
+            },
+            {
+              src: "/assets/work/edulume/more-than-a-teacher.jpg",
+              alt: "Edulume social post: More than a teacher, no less than a friend",
+              width: 1280,
+              height: 1282,
+            },
+            {
+              src: "/assets/work/edulume/learning-fun.jpg",
+              alt: "Edulume banner: Learning should be fun, not forced",
+              width: 1280,
+              height: 520,
+            },
+          ],
+          layout: "carousel",
+        },
+      ],
+      result:
+        "In 18 months Edulume went **from a pitch to a production platform**, and a new school now goes live in about four hours.",
     },
   },
   {
@@ -298,49 +352,61 @@ export const projects: Project[] = [
       detail: "Full Product, AI & Brand Partnership",
     },
     story: {
-      vision: [
-        "Chem0 came to us with a vision, not a product: modernise chemistry research by putting molecular intelligence, machine learning, and visualisation in one place.",
-        "They needed a long-term partner to build it from scratch, from the brand and the interface to the AI models and the cloud they run on, for pharma companies, R&D labs, and universities alike.",
+      chapters: [
+        {
+          label: "The brief",
+          statement:
+            "Give chemists a way to **test a reaction before they run it**, in one platform that works for both labs and pharma.",
+          paragraphs: [
+            "Chem0 came to us with **a vision, not a product**: modernise chemistry research by putting molecular intelligence, machine learning, and visualisation in one place.",
+            "They needed a long-term partner to build it from scratch, from the brand and the interface to the AI models and the cloud they run on, for pharma companies, R&D labs, and universities alike.",
+          ],
+        },
+        {
+          label: "The models",
+          statement:
+            "Instead of one model that guesses everything, we built **three engines, each trained for a single scientific question**.",
+          paragraphs: [
+            "The hardest part was **trust**. Chemists won't act on a black box, so every engine shows its inputs, from pH and humidity to functional groups and pKa, and returns a score a researcher can reason about.",
+            "Underneath, Graph Neural Networks learn how structure, physicochemical properties, and conditions interact. That lets Chem0 predict chemical interactions **it has never seen**, where rule-based systems stop.",
+          ],
+          cards: [
+            {
+              title: "Chemical Stability Engine",
+              body: "Scores how stable a combination stays across pH, temperature, and humidity. About 92% accurate.",
+            },
+            {
+              title: "Reaction Risk Engine",
+              body: "Rates mixing compounds as low, medium, or high risk. Trained on 50,000+ combinations, up to 98% accurate.",
+            },
+            {
+              title: "Reaction Classification Engine",
+              body: "Predicts the most likely reaction type, including no reaction at all. About 94% accurate.",
+            },
+            {
+              title: "Molecular intelligence engine",
+              body: "The GNN core: descriptors, LogP, TPSA, pKa, and hydrogen bonding, feeding every model.",
+            },
+          ],
+        },
+        {
+          label: "The product",
+          statement:
+            "Around the models, **a full product**: the brand, the marketing site, and a research dashboard built for chemists.",
+          bullets: [
+            "Prediction of previously unseen chemical interactions",
+            "AI chemistry assistant for scientific exploration",
+            "Interactive 2D and 3D molecular visualisation",
+            "Batch prediction APIs for large-scale workflows",
+            "Multi-model inference architecture",
+            "Enterprise-ready APIs with interactive documentation",
+            "Research journeys designed for labs and institutions",
+            "Complete brand, marketing site, and dashboard",
+          ],
+        },
       ],
-      built: {
-        title: "Three models, one molecular core",
-        statement:
-          "Instead of one model that guesses everything, we built three engines, each trained for a single scientific question.",
-        notes: [
-          "The hardest part was trust. Chemists won't act on a black box, so every engine shows its inputs, from pH and humidity to functional groups and pKa, and returns a score a researcher can reason about.",
-          "Underneath, Graph Neural Networks learn how structure, physicochemical properties, and conditions interact. That lets Chem0 predict chemical interactions it has never seen, where rule-based systems stop.",
-        ],
-        parts: [
-          {
-            title: "Chemical Stability Engine",
-            body: "Scores how stable a combination stays across pH, temperature, and humidity. About 92% accurate.",
-          },
-          {
-            title: "Reaction Risk Engine",
-            body: "Rates mixing compounds as low, medium, or high risk. Trained on 50,000+ combinations, up to 98% accurate.",
-          },
-          {
-            title: "Reaction Classification Engine",
-            body: "Predicts the most likely reaction type, including no reaction at all. About 94% accurate.",
-          },
-          {
-            title: "Molecular intelligence engine",
-            body: "The GNN core: descriptors, LogP, TPSA, pKa, and hydrogen bonding, feeding every model.",
-          },
-        ],
-        highlights: [
-          "Prediction of previously unseen chemical interactions",
-          "AI chemistry assistant for scientific exploration",
-          "Interactive 2D and 3D molecular visualisation",
-          "Batch prediction APIs for large-scale workflows",
-          "Multi-model inference architecture",
-          "Enterprise-ready APIs with interactive documentation",
-          "Research journeys designed for labs and institutions",
-          "Complete brand, marketing site, and dashboard",
-        ],
-      },
       result:
-        "Chem0 grew from a research idea into an investor-ready platform, earned a Letter of Intent from Strausswell Organics after beta, and drew acquisition offers while still in development.",
+        "Chem0 grew from a research idea into an investor-ready platform, earned **a Letter of Intent from Strausswell Organics** after beta, and drew acquisition offers while still in development.",
     },
   },
   {
