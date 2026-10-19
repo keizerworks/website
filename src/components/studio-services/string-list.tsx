@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { cn } from "~/lib/utils";
+import { useEffect, useRef } from "react";
 
 // A minor pentatonic, low to high: any run of rows sounds musical.
 const NOTES = [
@@ -36,7 +35,6 @@ const wobble = [0, -3, 2.4, -1.7, 1.1, -0.6, 0.25, 0].map((y) => ({
 }));
 
 export default function StringList({ items }: { items: string[] }) {
-  const [soundOn, setSoundOn] = useState(false);
   const ctxRef = useRef<AudioContext | null>(null);
   const buffers = useRef<Map<number, AudioBuffer>>(new Map());
   const rows = useRef<(HTMLLIElement | null)[]>([]);
@@ -50,15 +48,37 @@ export default function StringList({ items }: { items: string[] }) {
       reduceMotion.current = query.matches;
     };
     query.addEventListener("change", update);
+
+    // Browsers keep audio muted until the visitor clicks, taps, or types
+    // somewhere on the page. Unlock on that first gesture, wherever it is.
+    const unlock = () => {
+      ensureAudio();
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+    window.addEventListener("pointerdown", unlock);
+    window.addEventListener("keydown", unlock);
+
     return () => {
       query.removeEventListener("change", update);
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
       ctxRef.current?.close();
     };
   }, []);
 
+  function ensureAudio() {
+    ctxRef.current ??= new AudioContext();
+    if (ctxRef.current.state === "suspended") void ctxRef.current.resume();
+  }
+
   function playNote(index: number) {
+    // If the visitor already clicked anywhere (e.g. a nav link), audio is allowed.
+    if (!ctxRef.current && navigator.userActivation?.hasBeenActive) {
+      ensureAudio();
+    }
     const ctx = ctxRef.current;
-    if (!soundOn || !ctx) return;
+    if (!ctx || ctx.state !== "running") return;
     const frequency = NOTES[index % NOTES.length];
     let buffer = buffers.current.get(frequency);
     if (!buffer) {
@@ -101,32 +121,8 @@ export default function StringList({ items }: { items: string[] }) {
     return hit ? Number(hit.getAttribute("data-string")) : null;
   }
 
-  async function toggleSound() {
-    if (!soundOn) {
-      // Browsers only allow audio after a click, so it starts here.
-      ctxRef.current ??= new AudioContext();
-      await ctxRef.current.resume();
-    }
-    setSoundOn((on) => !on);
-  }
-
   return (
     <>
-      <button
-        type="button"
-        aria-pressed={soundOn}
-        onClick={toggleSound}
-        className={cn(
-          "mb-4 rounded border px-2.5 py-1 text-sm transition-[transform,background-color,color] duration-150 active:scale-[0.97]",
-          soundOn
-            ? "border-[#ff66ff] bg-[#ff66ff] text-black"
-            : "border-white/20 text-[#ebebeb]/80 hover:border-white/40",
-        )}
-      >
-        {soundOn
-          ? "♪ Sound on: run your cursor across the strings"
-          : "♪ Play the strings"}
-      </button>
       <ol
         className="flex flex-col gap-0.5"
         onPointerMove={(event) => {
