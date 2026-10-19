@@ -21,9 +21,9 @@ export const gotham_font = localFont({
   variable: "--font-gb",
 });
 
-// Navbar only: free stand-in for HEX's licensed Lausanne.
+// HEX-style sections: free stand-in for HEX's licensed Lausanne.
 export const inter = Inter({
   subsets: ["latin"],
-  weight: ["500"],
+  weight: ["500", "600"],
   display: "swap",
 });

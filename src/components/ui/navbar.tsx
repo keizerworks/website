@@ -7,11 +7,14 @@ import { useEffect, useState } from "react";
 import { inter } from "~/config/font";
 import { cn } from "~/lib/utils";
 
+// Home-page sections use "/#id" so they also work from other pages.
 const links = [
-  { label: "Our Projects", href: "#ourprojects" },
-  { label: "Services", href: "#services" },
-  { label: "Blogs", href: "#news" },
-  { label: "About Us", href: "#aboutus" },
+  { label: "Home", href: "/#hero" },
+  { label: "Info", href: "/v2/info" },
+  { label: "Services", href: "/#services" },
+  // Hidden with the Selected Work section.
+  // { label: "Work", href: "/#work" },
+  { label: "Blogs", href: "/#news" },
 ];
 
 const Navbar = () => {
@@ -34,7 +37,7 @@ const Navbar = () => {
         {/* Same box as the hero (max 1536px, px-4 / md:px-24), scaled by 0.9 to match the zoomed page. */}
         <div className="mx-auto grid h-8 grid-rows-[2rem] max-w-[calc(1536px*0.9)] grid-cols-[1fr_auto_1fr] items-center px-[calc(1rem*0.9)] md:px-[calc(6rem*0.9)]">
           <Link
-            href="#"
+            href="/"
             aria-label="Keizer home"
             className="flex items-center justify-self-start"
           >
@@ -63,10 +66,10 @@ const Navbar = () => {
 
           <div className="col-start-3 flex items-center gap-2 justify-self-end">
             <Link
-              href="#contact"
+              href="/#contact"
               className="block rounded bg-white p-2 text-base leading-none text-black shadow-[0_0_0_4px_rgba(255,255,255,0.12)] transition-[background-color,transform] duration-200 hover:bg-[#ff66ff] active:scale-[0.97]"
             >
-              Get in touch
+              Start a project
             </Link>
             <button
               type="button"
