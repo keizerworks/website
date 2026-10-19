@@ -46,6 +46,8 @@ export type Project = {
   // matches the image's own edge color so the letterbox is invisible.
   coverImage?: string;
   coverImageBg?: string;
+  // Pixel size of coverImage, so the card's window takes its exact shape.
+  coverImageSize?: { width: number; height: number };
   problem: string;
   whatWeDid: string;
   services: string[];
@@ -89,7 +91,8 @@ export const projects: Project[] = [
     year: "2024",
     icon: "/assets/portfolio/samriddh-cover.png",
     coverColor: "blue",
-    coverImage: "/assets/work/edulume/site.webp",
+    coverImage: "/assets/work/edulume/site-cover.webp",
+    coverImageSize: { width: 2000, height: 1056 },
     coverImageBg: "#ffffff",
     url: "https://edulume.com",
     seo: {
@@ -286,6 +289,7 @@ export const projects: Project[] = [
     tags: ["AI", "Product"],
     coverColor: "black",
     coverImage: "/assets/work/tael-cover.webp",
+    coverImageSize: { width: 2000, height: 1131 },
     coverImageBg: "#151515",
     url: "https://taelprotocol.xyz",
     problem: TODO_PROBLEM,
@@ -417,6 +421,7 @@ export const projects: Project[] = [
     icon: "/assets/portfolio/betteridea-cover.png",
     coverColor: "pink",
     coverImage: "/assets/work/arlink-cover.png",
+    coverImageSize: { width: 1068, height: 470 },
     coverImageBg: "#141414",
     url: "https://arlink.ar.io",
     problem: TODO_PROBLEM,
@@ -451,6 +456,7 @@ export const projects: Project[] = [
     icon: "/assets/portfolio/voice-cover.png",
     coverColor: "black",
     coverImage: "/assets/work/student-intelligence-tutor.webp",
+    coverImageSize: { width: 2000, height: 1011 },
     coverImageBg: "#f6f6f3",
     url: "https://studentintelligence.ai",
     problem: TODO_PROBLEM,
@@ -483,6 +489,7 @@ export const projects: Project[] = [
     tags: ["Brand"],
     coverColor: "blue",
     coverImage: "/assets/work/betteridea-cover.png",
+    coverImageSize: { width: 1622, height: 866 },
     coverImageBg: "#ffffff",
     url: "https://betteridea.dev",
     problem: TODO_PROBLEM,

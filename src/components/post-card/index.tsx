@@ -4,7 +4,7 @@ import { type Post, formatPostDate, postAuthor } from "~/data/posts";
 import { cn } from "~/lib/utils";
 
 // Blog items, LCA-style: image first, a small byline, then the title (Inter,
-// like the navbar). Grid items have no card until you hover.
+// like the navbar), all left-aligned. Grid items have no card until you hover.
 
 type Tone = "light" | "dark";
 
@@ -235,12 +235,12 @@ export default function PostCard({
         sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
         className="relative aspect-[16/10]"
       />
-      <div className="relative mt-6 flex justify-center">
+      <div className="relative mt-5 flex px-1">
         <Byline post={post} tone={tone} date />
       </div>
       <h3
         className={cn(
-          "relative mt-4 px-3 text-center text-[22px] leading-[1.25] tracking-[-0.015em] [text-wrap:balance] md:text-2xl",
+          "relative mt-3 px-1 text-left text-[22px] leading-[1.25] tracking-[-0.015em] [text-wrap:balance] md:text-2xl",
           tone === "light" ? "text-[#111]" : "text-[#ebebeb]",
         )}
       >
@@ -248,7 +248,7 @@ export default function PostCard({
       </h3>
       <p
         className={cn(
-          "relative mt-3 line-clamp-2 px-3 text-center text-[15px] leading-relaxed",
+          "relative mt-2.5 line-clamp-2 px-1 text-left text-[15px] leading-relaxed",
           tone === "light" ? "text-black/60" : "text-[#ebebeb]/60",
         )}
       >

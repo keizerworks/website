@@ -51,48 +51,52 @@ function Panel({
       )}
     >
       {/* Every project sits in the same browser window, screenshot or not,
-          so the grid reads as one set. It lifts 2px on hover (mouse only). */}
-      <div
-        style={
-          project.coverImage
-            ? { backgroundColor: project.coverImageBg }
-            : undefined
-        }
-        className={cn(
-          "absolute inset-x-[8%] bottom-0 top-[11%] flex flex-col overflow-hidden rounded-t-lg shadow-[0_10px_40px_rgba(0,0,0,0.22)] transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-0.5",
-          !project.coverImage && emptyWindows[project.coverColor],
-        )}
-      >
+          so the grid reads as one set. The window takes the screenshot's
+          own shape and sits centred in the panel, so there's never blank
+          space inside it, and its 2px hover lift (mouse only) can't reveal a
+          gap at the edge. */}
+      <div className="absolute inset-0 flex items-center justify-center px-[8%] pb-[4%] pt-[13%]">
         <div
-          aria-hidden="true"
+          style={
+            project.coverImage
+              ? { backgroundColor: project.coverImageBg }
+              : undefined
+          }
           className={cn(
-            "flex h-5 shrink-0 items-center gap-1 px-2.5 md:h-6",
-            darkChrome ? "bg-white/[0.06]" : "bg-black/[0.05]",
+            "flex w-full flex-col overflow-hidden rounded-lg shadow-[0_10px_40px_rgba(0,0,0,0.22)] transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-0.5",
+            !project.coverImage && emptyWindows[project.coverColor],
           )}
         >
-          {[0, 1, 2].map((dot) => (
-            <span
-              key={dot}
-              className={cn(
-                "size-1.5 rounded-full",
-                darkChrome ? "bg-white/25" : "bg-black/15",
-              )}
-            />
-          ))}
-        </div>
+          <div
+            aria-hidden="true"
+            className={cn(
+              "flex h-5 shrink-0 items-center gap-1 px-2.5 md:h-6",
+              darkChrome ? "bg-white/[0.06]" : "bg-black/[0.05]",
+            )}
+          >
+            {[0, 1, 2].map((dot) => (
+              <span
+                key={dot}
+                className={cn(
+                  "size-1.5 rounded-full",
+                  darkChrome ? "bg-white/25" : "bg-black/15",
+                )}
+              />
+            ))}
+          </div>
 
-        <div className="relative flex-1">
-          {project.coverImage ? (
+          {project.coverImage && project.coverImageSize ? (
             <Image
               src={project.coverImage}
               alt={`${project.name} landing page`}
-              fill
+              width={project.coverImageSize.width}
+              height={project.coverImageSize.height}
               priority={priority}
               sizes="(min-width: 768px) 60vw, 90vw"
-              className="object-contain object-top"
+              className="h-auto w-full"
             />
           ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-3">
+            <div className="flex aspect-[16/9] flex-col items-center justify-center gap-3">
               {project.icon && (
                 <Image
                   src={project.icon}
