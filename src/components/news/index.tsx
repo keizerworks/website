@@ -1,36 +1,32 @@
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import PostCard from "~/components/post-card";
+import { SeeAll } from "~/components/selected-work";
+import { sectionTitle } from "~/components/studio-services";
+import { inter } from "~/config/font";
+import { posts } from "~/data/posts";
+import { cn } from "~/lib/utils";
 
-const NewsSection = () => {
+// Home preview of /v2/blogs: our best four pieces of writing.
+export default function NewsSection() {
   return (
-    <section id="news" className="bg-white text-black">
-      <div className="max-w-[1536px] mx-auto md:p-[100px] px-[24px] py-[60px]">
-        <header className="flex justify-between items-end">
-          <div>
-            <span className="text-[15px] font-bold uppercase">News</span>
-            <h2 className="md:text-[54px] text-[32px] font-semibold">
-              News archive.
-            </h2>
-          </div>
-          <Link
-            href="#"
-            className="items-center group md:flex hidden gap-[10px]"
-          >
-            Show all post{" "}
-            <ArrowRight className="group-hover:translate-x-1 group-hover:opacity-100 opacity-60 transition-all" />
-          </Link>
-        </header>
-        <div>Coming soon...</div>
-        <Link
-          href="#"
-          className="items-center group justify-center md:hidden flex gap-[10px]"
-        >
-          Show all post{" "}
-          <ArrowRight className="group-hover:translate-x-2 group-hover:opacity-100 opacity-0 transition-all" />
-        </Link>
+    <section
+      id="news"
+      className={cn(
+        inter.className,
+        "mx-auto w-full max-w-[1536px] scroll-mt-[100px] bg-black px-4 py-16 text-[#ebebeb] md:px-24 md:py-[100px]",
+      )}
+    >
+      <div className="mb-6 flex items-baseline justify-between gap-4">
+        <h2 className={cn(sectionTitle, "mb-0")}>Blogs</h2>
+        <SeeAll href="/v2/blogs">All writing</SeeAll>
       </div>
+
+      <ul className="-mx-3 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {posts.slice(0, 4).map((post) => (
+          <li key={post.slug}>
+            <PostCard post={post} tone="dark" />
+          </li>
+        ))}
+      </ul>
     </section>
   );
-};
-
-export default NewsSection;
+}
