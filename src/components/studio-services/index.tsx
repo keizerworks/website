@@ -1,3 +1,5 @@
+import StringList from "./string-list";
+
 // Shared by the home page and /v2/info. Draft copy: to be corrected.
 export const services = [
   "Web Design",
@@ -35,19 +37,7 @@ export function ServiceList() {
   return (
     <>
       <h2 className={sectionTitle}>Services</h2>
-      <ol className="flex flex-col gap-0.5">
-        {services.map((service, index) => (
-          <li
-            key={service}
-            className="flex items-center justify-between border border-[#d9d9d9]/80 px-2 py-2.5 text-xl leading-5 hover:bg-white/5"
-          >
-            <span>{service}</span>
-            <span className="tabular-nums">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-          </li>
-        ))}
-      </ol>
+      <StringList items={services} />
     </>
   );
 }
