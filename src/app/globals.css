@@ -18,7 +18,7 @@ span {
 
 ::selection {
   background-color: grey;
-  color: white;
+  color: #fafafd;
 }
 
 html {
@@ -151,11 +151,11 @@ html {
   :root {
     --primary: 240, 7%, 9%;
     color: black;
-    --background: 0 0% 100%;
+    --background: 240 43% 98.6%; /* #fafafd */
     --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
+    --card: 240 43% 98.6%; /* #fafafd */
     --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
+    --popover: 240 43% 98.6%; /* #fafafd */
     --popover-foreground: 0 0% 3.9%;
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
@@ -177,7 +177,7 @@ html {
     --radius: 0.5rem;
   }
   .dark {
-    color: white;
+    color: #fafafd;
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;

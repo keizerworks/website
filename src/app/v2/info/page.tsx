@@ -185,7 +185,7 @@ export default function InfoPage() {
           </ul>
           <Link
             href="/portfolio"
-            className="mt-12 block rounded bg-white py-2 text-center text-base text-black shadow-[0_0_0_4px_rgba(255,255,255,0.12)] transition-[background-color,transform] duration-200 hover:bg-[#ff66ff] active:scale-[0.99]"
+            className="mt-12 block rounded bg-white py-2 text-center text-base text-black shadow-[0_0_0_4px_rgba(250,250,253,0.12)] transition-[background-color,transform] duration-200 hover:bg-[#ff66ff] active:scale-[0.99]"
           >
             All Clients
           </Link>

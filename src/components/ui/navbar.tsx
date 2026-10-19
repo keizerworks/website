@@ -67,7 +67,7 @@ const Navbar = () => {
           <div className="col-start-3 flex items-center gap-2 justify-self-end">
             <Link
               href="/#contact"
-              className="block rounded bg-white p-2 text-base leading-none text-black shadow-[0_0_0_4px_rgba(255,255,255,0.12)] transition-[background-color,transform] duration-200 hover:bg-[#ff66ff] active:scale-[0.97]"
+              className="block rounded bg-white p-2 text-base leading-none text-black shadow-[0_0_0_4px_rgba(250,250,253,0.12)] transition-[background-color,transform] duration-200 hover:bg-[#ff66ff] active:scale-[0.97]"
             >
               Start a project
             </Link>
