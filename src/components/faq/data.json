@@ -26,6 +26,6 @@
   {
     "question": "How do we start?",
     "answer": "Book a 30-minute call and tell us what you're building. We'll talk through your idea, your users, and your timeline, then come back with what we'd build first and who'd be on the team.",
-    "link": { "href": "/v2/book", "label": "Book a call" }
+    "link": { "href": "/book", "label": "Book a call" }
   }
 ]

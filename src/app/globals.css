@@ -242,6 +242,11 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Jump to anchors (contents, Services) instead of gliding. */
+  html {
+    scroll-behavior: auto;
+  }
+
   .legal-section:target > h2 {
     animation: none;
   }

@@ -8,12 +8,13 @@ import BookCallLink from "~/components/book-call-link";
 import { inter } from "~/config/font";
 import { cn } from "~/lib/utils";
 
-// Home-page sections use "/#id" so they also work from other pages.
+// Home uses "/#hero" so it also works from other pages.
 const links = [
   { label: "Home", href: "/#hero" },
-  { label: "Services", href: "/#services" },
-  { label: "Work", href: "/v2/work" },
-  { label: "Blogs", href: "/v2/blogs" },
+  { label: "Services", href: "/services" },
+  { label: "Work", href: "/work" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Blogs", href: "/blogs" },
 ];
 
 // Dark on the black pages; light on the #fafafd long-form pages (case
@@ -35,6 +36,15 @@ const tones = {
     link: "hover:bg-[#ff66ff]/[0.12] hover:text-[#ff66ff]",
     cta: "bg-white text-black shadow-[0_0_0_4px_rgba(250,250,253,0.12)] hover:bg-[#ff66ff]",
     menu: "texture-weave text-[#ebebeb]",
+    rule: "border-white/10",
+  },
+  // The charcoal pages (Blogs): same as dark, on #181818.
+  charcoal: {
+    bar: "border-white/10 bg-[#181818] text-[#ebebeb]",
+    logo: "",
+    link: "hover:bg-[#ff66ff]/[0.12] hover:text-[#ff66ff]",
+    cta: "bg-white text-black shadow-[0_0_0_4px_rgba(250,250,253,0.12)] hover:bg-[#ff66ff]",
+    menu: "bg-[#181818] text-[#ebebeb]",
     rule: "border-white/10",
   },
   light: {

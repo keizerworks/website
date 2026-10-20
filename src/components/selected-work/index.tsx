@@ -8,7 +8,7 @@ import { cn } from "~/lib/utils";
 // Picked by hand for the home page, featured first.
 const homeSlugs = ["edulume", "arlink", "chem0"];
 
-// Home preview of /v2/work: the featured case study across the row, then
+// Home preview of /work: the featured case study across the row, then
 // the next two side by side. Same cards as the work page.
 export default function SelectedWork() {
   const [featured, ...rest] = homeSlugs
@@ -25,7 +25,7 @@ export default function SelectedWork() {
     >
       <div className="mb-6 flex items-baseline justify-between gap-4">
         <h2 className={cn(sectionTitle, "mb-0")}>Selected work</h2>
-        <SeeAll href="/v2/work">All work</SeeAll>
+        <SeeAll href="/work">All work</SeeAll>
       </div>
 
       <ul className="grid gap-5 md:grid-cols-2">

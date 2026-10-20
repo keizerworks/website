@@ -38,15 +38,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!project) return {};
 
   const seo = project.seo;
-  // Plain metadata until a project's SEO copy is written.
+  // Plain metadata until a project's SEO copy is written, and kept out of
+  // search: these pages are mostly "coming soon".
   if (!seo) {
     return {
       title: `${project.name} | Work`,
       description: `${project.name}: ${project.headline}.`,
+      alternates: { canonical: `/work/${project.slug}` },
+      robots: { index: false, follow: true },
     };
   }
 
-  const path = `/v2/work/${project.slug}`;
+  const path = `/work/${project.slug}`;
   const image = {
     url: seoImage(project),
     alt: `${project.name} by Keizerworks`,
@@ -85,7 +88,7 @@ function JsonLd({
   project: Project;
   seo: NonNullable<Project["seo"]>;
 }) {
-  const url = `${siteUrl}/v2/work/${project.slug}`;
+  const url = `${siteUrl}/work/${project.slug}`;
   const keizer = {
     "@type": "Organization",
     name: "Keizerworks",
@@ -136,7 +139,7 @@ function JsonLd({
             "@type": "ListItem",
             position: 2,
             name: "Work",
-            item: `${siteUrl}/v2/work`,
+            item: `${siteUrl}/work`,
           },
           { "@type": "ListItem", position: 3, name: project.name, item: url },
         ],
@@ -388,7 +391,7 @@ export default async function ProjectPage({ params }: Props) {
 
       <div className="mx-auto max-w-[1200px] px-5 pb-24 pt-[96px] md:pt-[120px]">
         <div className={column}>
-          <BackLink href="/v2/work" label="Back to Work" />
+          <BackLink href="/work" label="Back to Work" />
         </div>
 
         <header className="mt-14 text-center md:mt-20">
@@ -552,7 +555,7 @@ export default async function ProjectPage({ params }: Props) {
           </figure>
         )}
 
-        <PageFooter back={{ href: "/v2/work", label: "Back to Work" }} />
+        <PageFooter back={{ href: "/work", label: "Back to Work" }} />
       </div>
     </main>
   );

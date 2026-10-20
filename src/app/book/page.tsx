@@ -11,7 +11,15 @@ export const metadata: Metadata = {
   title: "Book a call",
   description:
     "Book a 30-minute call with Keizerworks about the product you're building.",
-  alternates: { canonical: "/v2/book" },
+  alternates: { canonical: "/book" },
+  openGraph: {
+    url: "/book",
+    title: "Book a call | Keizerworks",
+    description:
+      "Book a 30-minute call with Keizerworks about the product you're building.",
+    siteName: "Keizerworks",
+    images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }],
+  },
 };
 
 // One job: pick a time. No navbar, nothing else to click.

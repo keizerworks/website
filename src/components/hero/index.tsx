@@ -8,6 +8,7 @@ import {
   type MotionValue,
 } from "motion/react";
 import { useEffect, useState } from "react";
+import BookCallLink from "~/components/book-call-link";
 import CursorIcon from "../assets/cursor-icon";
 
 interface AnimatedTextProps {
@@ -194,12 +195,12 @@ const HeroSection = () => {
         >
           <div className="absolute -bottom-1 -left-1 w-full h-full bg-white z-0"></div>
           <div className="absolute group-active:translate-y-1 group-active:-translate-x-1 transition-all inset-0 bg-[#2d2dc3] z-10"></div>
-          <a
-            href="#contact"
+          <BookCallLink
+            from="hero"
             className="relative inline-block transition-all  duration-300 z-20 group-active:-translate-x-1 group-active:translate-y-1"
           >
             Let's talk
-          </a>
+          </BookCallLink>
         </motion.button>
       </div>
       <motion.div

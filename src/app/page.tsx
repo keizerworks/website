@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 // import Testimonials from "~/components/testimonials";
 import ClientNotes from "~/components/client-notes";
 // import AboutSection from "~/components/about";
@@ -15,6 +16,12 @@ import Navbar from "~/components/ui/navbar";
 import WhyKeizer from "~/components/why-keizer";
 import { gotham_font, inter, spaceGrotesk } from "~/config/font";
 
+// The home page's own canonical. (Set here, not in the root layout, so other
+// pages don't inherit it and look like copies of the home page.)
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default function Home() {
   return (
     <main
@@ -28,10 +35,14 @@ export default function Home() {
       {/* Trying the Info page's intro + services here in place of "How we work". */}
       {/* <StrategySection /> */}
       <section
-        id="services"
-        className={`${inter.className} mx-auto w-full max-w-[1536px] scroll-mt-[100px] bg-black px-4 py-16 text-[#ebebeb] md:px-24 md:py-[100px]`}
+        className={`${inter.className} mx-auto w-full max-w-[1536px] bg-black px-4 py-16 text-[#ebebeb] md:px-24 md:py-[100px]`}
       >
-        <StudioIntro />
+        {/* The anchor sits on the intro, not the section: the logo strip
+            overlaps the section's top, so landing on the section showed it.
+            html's 100px scroll-padding keeps the intro clear of the navbar. */}
+        <div id="services" className="scroll-mt-[-20px]">
+          <StudioIntro />
+        </div>
         <div className="mt-20">
           <ServiceList />
         </div>

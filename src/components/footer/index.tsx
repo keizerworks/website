@@ -6,10 +6,15 @@ import { cn } from "~/lib/utils";
 
 // Absolute links, so they work from every page, matching the navbar.
 const navigate = [
-  { label: "Home", href: "/" },
-  { label: "Services", href: "/#services" },
-  { label: "Work", href: "/v2/work" },
-  { label: "Blogs", href: "/v2/blogs" },
+  { label: "Services", href: "/services" },
+  { label: "Work", href: "/work" },
+  { label: "Careers", href: "/careers" },
+];
+
+// Our Discord servers.
+const community = [
+  { label: "Founder community", href: "https://discord.gg/bpWBgNUPA5" },
+  { label: "Dev community", href: "https://discord.gg/3xSG8rQNyv" },
 ];
 
 const socials = [
@@ -21,7 +26,16 @@ const socials = [
 
 const heading = "text-[15px] text-[#ebebeb]/45";
 const link =
-  "text-[15px] text-[#ebebeb]/85 transition-colors duration-150 hover:text-[#ff66ff]";
+  "whitespace-nowrap text-[15px] text-[#ebebeb]/85 transition-colors duration-150 [@media(hover:hover)_and_(pointer:fine)]:hover:text-[#ff66ff]";
+
+// An outside link: opens in a new tab.
+function External({ href, label }: { href: string; label: string }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={link}>
+      {label}
+    </a>
+  );
+}
 
 export default function FooterSection() {
   return (
@@ -49,7 +63,8 @@ export default function FooterSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 sm:gap-16">
+        {/* Four columns on wider screens, sized to their links; two on phones. */}
+        <div className="grid grid-cols-2 gap-x-10 gap-y-12 sm:grid-cols-[repeat(4,auto)] sm:gap-x-16">
           <div>
             <h3 className={heading}>Navigate</h3>
             <ul className="mt-4 flex flex-col gap-2.5">
@@ -73,14 +88,18 @@ export default function FooterSection() {
             <ul className="mt-4 flex flex-col gap-2.5">
               {socials.map((item) => (
                 <li key={item.label}>
-                  <a
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={link}
-                  >
-                    {item.label}
-                  </a>
+                  <External {...item} />
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className={heading}>Community</h3>
+            <ul className="mt-4 flex flex-col gap-2.5">
+              {community.map((item) => (
+                <li key={item.label}>
+                  <External {...item} />
                 </li>
               ))}
             </ul>
@@ -93,6 +112,10 @@ export default function FooterSection() {
                 <a href="mailto:biz@keizerworks.com" className={link}>
                   Mail
                 </a>
+              </li>
+              <li>
+                {/* Business number, +91 98170 69743. */}
+                <External href="https://wa.me/919817069743" label="WhatsApp" />
               </li>
             </ul>
           </div>

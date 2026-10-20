@@ -1,6 +1,6 @@
 import StringList from "./string-list";
 
-// Shared by the home page and /v2/info. Draft copy: to be corrected.
+// Shared by the home page and /services. Draft copy: to be corrected.
 export const services = [
   "Web Design",
   "Web Development",

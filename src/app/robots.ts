@@ -7,6 +7,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      // Admin and claim links aren't for search.
+      disallow: ["/admin", "/claim", "/api/"],
     },
     sitemap: `${siteUrl}/sitemap.xml`,
   };

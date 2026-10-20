@@ -1,6 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { type Post, formatPostDate, postAuthor } from "~/data/posts";
+import {
+  type Post,
+  formatPostDate,
+  hasContent,
+  postAuthor,
+} from "~/data/posts";
 import { cn } from "~/lib/utils";
 
 // Blog items, LCA-style: image first, a small byline, then the title (Inter,
@@ -55,6 +60,11 @@ function Cover({
             ease,
           )}
         />
+        {/* A hairline edge above the image, so dark covers keep their shape. */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10"
+        />
       </div>
     );
   }
@@ -74,10 +84,10 @@ function Cover({
         {post.coverLine && (
           <span
             className={cn(
-              "font-semibold leading-[1.05] tracking-[-0.03em] [text-wrap:balance]",
+              "block font-semibold leading-[1.1] tracking-[-0.03em] [text-wrap:balance]",
               large
                 ? "text-[32px] md:text-[48px]"
-                : "text-[26px] md:text-[30px]",
+                : "text-[24px] xl:text-[26px]",
             )}
           >
             {post.coverLine}
@@ -143,26 +153,28 @@ function Byline({
   );
 }
 
-// The newest post: a white card, image left, story right.
-export function PostHero({ post }: { post: Post }) {
+// The newest post: a card with the image left, story right. White on light
+// pages, a faint panel on dark ones.
+export function PostHero({
+  post,
+  tone = "light",
+}: {
+  post: Post;
+  tone?: Tone;
+}) {
+  const dark = tone === "dark";
   return (
     <Link
-      href={`/v2/blogs/${post.slug}`}
+      href={`/blogs/${post.slug}`}
       className={cn(
-        "group relative block rounded-3xl bg-white p-3 shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.06] transition-transform duration-150 active:scale-[0.99] motion-reduce:active:scale-100",
+        "group relative block rounded-3xl p-3 ring-1 transition-[transform,background-color] duration-150 active:scale-[0.99] motion-reduce:active:scale-100",
+        dark
+          ? "bg-white/[0.06] ring-white/10 focus-visible:ring-offset-[#181818] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.08]"
+          : "bg-white ring-black/[0.06]",
         ease,
         focus,
       )}
     >
-      {/* The hover shadow fades in on its own layer: opacity animates
-          cheaply, box-shadow would repaint every frame. */}
-      <span
-        aria-hidden="true"
-        className={cn(
-          "pointer-events-none absolute inset-0 rounded-3xl opacity-0 shadow-[0_0_3px_rgba(0,0,0,0.12),0_8px_32px_rgba(0,0,0,0.06)] transition-opacity duration-200",
-          "[@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100",
-        )}
-      />
       <div className="relative flex flex-col items-center gap-6 md:flex-row lg:gap-10">
         <Cover
           post={post}
@@ -172,17 +184,37 @@ export function PostHero({ post }: { post: Post }) {
           className="aspect-[16/10] w-full md:w-[55%]"
         />
         <div className="flex flex-1 flex-col items-center gap-4 px-3 pb-5 text-center md:items-start md:px-0 md:pb-0 md:pr-6 md:text-left">
-          <p className="text-xs font-medium uppercase tracking-[0.14em] text-[#2D2DC3]">
-            Latest · {post.category}
+          <p
+            className={cn(
+              "text-sm font-medium",
+              dark ? "text-[#ff66ff]" : "text-[#2D2DC3]",
+            )}
+          >
+            Latest
           </p>
-          <h2 className="text-[26px] leading-[1.25] tracking-[-0.02em] text-[#111] [text-wrap:balance] lg:text-[32px] xl:text-[40px]">
+          <h2
+            className={cn(
+              "text-[26px] leading-[1.25] tracking-[-0.02em] [text-wrap:balance] lg:text-[32px] xl:text-[40px]",
+              dark ? "text-[#ebebeb]" : "text-[#111]",
+            )}
+          >
             {post.title}
           </h2>
-          <p className="line-clamp-2 text-base leading-[1.6] text-black/60">
+          <p
+            className={cn(
+              "line-clamp-2 text-base leading-[1.6]",
+              dark ? "text-[#ebebeb]/60" : "text-black/60",
+            )}
+          >
             {post.excerpt}
           </p>
-          <Byline post={post} tone="light" date />
-          <span className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-[#111]">
+          <Byline post={post} tone={tone} date />
+          <span
+            className={cn(
+              "mt-2 inline-flex items-center gap-1.5 text-sm font-medium",
+              dark ? "text-[#ebebeb]" : "text-[#111]",
+            )}
+          >
             Read more
             <span
               aria-hidden="true"
@@ -209,27 +241,8 @@ export default function PostCard({
   post: Post;
   tone?: Tone;
 }) {
-  return (
-    <Link
-      href={`/v2/blogs/${post.slug}`}
-      className={cn(
-        "group relative block h-full rounded-3xl p-3 pb-6 transition-transform duration-150 active:scale-[0.99] motion-reduce:active:scale-100",
-        ease,
-        focus,
-        tone === "dark" && "focus-visible:ring-offset-black",
-      )}
-    >
-      {/* The hover card fades in as one layer (opacity only). */}
-      <span
-        aria-hidden="true"
-        className={cn(
-          "pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-200",
-          "[@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100",
-          tone === "light"
-            ? "bg-white shadow-[0_0_3px_rgba(0,0,0,0.12),0_8px_32px_rgba(0,0,0,0.05)]"
-            : "bg-white/[0.05]",
-        )}
-      />
+  const content = (
+    <>
       <Cover
         post={post}
         sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
@@ -240,7 +253,9 @@ export default function PostCard({
       </div>
       <h3
         className={cn(
-          "relative mt-3 px-1 text-left text-[22px] leading-[1.25] tracking-[-0.015em] [text-wrap:balance] md:text-2xl",
+          // Two lines, always: short titles reserve the space and long ones
+          // are clamped, so every excerpt starts at the same height.
+          "relative mt-3 line-clamp-2 min-h-[2.5em] px-1 text-left text-[20px] leading-[1.25] tracking-[-0.015em] [text-wrap:balance] md:text-[22px]",
           tone === "light" ? "text-[#111]" : "text-[#ebebeb]",
         )}
       >
@@ -248,12 +263,42 @@ export default function PostCard({
       </h3>
       <p
         className={cn(
-          "relative mt-2.5 line-clamp-2 px-1 text-left text-[15px] leading-relaxed",
+          "relative mt-2.5 line-clamp-2 min-h-[3.25em] px-1 text-left text-[15px] leading-relaxed",
           tone === "light" ? "text-black/60" : "text-[#ebebeb]/60",
         )}
       >
         {post.excerpt}
       </p>
+    </>
+  );
+
+  // Not written yet: shown, but not a link, with no hover or press.
+  if (!hasContent(post)) {
+    return <div className="relative h-full p-3 pb-6">{content}</div>;
+  }
+
+  return (
+    <Link
+      href={`/blogs/${post.slug}`}
+      className={cn(
+        "group relative block h-full rounded-3xl p-3 pb-6 transition-transform duration-150 active:scale-[0.99] motion-reduce:active:scale-100",
+        ease,
+        focus,
+        tone === "dark" && "focus-visible:ring-offset-[#181818]",
+      )}
+    >
+      {/* The hover card fades in as one layer (opacity only). */}
+      <span
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-200",
+          "[@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100",
+          tone === "light"
+            ? "bg-white ring-1 ring-black/[0.06]"
+            : "bg-white/[0.05]",
+        )}
+      />
+      {content}
     </Link>
   );
 }

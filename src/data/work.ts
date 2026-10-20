@@ -1,4 +1,4 @@
-// Case studies for /v2/work. Draft: fields marked TODO still need the real
+// Case studies for /work. Draft: fields marked TODO still need the real
 // story, images, numbers, years, and links from the team.
 
 export type WorkTag = "Product" | "Web" | "AI" | "Mobile" | "Brand";

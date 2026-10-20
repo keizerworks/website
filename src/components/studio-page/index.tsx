@@ -13,7 +13,7 @@ const socials = [
   { label: "GitHub", href: "https://github.com/keizerworks" },
 ];
 
-// Shared shell for the HEX-style pages (/v2/info, /v2/work): navbar, a
+// Shared shell for the HEX-style pages (/work): navbar, a
 // pinned index on the left, and a 960px content column on the right.
 // Without `links`, the sidebar is dropped and the column is centered.
 // `ink` is a deep navy tinted by the brand blue: softer than pure black.

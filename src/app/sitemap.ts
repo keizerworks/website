@@ -15,13 +15,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${siteUrl}/k25`,
+      url: `${siteUrl}/services`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/careers`,
       lastModified,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${siteUrl}/v2/work`,
+      url: `${siteUrl}/book`,
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.8,
+    },
+    {
+      url: `${siteUrl}/work`,
       lastModified,
       changeFrequency: "weekly",
       priority: 0.9,
@@ -30,11 +42,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...projects
       .filter((project) => project.seo)
       .map((project) => ({
-        url: `${siteUrl}/v2/work/${project.slug}`,
+        url: `${siteUrl}/work/${project.slug}`,
         lastModified,
         changeFrequency: "monthly" as const,
         priority: 0.8,
       })),
+    {
+      url: `${siteUrl}/gallery`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
     {
       url: `${siteUrl}/privacy`,
       lastModified,
@@ -48,7 +66,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
     {
-      url: `${siteUrl}/v2/blogs`,
+      url: `${siteUrl}/blogs`,
       lastModified,
       changeFrequency: "weekly",
       priority: 0.7,
@@ -57,7 +75,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...posts
       .filter((post) => hasContent(post))
       .map((post) => ({
-        url: `${siteUrl}/v2/blogs/${post.slug}`,
+        url: `${siteUrl}/blogs/${post.slug}`,
         lastModified: post.date ? new Date(post.date) : lastModified,
         changeFrequency: "monthly" as const,
         priority: 0.6,

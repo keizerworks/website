@@ -10,6 +10,15 @@ export const metadata: Metadata = {
   title: "Work",
   description:
     "Products, platforms, and websites Keizerworks has designed and built for startups.",
+  alternates: { canonical: "/work" },
+  openGraph: {
+    url: "/work",
+    title: "Work | Keizerworks",
+    description:
+      "Products, platforms, and websites Keizerworks has designed and built for startups.",
+    siteName: "Keizerworks",
+    images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }],
+  },
 };
 
 type Props = { searchParams: Promise<{ tag?: string }> };
@@ -54,7 +63,7 @@ export default async function WorkPage({ searchParams }: Props) {
             return (
               <Link
                 key={filter.label}
-                href={filter.tag ? `/v2/work?tag=${filter.tag}` : "/v2/work"}
+                href={filter.tag ? `/work?tag=${filter.tag}` : "/work"}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "rounded-full border px-3 py-1 text-sm transition-colors duration-150",

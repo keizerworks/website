@@ -5,7 +5,7 @@ import { inter } from "~/config/font";
 import { posts } from "~/data/posts";
 import { cn } from "~/lib/utils";
 
-// Home preview of /v2/blogs: our best four pieces of writing.
+// Home preview of /blogs: our best four pieces of writing.
 export default function NewsSection() {
   return (
     <section
@@ -17,12 +17,14 @@ export default function NewsSection() {
     >
       <div className="mb-6 flex items-baseline justify-between gap-4">
         <h2 className={cn(sectionTitle, "mb-0")}>Blogs</h2>
-        <SeeAll href="/v2/blogs">All writing</SeeAll>
+        <SeeAll href="/blogs">All writing</SeeAll>
       </div>
 
-      <ul className="-mx-3 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {/* Phones: a swipeable row (native scroll, snapping to each card, the
+          next one peeking in). Wider screens: the grid. */}
+      <ul className="-mx-4 flex snap-x snap-mandatory scroll-px-1 gap-2 overflow-x-auto overscroll-x-contain px-1 [scrollbar-width:none] sm:-mx-3 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 xl:grid-cols-4 [&::-webkit-scrollbar]:hidden">
         {posts.slice(0, 4).map((post) => (
-          <li key={post.slug}>
+          <li key={post.slug} className="w-[85%] shrink-0 snap-start sm:w-auto">
             <PostCard post={post} tone="dark" />
           </li>
         ))}

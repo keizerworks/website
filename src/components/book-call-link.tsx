@@ -18,7 +18,7 @@ export default function BookCallLink({
 }) {
   return (
     <Link
-      href="/v2/book"
+      href="/book"
       className={className}
       onClick={() => track({ name: "book_call_click", from })}
     >

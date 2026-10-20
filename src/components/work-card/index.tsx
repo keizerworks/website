@@ -182,7 +182,7 @@ function CardLink({
     );
   }
   return (
-    <Link href={`/v2/work/${project.slug}`} className={className}>
+    <Link href={`/work/${project.slug}`} className={className}>
       {children}
     </Link>
   );
