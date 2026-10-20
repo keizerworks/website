@@ -1,116 +1,171 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
-import NavLink from "../shared";
-import { AlignJustify } from "lucide-react";
-import { cn } from "~/lib/utils";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import BookCallLink from "~/components/book-call-link";
+import { inter } from "~/config/font";
+import { cn } from "~/lib/utils";
 
-const Navbar = () => {
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
-  const [visible, setVisible] = useState(true);
-  const [openSideBar, setOpenSideBar] = useState(false);
-  const links = ["Our Projects", "Services", "News", "About Us"];
+// Home uses "/#hero" so it also works from other pages.
+const links = [
+  { label: "Home", href: "/#hero" },
+  { label: "Services", href: "/services" },
+  { label: "Work", href: "/work" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Blogs", href: "/blogs" },
+];
 
+// Dark on the black pages; light on the #fafafd long-form pages (case
+// studies, blog posts), so a black bar doesn't sit on top of them.
+const tones = {
+  dark: {
+    bar: "border-white/10 bg-black text-[#ebebeb]",
+    logo: "",
+    link: "hover:bg-[#ff66ff]/[0.12] hover:text-[#ff66ff]",
+    cta: "bg-white text-black shadow-[0_0_0_4px_rgba(250,250,253,0.12)] hover:bg-[#ff66ff]",
+    menu: "bg-black text-[#ebebeb]",
+    rule: "border-white/10",
+  },
+  // Dark pages on the woven texture: the bar shares the same fixed texture,
+  // so it reads as part of the page.
+  woven: {
+    bar: "texture-weave border-white/[0.08] text-[#ebebeb]",
+    logo: "",
+    link: "hover:bg-[#ff66ff]/[0.12] hover:text-[#ff66ff]",
+    cta: "bg-white text-black shadow-[0_0_0_4px_rgba(250,250,253,0.12)] hover:bg-[#ff66ff]",
+    menu: "texture-weave text-[#ebebeb]",
+    rule: "border-white/10",
+  },
+  // The charcoal pages (Blogs): same as dark, on #181818.
+  charcoal: {
+    bar: "border-white/10 bg-[#181818] text-[#ebebeb]",
+    logo: "",
+    link: "hover:bg-[#ff66ff]/[0.12] hover:text-[#ff66ff]",
+    cta: "bg-white text-black shadow-[0_0_0_4px_rgba(250,250,253,0.12)] hover:bg-[#ff66ff]",
+    menu: "bg-[#181818] text-[#ebebeb]",
+    rule: "border-white/10",
+  },
+  light: {
+    bar: "border-black/[0.06] bg-[#fafafd]/85 text-[#111] backdrop-blur-md",
+    // The logo file is white; invert it to black.
+    logo: "invert",
+    link: "hover:bg-[#2D2DC3]/[0.07] hover:text-[#2D2DC3]",
+    cta: "bg-[#111] text-[#fafafd] shadow-[0_0_0_4px_rgba(17,17,17,0.06)] hover:bg-[#2D2DC3]",
+    menu: "bg-[#fafafd] text-[#111]",
+    rule: "border-black/[0.08]",
+  },
+};
+
+const Navbar = ({ tone = "dark" }: { tone?: keyof typeof tones }) => {
+  const [open, setOpen] = useState(false);
+  const t = tones[tone];
+
+  // Lock page scroll while the mobile menu is open.
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollPos = window.scrollY;
-
-      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
-      setPrevScrollPos(currentScrollPos);
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
     };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [prevScrollPos]);
+  }, [open]);
 
   return (
     <>
-      <div
-        className={cn(
-          "inset-0 smooth-transition z-[500] md:hidden px-[24px] py-[100px] block bg-black/80 backdrop-blur-md fixed",
-          openSideBar ? "translate-x-0" : "-translate-x-full",
-        )}
-      >
-        <p className="text-[60px] font-bold">Navigate</p>
-        <div>
-          <ul className="pt-[40px]">
-            {links.map((link, index) => {
-              return (
-                <li
-                  onClick={() => setOpenSideBar(() => false)}
-                  key={link}
-                  className={cn(
-                    "text-[20px] fade-in-blur-1 py-[20px]",
-                    index !== links.length - 1 && "border-b border-neutral-700",
-                  )}
-                >
-                  <Link href={`#${link.split(" ").join("").toLowerCase()}`}>
-                    {link}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
-
+      {/* globals.css zooms the body to 0.9; undo it here so the bar is HEX's true size. */}
       <nav
         className={cn(
-          `w-full text-white ${openSideBar ? "bg-transparent" : "bg-black/50"} fixed z-[1000] top-0 flex justify-between items-center lg:px-[40px] px-[20px] transition-a duration-300 ease-in-out`,
-          visible
-            ? `md:h-[130px] h-[80px] md:backdrop-blur-none ${openSideBar ? "backdrop-blur-none bg-transparent" : "backdrop-blur-md "}`
-            : `md:h-[80px] h-[80px] ${openSideBar ? "bg-transparent" : "bg-black/15  backdrop-blur-md "}`,
+          "fixed inset-x-0 top-0 z-[1000] [zoom:calc(1/0.9)] border-b py-3 font-medium",
+          t.bar,
+          inter.className,
         )}
       >
-        <div className="max-w-[1440px] w-full flex justify-between items-center mx-auto">
-          <div className="flex fade-in-blur-left-0 cursor-pointer items-center gap-[5px]">
-            <AlignJustify
-              type="button"
-              onClick={() => setOpenSideBar((prev) => !prev)}
-              className="md:hidden block"
-              fontWeight={900}
+        {/* Same box as the hero (max 1536px, px-4 / md:px-24), scaled by 0.9 to match the zoomed page. */}
+        <div className="mx-auto grid h-8 grid-rows-[2rem] max-w-[calc(1536px*0.9)] grid-cols-[1fr_auto_1fr] items-center px-[calc(1rem*0.9)] md:px-[calc(6rem*0.9)]">
+          <Link
+            href="/"
+            aria-label="Keizer home"
+            className="flex items-center justify-self-start"
+          >
+            <Image
+              src="/assets/logos/keizer-logo-name.svg"
+              width={88}
+              height={40}
+              alt="Keizer"
+              priority
+              className={cn("h-10 w-auto", t.logo)}
             />
+          </Link>
 
-            <Link href="#">
-              <Image
-                src="/assets/logos/keizer-logo-name.svg"
-                width={175}
-                height={79.82}
-                alt="keizer-brand-logo"
-                className={cn(
-                  "md:w-[175px] md:h-[79.82px] sm:w-[135px] sm:h-[58.856px] w-[80.4px] h-[49.83px] transition-all",
-                  visible ? "scale-100" : "md:scale-[0.9] scale-100",
-                )}
-              />
-            </Link>
-          </div>
+          <ul className="hidden items-center md:flex">
+            {links.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className={cn(
+                    "block rounded-lg px-2 py-1 text-sm leading-[1.5]",
+                    t.link,
+                  )}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-          <div className="flex fade-in-0 duration-1000 animate-in items-center lg:gap-[75px] gap-[40px]">
-            <ul className="md:flex hidden lg:gap-[36px] gap-[30px] md:text-[16px] text-[14px]">
-              {links.map((link, index) => {
-                return (
-                  <li key={link}>
-                    <NavLink
-                      className="font-[300] text-[16px]"
-                      linkName={link}
-                      index={index}
-                    />
-                  </li>
-                );
-              })}
-            </ul>
-
-            <Link
-              href="#contact"
-              className="font-sans flex flex-center bg-white hover:bg-neutral-300 text-black w-[102px] h-[36px] font-[700] text-[16px] rounded-[4px]"
+          <div className="col-start-3 flex items-center gap-2 justify-self-end">
+            <BookCallLink
+              from="navbar"
+              className={cn(
+                "block whitespace-nowrap rounded p-2 text-sm leading-none transition-[background-color,transform] duration-200 active:scale-[0.97] md:text-base",
+                t.cta,
+              )}
             >
-              Let's talk
-            </Link>
+              Book a call
+            </BookCallLink>
+            <button
+              type="button"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              onClick={() => setOpen((prev) => !prev)}
+              className={cn(
+                "flex size-8 items-center justify-center rounded-lg md:hidden",
+                t.link,
+              )}
+            >
+              {open ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
         </div>
       </nav>
+
+      <div
+        className={cn(
+          "fixed inset-x-0 bottom-0 top-[57px] z-[999] [zoom:calc(1/0.9)] px-5 pt-4 font-medium transition-opacity duration-200 md:hidden",
+          t.menu,
+          inter.className,
+          open ? "opacity-100" : "pointer-events-none opacity-0",
+        )}
+      >
+        <ul className="flex flex-col">
+          {links.map((link) => (
+            <li key={link.href} className={cn("border-b", t.rule)}>
+              <Link
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "block py-3 text-2xl leading-none",
+                  tone === "light"
+                    ? "hover:text-[#2D2DC3]"
+                    : "hover:text-[#ff66ff]",
+                )}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 };

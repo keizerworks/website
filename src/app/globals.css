@@ -18,7 +18,7 @@ span {
 
 ::selection {
   background-color: grey;
-  color: white;
+  color: #fafafd;
 }
 
 html {
@@ -151,11 +151,11 @@ html {
   :root {
     --primary: 240, 7%, 9%;
     color: black;
-    --background: 0 0% 100%;
+    --background: 240 43% 98.6%; /* #fafafd */
     --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
+    --card: 240 43% 98.6%; /* #fafafd */
     --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
+    --popover: 240 43% 98.6%; /* #fafafd */
     --popover-foreground: 0 0% 3.9%;
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
@@ -177,7 +177,7 @@ html {
     --radius: 0.5rem;
   }
   .dark {
-    color: white;
+    color: #fafafd;
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
@@ -201,5 +201,53 @@ html {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+  }
+}
+
+/* Dark woven texture (newsletter + footer band, legal pages): fine film
+   grain over a faint diagonal cross-weave, like woven cloth. Fixed to the
+   viewport, so it stays still while content scrolls and lines up exactly
+   wherever it's used, including under the navbar. */
+.texture-weave {
+  background-color: #0d0d10;
+  background-attachment: fixed;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.022) 0 1px,
+      transparent 1px 3px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.022) 0 1px,
+      transparent 1px 3px
+    );
+}
+
+/* Legal pages: when a link lands on a section (e.g. /privacy#children),
+   tint its heading for a moment so it's clear where you are. */
+.legal-section:target > h2 {
+  animation: legal-target 1.4s ease-out;
+}
+
+@keyframes legal-target {
+  0%,
+  60% {
+    background-color: rgba(255, 102, 255, 0.14);
+  }
+  100% {
+    background-color: rgba(255, 102, 255, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Jump to anchors (contents, Services) instead of gliding. */
+  html {
+    scroll-behavior: auto;
+  }
+
+  .legal-section:target > h2 {
+    animation: none;
   }
 }

@@ -111,6 +111,8 @@ const config: Config = {
         },
       },
       colors: {
+        // Brand white: every `white` utility (bg-white, text-white/80, …) uses this.
+        white: "#fafafd",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: "hsl(var(--primary))",

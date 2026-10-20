@@ -1,10 +1,12 @@
 "use client";
 
 import type React from "react";
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Upload, FileText, Github, Menu, X } from "lucide-react";
 import Image from "next/image";
-import { submitApplication, type FormData as ApplicationFormData } from "../../../lib/applicationService";
+
+// Matches the server's limit in /api/careers.
+const MAX_RESUME_BYTES = 4 * 1024 * 1024;
 
 export default function ApplicationForm() {
   const [dragActive, setDragActive] = useState(false);
@@ -14,6 +16,10 @@ export default function ApplicationForm() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  // When the form was opened: a spam check on the server (bots submit
+  // instantly). Set after mount so it's the visitor's clock, not the build's.
+  const [startedAt, setStartedAt] = useState(0);
+  useEffect(() => setStartedAt(Date.now()), []);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -39,6 +45,10 @@ export default function ApplicationForm() {
   const handleFileSelect = (file: File) => {
     // Check if the file is a PDF
     if (file.type === "application/pdf") {
+      if (file.size > MAX_RESUME_BYTES) {
+        setSubmitError("Your resume must be 4 MB or smaller");
+        return;
+      }
       setSelectedFile(file);
       setSubmitError(null); 
     } else {
@@ -74,23 +84,19 @@ export default function ApplicationForm() {
       return;
     }
 
+    // Sent as an email to the studio by /api/careers, resume attached.
+    formData.set("resume", selectedFile);
+    formData.set("_timestamp", String(startedAt));
+
     try {
-      const applicationData: ApplicationFormData = {
-        preferredRole: formData.get('preferred_role') as string,
-        name: formData.get('name') as string,
-        email: formData.get('email') as string,
-        githubProfile: formData.get('github_profile') as string,
-        linkedinTwitterProfile: formData.get('linkedin_twitter_profile') as string || undefined,
-        resumeFile: selectedFile,
-        currentSchool: formData.get('current_school') as string || undefined,
-        pitch: formData.get('pitch') as string
-      };
+      const response = await fetch("/api/careers", {
+        method: "POST",
+        body: formData,
+      });
+      const result = await response.json().catch(() => ({}));
 
-      const result = await submitApplication(applicationData);
-
-      if (result.success) {
+      if (response.ok) {
         setSubmitSuccess(true);
-        // Reset form
         form.reset();
         setSelectedFile(null);
       } else {
@@ -192,7 +198,7 @@ export default function ApplicationForm() {
           <div className="lg:col-span-1 order-2 lg:order-1">
             <div className="bg-white rounded-lg lg:bg-transparent p-4 lg:p-6 space-y-4 lg:space-y-6 shadow-sm lg:shadow-none">
               <h2 className="text-xl lg:text-2xl font-semibold text-gray-900 mb-4">
-                Engineering Intern
+                Sales Intern
               </h2>
 
               <div className="space-y-3 lg:space-y-4">
@@ -219,14 +225,14 @@ export default function ApplicationForm() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1">Department</label>
-                  <p className="text-gray-900">Engineering</p>
+                  <p className="text-gray-900">Sales</p>
                 </div>
 
                 <div className="border-t border-gray-200"></div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1">Compensation</label>
-                  <p className="text-gray-900">50k</p>
+                  <p className="text-gray-900">30–50k</p>
                 </div>
               </div>
             </div>
@@ -235,6 +241,11 @@ export default function ApplicationForm() {
           {/* Application Form Section */}
           <div className="lg:col-span-3 order-1 lg:order-2 lg:pt-12">
             <form onSubmit={handleSubmit} className="bg-white rounded-lg lg:bg-transparent p-4 lg:p-6 space-y-4 lg:space-y-6 shadow-sm lg:shadow-none">
+              {/* Spam trap: hidden from people; bots fill it in. */}
+              <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
+                <label htmlFor="website">Website</label>
+                <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+              </div>
               
               {/* Preferred Role */}
               <div className="space-y-2">
@@ -249,11 +260,7 @@ export default function ApplicationForm() {
                   required
                 >
                   <option value="" disabled>Select your preferred role</option>
-                  <option value="backend">Ui/Ux Designer</option>
-                  <option value="frontend">Frontend Engineer</option>
-                  <option value="backend">Backend Engineer</option>
-                  <option value="backend">Full Stack Engineer</option>
-                  <option value="ai-ml">AI/ML Engineer</option>
+                  <option value="sales">Sales Intern</option>
                 </select>
               </div>
 
@@ -290,7 +297,7 @@ export default function ApplicationForm() {
               {/* GitHub Profile */}
               <div className="space-y-2">
                 <label htmlFor="github" className="block text-sm font-medium text-gray-700">
-                  GitHub Profile<span className="text-red-500">*</span>
+                  GitHub Profile
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -302,7 +309,6 @@ export default function ApplicationForm() {
                     type="url"
                     placeholder="https://github.com/yourusername"
                     className="w-full pl-9 lg:pl-10 px-3 py-3 lg:py-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-violet-500 focus:border-violet-500 transition-colors text-base"
-                    required
                   />
                 </div>
               </div>
@@ -310,7 +316,7 @@ export default function ApplicationForm() {
               {/* LinkedIn/Twitter Profile */}
               <div className="space-y-2">
                 <label htmlFor="twitter/linkedin" className="block text-sm font-medium text-gray-700">
-                  Linkedin/Twitter Profile
+                  Linkedin/Twitter Profile<span className="text-red-500">*</span>
                 </label>
                 <input
                   id="twitter/linkedin"
@@ -318,6 +324,7 @@ export default function ApplicationForm() {
                   type="url"
                   placeholder="Profile Link"
                   className="w-full px-3 py-3 lg:py-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-violet-500 focus:border-violet-500 transition-colors text-base"
+                  required
                 />
               </div>
 

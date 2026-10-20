@@ -8,6 +8,7 @@ import {
   type MotionValue,
 } from "motion/react";
 import { useEffect, useState } from "react";
+import BookCallLink from "~/components/book-call-link";
 import CursorIcon from "../assets/cursor-icon";
 
 interface AnimatedTextProps {
@@ -42,7 +43,7 @@ const AnimatedText = ({ text, delay = 0 }: AnimatedTextProps) => {
             stiffness: 100,
             damping: 12,
             mass: 0.1,
-            delay: delay + index * 0.05,
+            delay: delay + index * 0.012,
           }}
         >
           {char}
@@ -60,7 +61,7 @@ const HeroSection = () => {
     useState<boolean>(false);
 
   // Calculate total animation time for text + a small buffer
-  const textAnimationDuration = 1.0; // Approximate time for text animation
+  const textAnimationDuration = 0.35; // Approximate time for text animation
   const underlineDelay = firstLineDelay + textAnimationDuration;
   const labelDelay = underlineDelay + 0.3;
 
@@ -99,7 +100,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
-            delay: 0.2,
+            delay: 0,
             type: "spring",
             stiffness: 100,
             damping: 12,
@@ -121,7 +122,7 @@ const HeroSection = () => {
           <span className="inline-block relative">
             <AnimatedText
               text="while you sell"
-              delay={firstLineDelay + 0.4}
+              delay={firstLineDelay + 0.1}
             />
             <motion.span
               className="absolute translate-y-1 inline-block left-0 bottom-0 bg-[#ff66ff] h-2"
@@ -145,7 +146,7 @@ const HeroSection = () => {
             y: 0,
           }}
           transition={{
-            delay: 2,
+            delay: 0.25,
             type: "spring",
             stiffness: 100,
             damping: 12,
@@ -162,7 +163,7 @@ const HeroSection = () => {
             y: 0,
           }}
           transition={{
-            delay: 1.8,
+            delay: 0.2,
             type: "spring",
             stiffness: 100,
             damping: 12,
@@ -184,7 +185,7 @@ const HeroSection = () => {
             y: 0,
           }}
           transition={{
-            delay: 2.1,
+            delay: 0.3,
             type: "spring",
             stiffness: 100,
             damping: 12,
@@ -194,12 +195,12 @@ const HeroSection = () => {
         >
           <div className="absolute -bottom-1 -left-1 w-full h-full bg-white z-0"></div>
           <div className="absolute group-active:translate-y-1 group-active:-translate-x-1 transition-all inset-0 bg-[#2d2dc3] z-10"></div>
-          <a
-            href="#contact"
+          <BookCallLink
+            from="hero"
             className="relative inline-block transition-all  duration-300 z-20 group-active:-translate-x-1 group-active:translate-y-1"
           >
             Let's talk
-          </a>
+          </BookCallLink>
         </motion.button>
       </div>
       <motion.div
@@ -209,7 +210,7 @@ const HeroSection = () => {
           y: 0,
         }}
         transition={{
-          delay: 2.1,
+          delay: 0.3,
           type: "spring",
           stiffness: 100,
           damping: 12,
@@ -232,7 +233,7 @@ const HeroSection = () => {
             x: 0,
           }}
           transition={{
-            delay: 1.9,
+            delay: 0.15,
             type: "spring",
             stiffness: 100,
             damping: 12,
@@ -250,7 +251,7 @@ const HeroSection = () => {
             x: -15,
           }}
           transition={{
-            delay: 2.0,
+            delay: 0.2,
             type: "spring",
             stiffness: 100,
             damping: 12,
@@ -266,7 +267,7 @@ const HeroSection = () => {
             x: -28,
           }}
           transition={{
-            delay: 2.1,
+            delay: 0.25,
             type: "spring",
             stiffness: 100,
             damping: 12,
@@ -370,7 +371,7 @@ const FloatingLabelNormal = () => {
         opacity: 1,
       }}
       transition={{
-        delay: 2,
+        delay: 0.35,
         duration: 0.5,
         ease: "easeOut",
       }}

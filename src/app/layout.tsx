@@ -11,7 +11,15 @@ const organizationJsonLd = {
   "@type": "Organization",
   "@id": `${siteUrl}/#organization`,
   name: "Keizerworks",
-  alternateName: ["Keizer", "KZR"],
+  alternateName: [
+    "Keizer",
+    "KZR",
+    "Keizer Works",
+    "Keizer Product Studio",
+    "Keizerworks Product Studio",
+    "KZR Agency",
+    "KZR Product Studio",
+  ],
   url: siteUrl,
   logo: `${siteUrl}/assets/logos/keizer-logo-name.svg`,
   foundingDate: "2024",
@@ -48,7 +56,7 @@ const organizationJsonLd = {
   description:
     "Keizerworks is a software company and product studio that designs, builds, and maintains web apps, mobile apps, SaaS products, AI products, and custom software for startups and growth-stage companies.",
   email: "rahul.sain@keizerworks.com",
-  telephone: "+91-7357156587",
+  telephone: "+91-9817069743",
   areaServed: ["North America", "Europe", "Asia", "India"],
   numberOfEmployees: {
     "@type": "QuantitativeValue",
@@ -86,15 +94,32 @@ const organizationJsonLd = {
   ],
 };
 
+// Tells Google the site's name, so results show "Keizerworks" rather than
+// the bare domain.
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${siteUrl}/#website`,
+  name: "Keizerworks",
+  alternateName: ["Keizer", "KZR"],
+  url: siteUrl,
+  publisher: { "@id": `${siteUrl}/#organization` },
+};
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
 };
 
+// GA4 measurement ID, e.g. G-XXXXXXXXXX. Set it in the environment.
+// Production builds only, so local development visits aren't counted.
+const gaId =
+  process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_GA_ID
+    : undefined;
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL || siteUrl,
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || siteUrl),
   title: {
     default: "Keizerworks - Design, Build, and Maintain Products",
     template: "%s | Keizerworks",
@@ -124,9 +149,6 @@ export const metadata: Metadata = {
   authors: [{ name: "Keizerworks", url: siteUrl }],
   creator: "Keizerworks",
   publisher: "Keizerworks",
-  alternates: {
-    canonical: siteUrl,
-  },
   category: "Software Development",
   openGraph: {
     type: "website",
@@ -145,20 +167,11 @@ export const metadata: Metadata = {
       },
     ],
   },
+  // Title, description, and image come from each page's openGraph, so a
+  // shared /work link doesn't show the home page's title.
   twitter: {
     card: "summary_large_image",
-    title: "Keizerworks - Design, Build, and Maintain Products",
-    description:
-      "Design, engineering, deployment, and maintenance for startups and growth-stage companies.",
     creator: "@keizerHq",
-    images: [
-      {
-        url: "/opengraph-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Keizerworks",
-      },
-    ],
   },
   robots: {
     index: true,
@@ -179,7 +192,12 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${dmMono.variable}`}>
+    <html
+      lang="en"
+      // Keeps smooth scrolling for #anchors, but page changes jump to the top.
+      data-scroll-behavior="smooth"
+      className={`${spaceGrotesk.variable} ${dmMono.variable}`}
+    >
       <body className="font-sans antialiased dark bg-background">
         {children}
         <Script
@@ -190,6 +208,34 @@ export default function RootLayout({
             __html: JSON.stringify(organizationJsonLd),
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd),
+          }}
+        />
+        {/* Google Analytics 4. Off in development and until NEXT_PUBLIC_GA_ID is set. */}
+        {gaId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script
+              id="ga4"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  window.gtag = gtag;
+                  gtag('js', new Date());
+                  gtag('config', '${gaId}');
+                `,
+              }}
+            />
+          </>
+        )}
         <Script
           id="apollo-tracker"
           strategy="afterInteractive"

@@ -1,3 +1,4 @@
+import BookCallLink from "~/components/book-call-link";
 
 
 const WhyKeizer = () => {
@@ -36,12 +37,12 @@ const WhyKeizer = () => {
             <button className="font-sg translate-x-1 font-medium mt-8 group relative text-white px-4 md:text-lg py-2">
               <div className="absolute -bottom-1 -left-1 w-full h-full bg-white z-0"></div>
               <div className="absolute group-active:translate-y-1 group-active:-translate-x-1 transition-all inset-0 bg-black z-10"></div>
-              <a
-                href="#contact"
+              <BookCallLink
+                from="why-keizer"
                 className="relative inline-block transition-all duration-300 z-20 group-active:-translate-x-1 group-active:translate-y-1"
               >
                 Let's talk
-              </a>
+              </BookCallLink>
             </button>
           </div>
 

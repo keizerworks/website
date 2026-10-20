@@ -12,8 +12,8 @@
     "answer": "We work with startup founders, growth-stage companies, and teams building serious digital products. The best fit is a founder or company with a clear problem, strong intent, and the ability to move fast on users, sales, or distribution."
   },
   {
-    "question": "How is KZR different from hiring a CTO or using an agency?",
-    "answer": "An agency usually delivers scoped work. A CTO hire takes time and may not cover design, engineering, product, and maintenance together. KZR comes in as a product team that can design, build, and maintain the product with a systematic process."
+    "question": "How is Keizerworks different from hiring a CTO or using an agency?",
+    "answer": "An agency usually delivers scoped work. A CTO hire takes time and may not cover design, engineering, product, and maintenance together. Keizerworks comes in as a product team that can design, build, and maintain the product with a systematic process."
   },
   {
     "question": "What happens after the product ships?",
@@ -22,5 +22,10 @@
   {
     "question": "Who owns the intellectual property?",
     "answer": "The client owns the intellectual property for the product Keizerworks builds for them."
+  },
+  {
+    "question": "How do we start?",
+    "answer": "Book a 30-minute call and tell us what you're building. We'll talk through your idea, your users, and your timeline, then come back with what we'd build first and who'd be on the team.",
+    "link": { "href": "/book", "label": "Book a call" }
   }
 ]

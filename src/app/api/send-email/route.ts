@@ -1,22 +1,17 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { z } from "zod";
 import { RateLimiterMemory } from "rate-limiter-flexible";
+import { z } from "zod";
 
 const ContactFormSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  company: z.string().trim().min(2, "Company name is required"),
+  company: z.string().trim().min(2, "Company or website is required"),
   project: z
     .string()
     .trim()
     .min(15, "Project description must be at least 15 characters"),
-  earlyMarketValidation: z
-    .boolean()
-    .refine((value) => value, "Please confirm early market validation"),
-  earlyUserTalks: z
-    .boolean()
-    .refine((value) => value, "Please confirm early user talks"),
+  budget: z.string().trim().max(40).optional(),
   website: z.string().optional(), // Honeypot field
   _timestamp: z.number().optional(), // Form load timestamp
 });
@@ -27,6 +22,15 @@ const rateLimiter = new RateLimiterMemory({
   points: 3,
   duration: 60,
 });
+
+// Form input goes into an HTML email, so escape it.
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
 
 export async function POST(request: Request) {
   try {
@@ -42,16 +46,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ errors: errorMessages }, { status: 400 });
     }
 
-    const {
-      name,
-      email,
-      company,
-      project,
-      earlyMarketValidation,
-      earlyUserTalks,
-      website,
-      _timestamp,
-    } = result.data;
+    const { name, email, company, project, budget, website, _timestamp } =
+      result.data;
 
     // Spam check 1: Honeypot - if filled, it's a bot
     if (website && website.length > 0) {
@@ -86,24 +82,22 @@ export async function POST(request: Request) {
       to: process.env.EMAIL,
       replyTo: email,
       subject: `New Project Inquiry from ${name}`,
-      text: `
-        Name: ${name}
-        Email: ${email}
-        Company: ${company}
-        Early Market Validation: ${earlyMarketValidation ? "Yes" : "No"}
-        Early User Talks: ${earlyUserTalks ? "Yes" : "No"}
-        Project Details: ${project}
-      `,
+      text: [
+        `Name: ${name}`,
+        `Email: ${email}`,
+        `Company: ${company}`,
+        `Budget: ${budget || "Not given"}`,
+        `Project: ${project}`,
+      ].join("\n"),
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h1>New Project Inquiry</h1>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Company:</strong> ${company}</p>
-          <p><strong>Early Market Validation:</strong> ${earlyMarketValidation ? "Yes" : "No"}</p>
-          <p><strong>Early User Talks:</strong> ${earlyUserTalks ? "Yes" : "No"}</p>
-          <p><strong>Project Details:</strong></p>
-          <blockquote>${project}</blockquote>
+          <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+          <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+          <p><strong>Company:</strong> ${escapeHtml(company)}</p>
+          <p><strong>Budget:</strong> ${escapeHtml(budget || "Not given")}</p>
+          <p><strong>Project:</strong></p>
+          <blockquote>${escapeHtml(project)}</blockquote>
         </div>
       `,
     });
