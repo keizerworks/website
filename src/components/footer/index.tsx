@@ -91,7 +91,7 @@ export default function FooterSection() {
             <ul className="mt-4 flex flex-col gap-2.5">
               <li>
                 <a href="mailto:biz@keizerworks.com" className={link}>
-                  biz@keizerworks.com
+                  Mail
                 </a>
               </li>
             </ul>
