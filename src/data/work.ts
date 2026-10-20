@@ -62,6 +62,14 @@ export type Project = {
     placeholder?: boolean;
   };
   url?: string;
+  // No case study: the card opens `url` directly, in a new tab.
+  linkOnly?: boolean;
+  // A demo video shown as the case study's hero, in place of the cover.
+  // `poster` is a local image shown until someone presses play.
+  heroVideo?: { youtubeId: string; title: string; poster: string };
+  // Hero drawn like a social profile: coverImage as the banner, with `icon`
+  // as a round avatar overlapping it.
+  heroProfile?: boolean;
   // Hand-written search and link-preview copy. Projects without it get a
   // plain title and description; we write these one project at a time.
   seo?: {
@@ -142,18 +150,18 @@ export const projects: Project[] = [
         {
           label: "The brief",
           statement:
-            "Turn a one-page idea into **an AI-native LMS any school can run**, then make it ready for a thousand of them.",
+            "Turn a one-page idea into an AI-native LMS any school can run, then make it ready for a thousand of them.",
           paragraphs: [
-            "Edulume came to us with **a concept, not a codebase**. They needed one partner to own product, brand, design, engineering, and AI, and to stay for the long run.",
-            "The brief was big from day one: a multi-tenant architecture for **up to 1,000 schools**, roles flexible enough for any institution, and AI that writes course content and lifts learning outcomes.",
+            "Edulume came to us with a concept, not a codebase. They needed one partner to own product, brand, design, engineering, and AI, and to stay for the long run.",
+            "The brief was big from day one: a multi-tenant architecture for up to 1,000 schools, roles flexible enough for any institution, and AI that writes course content and lifts learning outcomes.",
           ],
         },
         {
           label: "The platform",
           statement:
-            "**One multi-tenant core**, with a workspace on top for everyone who runs, teaches, or learns at a school.",
+            "One multi-tenant core, with a workspace on top for everyone who runs, teaches, or learns at a school.",
           paragraphs: [
-            "The hardest part was permissions. Every school organises itself differently, so we designed one rule: **principal + role + scope = access**. Schools create as many custom roles as they need, with no new code.",
+            "The hardest part was permissions. Every school organises itself differently, so we designed one rule: principal + role + scope = access. Schools create as many custom roles as they need, with no new code.",
           ],
           cards: [
             {
@@ -177,9 +185,9 @@ export const projects: Project[] = [
         {
           label: "For schools",
           statement:
-            "School leaders see **every course, quiz, assignment, and wiki** across the institution in one view.",
+            "School leaders see every course, quiz, assignment, and wiki across the institution in one view.",
           paragraphs: [
-            "A new school goes from the console to **live in about four hours**. From there, custom roles decide who creates, publishes, and reviews content.",
+            "A new school goes from the console to live in about four hours. From there, custom roles decide who creates, publishes, and reviews content.",
           ],
           visuals: [
             {
@@ -195,9 +203,9 @@ export const projects: Project[] = [
         {
           label: "For teachers",
           statement:
-            "Teachers build a course **by describing it**. Edulume drafts the chapters, quizzes, and assignments.",
+            "Teachers build a course by describing it. Edulume drafts the chapters, quizzes, and assignments.",
           paragraphs: [
-            "Generation runs on curriculum-aware RAG over CBSE and NCERT content, so **drafts stay on syllabus**. Teachers can turn any document into a quiz, and open a student's profile to see how they're doing.",
+            "Generation runs on curriculum-aware RAG over CBSE and NCERT content, so drafts stay on syllabus. Teachers can turn any document into a quiz, and open a student's profile to see how they're doing.",
           ],
           visuals: [
             {
@@ -222,9 +230,9 @@ export const projects: Project[] = [
         {
           label: "For students",
           statement:
-            "Students get **one home for everything they're learning**, on the web and on their phone.",
+            "Students get one home for everything they're learning, on the web and on their phone.",
           paragraphs: [
-            "Progress, time spent, points, and a leaderboard give students **a reason to come back**. Personalised learner profiles and adaptive roadmaps decide what comes next.",
+            "Progress, time spent, points, and a leaderboard give students a reason to come back. Personalised learner profiles and adaptive roadmaps decide what comes next.",
           ],
           visuals: [
             {
@@ -248,7 +256,7 @@ export const projects: Project[] = [
         {
           label: "Brand & social",
           statement:
-            "**A brand to match the product**, carried through the site, launch banners, and social posts.",
+            "A brand to match the product, carried through the site, launch banners, and social posts.",
           visuals: [
             {
               src: "/assets/work/edulume/hero-banner.jpg",
@@ -279,25 +287,158 @@ export const projects: Project[] = [
         },
       ],
       result:
-        "In 18 months Edulume went **from a pitch to a production platform**, and a new school now goes live in about four hours.",
+        "In 18 months Edulume went from a pitch to a production platform, and a new school now goes live in about four hours.",
     },
   },
   {
+    // Source: "Case Study — Tael" doc (Claude Docs).
     slug: "tael",
     name: "Tael",
-    headline: "agent payments on Stellar, with no KYC",
+    headline: "payments for AI agents, live on Stellar",
     tags: ["AI", "Product"],
+    year: "2026",
     coverColor: "black",
-    coverImage: "/assets/work/tael-cover.webp",
-    coverImageSize: { width: 2000, height: 1131 },
-    coverImageBg: "#151515",
+    coverImage: "/assets/work/tael/title-card.webp",
+    coverImageSize: { width: 2078, height: 1162 },
+    coverImageBg: "#ffffff",
     url: "https://taelprotocol.xyz",
-    problem: TODO_PROBLEM,
-    // TODO: describe our role on Tael; this line describes the product.
+    seo: {
+      title: "Tael case study: payments and discovery for AI agents on Stellar",
+      description:
+        "How we built Tael: one SDK and wallet that lets AI agents discover, pay for and run any capability with USDC micropayments on Stellar. Live on mainnet.",
+      keywords: [
+        "Tael",
+        "Tael Protocol",
+        "Tael case study",
+        "AI agent payments",
+        "x402",
+        "HTTP 402 payments",
+        "Stellar USDC",
+        "agent wallet",
+        "MCP payments",
+        "Keizerworks case study",
+      ],
+    },
+    problem:
+      "Give AI agents a way to pay for what they use, without a human signing up, entering a card or approving an invoice.",
     whatWeDid:
-      "Tael lets AI agents pay, run capabilities, and swap on-chain instantly. Connect a Stellar wallet or passkey, fund with USDC, and you're set. No KYC.",
-    services: ["Product Design", "Development"],
-    results: [],
+      "Tael lets AI agents pay for the tools they use. We designed the protocol, built the SDK and the wallet, and took it live on Stellar mainnet within weeks.",
+    services: [
+      "Protocol Design",
+      "SDK",
+      "Payments Infrastructure",
+      "Product Design",
+    ],
+    results: [
+      { value: "25+", label: "builders integrating the SDK" },
+      { value: "6", label: "partnerships signed, building agents on Tael" },
+      { value: "100+", label: "developers on the waitlist" },
+      { value: "4+", label: "open-source contributors, verified on Drips" },
+    ],
+    story: {
+      chapters: [
+        {
+          label: "The problem",
+          statement: "AI agents can do the work. They just can't pay for it.",
+          paragraphs: [
+            "Every tool an agent might need, from an API or a model to a dataset or another agent, sits behind its own account, its own billing, and often its own KYC.",
+            "So builders patch it together by hand: a pile of API keys, prepaid credits that run out, invoices at the end of the month. It breaks the moment an agent needs something new.",
+            "We built Tael to fix this once, at the protocol level.",
+          ],
+          visuals: [
+            {
+              src: "/assets/work/tael/coins.webp",
+              alt: "Tael and Stellar coins: an illustration of an agent paying in USDC on Stellar",
+              caption: "Tael × Stellar.",
+              width: 1120,
+              height: 720,
+            },
+          ],
+        },
+        {
+          label: "How it works",
+          statement: "One request finds a tool, pays for it, and runs it.",
+          paragraphs: [
+            'Tael uses HTTP 402, the web\'s "payment required" response. When an agent calls a paid tool, the SDK pays a fraction of a cent in USDC on Stellar, and the call goes through, all in one round trip.',
+            "Getting started takes a minute: connect a Stellar wallet or a passkey, add USDC, and you're set. No KYC.",
+          ],
+          cards: [
+            {
+              title: "Discover",
+              body: "The agent finds an API, model, MCP server, dataset, or another agent in the Tael marketplace.",
+            },
+            {
+              title: "Pay",
+              body: "The SDK settles a sub-cent USDC payment on Stellar. No invoices, no API keys.",
+            },
+            {
+              title: "Run",
+              body: "The tool runs and returns its result, in the same request.",
+            },
+          ],
+          visuals: [
+            {
+              src: "/assets/work/tael/site-assistant.webp",
+              alt: 'taelprotocol.xyz: "The payment layer. For AI agents." with Tael\'s assistant explaining the product',
+              caption: "taelprotocol.xyz, with Tael's own assistant.",
+              width: 2000,
+              height: 1131,
+            },
+          ],
+        },
+        {
+          label: "What we shipped",
+          statement: "Everything a builder needs, live from day one.",
+          bullets: [
+            "An SDK to call and pay for any tool in a few lines of code",
+            "An agent wallet with Stellar wallet or passkey login",
+            "A marketplace where providers set a price per call",
+            "A free sandbox with testnet USDC",
+            "A 1% fee on each production transaction",
+          ],
+          visuals: [
+            {
+              src: "/assets/work/tael-cover.webp",
+              alt: "Tael onboarding: Jump right in, no KYC required. Connect, Fund, All set.",
+              caption: "Onboarding: connect, fund, done. No KYC.",
+              width: 2000,
+              height: 1131,
+            },
+          ],
+        },
+        {
+          label: "Partners",
+          statement: "Six teams are already building their agents on Tael.",
+          visuals: [
+            {
+              src: "/assets/work/tael/vayyl-x-tael.webp",
+              alt: "Vayyl × Tael Protocol partnership announcement",
+              caption: "Vayyl × Tael.",
+              width: 1774,
+              height: 530,
+            },
+            {
+              src: "/assets/work/tael/partner-x-tael.webp",
+              alt: "Partnership announcement with Tael Protocol",
+              caption: "Another partner building on Tael.",
+              width: 1280,
+              height: 427,
+            },
+          ],
+          layout: "carousel",
+        },
+        {
+          label: "What's next",
+          statement: "Next, the same rails for support agents.",
+          paragraphs: [
+            "Most Web3 products still run support on Discord. Questions wait up to 72 hours, answers get buried in busy channels, and bots hand out forms instead of fixes.",
+            "Tael's next product is an agent that answers, resolves, and follows up inside the conversation itself.",
+          ],
+        },
+      ],
+      result:
+        "Live on Stellar mainnet within weeks of launch: from protocol design to SDK to a live product, one team, in weeks.",
+    },
   },
   {
     // Source: notion_chem0.pdf
@@ -305,9 +446,18 @@ export const projects: Project[] = [
     name: "Chem0",
     headline: "a chemistry engine that predicts reactions no one has run yet",
     tags: ["AI", "Product", "Brand"],
-    year: "2024–2026",
+    year: "2024–2025",
     icon: "/assets/portfolio/edulume-cover.png",
     coverColor: "black",
+    coverImage: "/assets/work/chem0/research-mode.webp",
+    coverImageSize: { width: 1170, height: 666 },
+    coverImageBg: "#ffffff",
+    heroVideo: {
+      youtubeId: "kTaOAV3Tfw8",
+      title:
+        "Chem0 Research Mode: stability score, pair risk, and reaction classification",
+      poster: "/assets/work/chem0/demo-poster.webp",
+    },
     url: "https://chem0.com",
     seo: {
       title:
@@ -360,19 +510,19 @@ export const projects: Project[] = [
         {
           label: "The brief",
           statement:
-            "Give chemists a way to **test a reaction before they run it**, in one platform that works for both labs and pharma.",
+            "Give chemists a way to test a reaction before they run it, in one platform that works for both labs and pharma.",
           paragraphs: [
-            "Chem0 came to us with **a vision, not a product**: modernise chemistry research by putting molecular intelligence, machine learning, and visualisation in one place.",
+            "Chem0 came to us with a vision, not a product: modernise chemistry research by putting molecular intelligence, machine learning, and visualisation in one place.",
             "They needed a long-term partner to build it from scratch, from the brand and the interface to the AI models and the cloud they run on, for pharma companies, R&D labs, and universities alike.",
           ],
         },
         {
           label: "The models",
           statement:
-            "Instead of one model that guesses everything, we built **three engines, each trained for a single scientific question**.",
+            "Instead of one model that guesses everything, we built three engines, each trained for a single scientific question.",
           paragraphs: [
-            "The hardest part was **trust**. Chemists won't act on a black box, so every engine shows its inputs, from pH and humidity to functional groups and pKa, and returns a score a researcher can reason about.",
-            "Underneath, Graph Neural Networks learn how structure, physicochemical properties, and conditions interact. That lets Chem0 predict chemical interactions **it has never seen**, where rule-based systems stop.",
+            "The hardest part was trust. Chemists won't act on a black box, so every engine shows its inputs, from pH and humidity to functional groups and pKa, and returns a score a researcher can reason about.",
+            "Underneath, Graph Neural Networks learn how structure, physicochemical properties, and conditions interact. That lets Chem0 predict chemical interactions it has never seen, where rule-based systems stop.",
           ],
           cards: [
             {
@@ -394,9 +544,43 @@ export const projects: Project[] = [
           ],
         },
         {
+          label: "Research Mode",
+          statement:
+            "Can two drugs be formulated together safely? Chem0 answers in about 90 seconds.",
+          paragraphs: [
+            "A scientist drags two active ingredients onto the reaction canvas, sets real conditions such as 25°C, pH 7, and 60% humidity, and runs Research.",
+            "All three models run at once: a stability score from 0 to 100, a low, medium, or high risk for every functional-group pair, and the likely reaction types, from salt formation to nucleophilic attack.",
+            "LabMate, Chem0's AI assistant, watches the experiment. Click any risky pair and it explains, in plain terms for a formulator, why it matters under those conditions.",
+          ],
+          cards: [
+            {
+              title: "81.26",
+              body: "Stability score for Avatrombopag + Azithromycin in the demo",
+            },
+            { title: "86%", body: "Model confidence for that result" },
+            {
+              title: "1",
+              body: "High-risk functional-group pair flagged: ketone and ketone",
+            },
+          ],
+          visuals: [
+            {
+              src: "/assets/work/chem0/research-mode.webp",
+              alt: "Chem0 Research Mode: Avatrombopag and Azithromycin on the canvas, with LabMate explaining a medium-risk pair",
+              caption:
+                "Research Mode, with LabMate explaining a risk pair under the chosen conditions.",
+              width: 1170,
+              height: 666,
+            },
+          ],
+        },
+        {
           label: "The product",
           statement:
-            "Around the models, **a full product**: the brand, the marketing site, and a research dashboard built for chemists.",
+            "Around the models, a full product: the brand, the marketing site, and a research dashboard built for chemists.",
+          paragraphs: [
+            "Under the hood, a gateway on AWS Lambda runs the app's API and LabMate, powered by Gemini, while a separate service serves the Graph Neural Network models.",
+          ],
           bullets: [
             "Prediction of previously unseen chemical interactions",
             "AI chemistry assistant for scientific exploration",
@@ -410,7 +594,7 @@ export const projects: Project[] = [
         },
       ],
       result:
-        "Chem0 grew from a research idea into an investor-ready platform, earned **a Letter of Intent from Strausswell Organics** after beta, and drew acquisition offers while still in development.",
+        "Chem0 grew from a research idea into an investor-ready platform, earned a Letter of Intent from Strausswell Organics after beta, and drew acquisition offers while still in development.",
     },
   },
   {
@@ -424,6 +608,7 @@ export const projects: Project[] = [
     coverImageSize: { width: 1068, height: 470 },
     coverImageBg: "#141414",
     url: "https://arlink.ar.io",
+    linkOnly: true,
     problem: TODO_PROBLEM,
     whatWeDid:
       "We redesigned Arlink's product experience and brand at a critical stage, ahead of their fundraising milestone.",
@@ -441,12 +626,120 @@ export const projects: Project[] = [
     name: "Plobbo",
     headline: "the MVP of an AI platform that distributes content everywhere",
     tags: ["AI", "Product"],
+    year: "2025",
+    icon: "/assets/work/plobbo/logo.webp",
     coverColor: "blue",
-    problem: TODO_PROBLEM,
+    coverImage: "/assets/work/plobbo/banner.webp",
+    heroProfile: true,
+    coverImageSize: { width: 1500, height: 500 },
+    coverImageBg: "#ffffff",
+    url: "https://x.com/plobboo",
+    problem:
+      "Founders should be building, not rewriting the same update for four platforms.",
     whatWeDid:
-      "We designed the product and built the MVP behind an AI marketing platform that automates multi-channel content distribution.",
+      "Plobbo is agentic AI for founders: save time, stay consistent, and reach the right audience. We designed the product and built the MVP, with most of our effort on Ocean: write once, reach everywhere.",
     services: ["Product Design", "MVP Development", "AI"],
     results: [],
+    story: {
+      chapters: [
+        {
+          label: "The problem",
+          statement:
+            "Founders should be building, not rewriting the same update for four platforms.",
+          paragraphs: [
+            "In a 2024 founder survey, 92% of founders said building their personal brand directly affects business growth. Social has become the trend that matters most.",
+            "But it's a second job. The average professional now runs six different social accounts, and every launch, event, or milestone has to be written again for each one, in its own voice.",
+            "Plobbo takes that job over: you write down what happened once, and it handles the rest.",
+          ],
+          cards: [
+            {
+              title: "92%",
+              body: "of founders say their personal brand drives business growth",
+            },
+            {
+              title: "6",
+              body: "social accounts the average professional manages",
+            },
+            { title: "1", body: "place to write it, with Plobbo" },
+          ],
+        },
+        {
+          label: "Ocean",
+          statement: "Write once, reach everywhere.",
+          paragraphs: [
+            "Ocean is the feature we put the most into. Pick a chapter of your journey and it drafts a version for each platform, in that platform's voice: X, LinkedIn, Threads, and Reddit today, with Instagram, Facebook, Bluesky, Mastodon, Medium, and Notion planned. Add hashtags, regenerate a draft, or attach media, then post it or schedule it.",
+            "We named it for what it does:",
+          ],
+          bullets: [
+            "O — One-click publishing",
+            "C — Cross-platform distribution",
+            "E — Effortless content management",
+            "A — AI-driven automation",
+            "N — Network expansion",
+          ],
+          visuals: [
+            {
+              src: "/assets/work/plobbo/ocean-generate.webp",
+              alt: "Plobbo Ocean drafting posts for X, Reddit, Threads, and LinkedIn from one update",
+              caption:
+                "Ocean drafting one update for X, Reddit, Threads, and LinkedIn.",
+              width: 1774,
+              height: 994,
+            },
+            {
+              src: "/assets/work/plobbo/ocean-posts.webp",
+              alt: "Plobbo Ocean list of posts filtered by All, Posted, Draft, and Schedule",
+              caption: "Every post in one place: posted, draft, or scheduled.",
+              width: 1714,
+              height: 964,
+            },
+          ],
+          layout: "pair",
+        },
+        {
+          label: "Plobbo AI",
+          statement: "And an assistant that knows your story.",
+          paragraphs: [
+            "Plobbo AI has read your journey. Ask it for your top achievements this year and it answers from what you logged, then sends the answer straight to Ocean to become posts.",
+          ],
+          visuals: [
+            {
+              src: "/assets/work/plobbo/ai-start.webp",
+              alt: "Plobbo AI start screen: Let's have a talk",
+              caption: "Plobbo AI, ready for a question.",
+              width: 1988,
+              height: 1118,
+            },
+            {
+              src: "/assets/work/plobbo/ai-answer.webp",
+              alt: "Plobbo AI answering with a list of top achievements and a button to send it to Ocean",
+              caption: "An answer from your journey, one click from Ocean.",
+              width: 2000,
+              height: 1122,
+            },
+          ],
+          layout: "pair",
+        },
+        {
+          label: "The MVP",
+          statement: "We designed every screen and built the MVP end to end.",
+          paragraphs: [
+            "Onboarding, the journey, Ocean, and Plobbo AI, from the first empty state to a scheduled post.",
+          ],
+          visuals: [
+            {
+              src: "/assets/work/plobbo/figma-screens.webp",
+              alt: "The Plobbo MVP's screens laid out in Figma",
+              caption: "The MVP's screens in Figma.",
+              width: 2000,
+              height: 1010,
+            },
+          ],
+        },
+      ],
+      result:
+        "Plobbo went from an idea to a working MVP: a journey to write in, Ocean to publish everywhere, and an assistant that knows the story.",
+    },
   },
   {
     slug: "voice",
@@ -459,6 +752,7 @@ export const projects: Project[] = [
     coverImageSize: { width: 2000, height: 1011 },
     coverImageBg: "#f6f6f3",
     url: "https://studentintelligence.ai",
+    linkOnly: true,
     problem: TODO_PROBLEM,
     whatWeDid: "We're building the voice infrastructure for learning.",
     services: ["AI", "Infrastructure"],
@@ -491,7 +785,8 @@ export const projects: Project[] = [
     coverImage: "/assets/work/betteridea-cover.png",
     coverImageSize: { width: 1622, height: 866 },
     coverImageBg: "#ffffff",
-    url: "https://betteridea.dev",
+    url: "https://betteridea.ar.io",
+    linkOnly: true,
     problem: TODO_PROBLEM,
     whatWeDid:
       "We helped BetterIDEa launch their social and content presence while they were heading into an acquisition.",

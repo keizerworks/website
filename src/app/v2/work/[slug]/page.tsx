@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import ImageCarousel from "~/components/image-carousel";
 import { BackLink, Headline, PageFooter } from "~/components/page-chrome";
 import Navbar from "~/components/ui/navbar";
-import { inter, serif } from "~/config/font";
+import VideoEmbed from "~/components/video-embed";
+import ZoomImage from "~/components/zoom-image";
+import { dmMono, inter } from "~/config/font";
 import {
   type Project,
   type StoryChapter,
@@ -153,58 +155,7 @@ function JsonLd({
 
 // Shared measure: chapters and the meta strip align to it.
 const column = "mx-auto max-w-[1000px]";
-const label = "text-xs font-medium uppercase tracking-[0.12em] text-black/40";
-
-// Soft empty block where a visual will go. Deliberately blank.
-function VisualPlaceholder({ className }: { className?: string }) {
-  return (
-    <div
-      aria-hidden="true"
-      className={cn(
-        "rounded-2xl bg-gradient-to-br from-[#ececf2] to-[#f5f5f8] ring-1 ring-inset ring-black/[0.04]",
-        className,
-      )}
-    />
-  );
-}
-
-// A real project image at its natural shape, framed like the placeholders.
-function Shot({ visual, sizes }: { visual: Visual; sizes: string }) {
-  return (
-    <Image
-      src={visual.src}
-      alt={visual.alt}
-      width={visual.width}
-      height={visual.height}
-      sizes={sizes}
-      className="h-auto w-full rounded-2xl ring-1 ring-inset ring-black/[0.06]"
-    />
-  );
-}
-
-// Soft bars where copy will go.
-function TextPlaceholder({
-  lines = 3,
-  center,
-}: {
-  lines?: number;
-  center?: boolean;
-}) {
-  return (
-    <div
-      aria-hidden="true"
-      className={cn("flex flex-col gap-2.5", center && "items-center")}
-    >
-      {Array.from({ length: lines }, (_, i) => (
-        <span
-          key={i}
-          className="h-3 rounded-full bg-black/[0.06]"
-          style={{ width: i === lines - 1 ? "60%" : "100%" }}
-        />
-      ))}
-    </div>
-  );
-}
+const label = "text-[14px] text-black/45";
 
 function ClientMark({ project }: { project: Project }) {
   return project.icon ? (
@@ -225,76 +176,48 @@ function ClientMark({ project }: { project: Project }) {
   );
 }
 
-const prose =
-  "flex flex-col gap-4 text-[17px] leading-[1.65] text-black/65 [text-wrap:pretty]";
+// One left-aligned reading column, after LCA's AI field guide.
+const reading = "mx-auto w-full max-w-[760px]";
 
-// Editorial chapter: number and label in a left rail, the statement and
-// copy on the right. Body copy is left-aligned; centred paragraphs are hard
-// to read.
+// Chapter: a hairline, a small mono tag, a large heading (the statement),
+// a brighter lead paragraph, then the body.
 function ChapterText({
-  number,
   label: title,
   children,
 }: {
-  number: number;
   label: string;
   children: ReactNode;
 }) {
   return (
     <section
       className={cn(
-        column,
-        "mt-24 grid gap-4 border-t border-black/[0.07] pt-8 md:mt-32 md:grid-cols-[200px_1fr] md:gap-10",
+        reading,
+        "mt-24 border-t border-black/[0.08] pt-6 md:mt-32",
       )}
     >
-      <h2 className="flex items-baseline gap-3 md:flex-col md:gap-1.5 md:pt-2">
-        <span className="text-xs font-medium tabular-nums text-[#2D2DC3]">
-          {String(number).padStart(2, "0")}
-        </span>
-        <span className={label}>{title}</span>
-      </h2>
-      <div className="max-w-[720px]">{children}</div>
+      <p
+        className={cn(
+          dmMono.className,
+          "inline-block bg-[#111] px-2 py-1 text-[12px] uppercase leading-none tracking-[0.12em] text-[#fafafd]",
+        )}
+      >
+        {title}
+      </p>
+      <div className="mt-8">{children}</div>
     </section>
   );
 }
 
-// Copy marks its key phrase with **double asterisks**. Statements show it
-// by contrast (the rest fades back); body copy gets a pink highlighter.
-function Rich({ text, tone }: { text: string; tone: "statement" | "body" }) {
-  // Non-breaking hyphens keep words like "AI-native" on one line.
-  const parts = text.replace(/(\w)-(\w)/g, "$1\u2011$2").split(/\*\*(.+?)\*\*/);
-  return parts.map((part, i) =>
-    // Odd indexes are the captured **phrases**.
-    i % 2 === 1 ? (
-      <mark
-        key={i}
-        className={cn(
-          "text-[#111] [box-decoration-break:clone]",
-          tone === "statement"
-            ? "bg-transparent"
-            : "rounded-[3px] bg-[#ff66ff]/30 px-0.5",
-        )}
-      >
-        {part}
-      </mark>
-    ) : (
-      part
-    ),
-  );
+// Non-breaking hyphens keep words like "AI-native" on one line.
+function noBreakHyphens(text: string) {
+  return text.replace(/(\w)-(\w)/g, "$1\u2011$2");
 }
 
 function Statement({ text }: { text: string }) {
-  // Fully black when nothing is marked; otherwise the mark carries it.
-  const marked = text.includes("**");
   return (
-    <p
-      className={cn(
-        "text-[24px] leading-[1.3] tracking-[-0.015em] [text-wrap:balance] md:text-[30px]",
-        marked && "text-black/40",
-      )}
-    >
-      <Rich text={text} tone="statement" />
-    </p>
+    <h2 className="text-[30px] font-medium leading-[1.12] tracking-[-0.03em] text-[#111] [text-wrap:balance] md:text-[40px]">
+      {noBreakHyphens(text)}
+    </h2>
   );
 }
 
@@ -302,13 +225,30 @@ function Statement({ text }: { text: string }) {
 const wide = "(min-width: 1040px) 1000px, 100vw";
 const half = "(min-width: 768px) 500px, 100vw";
 
-// A screen with its caption, so every image says what it shows.
+// Every screen sits in the same frame (same shape, same backdrop), so a
+// chapter's images read as one set whatever their own proportions. Click
+// one to see it full size.
 function Figure({ visual, sizes }: { visual: Visual; sizes: string }) {
   return (
     <figure>
-      <Shot visual={visual} sizes={sizes} />
+      <div className="flex aspect-[16/10] items-center justify-center overflow-hidden rounded-2xl bg-[#efeff3] p-[5%]">
+        <ZoomImage
+          src={visual.src}
+          alt={visual.alt}
+          width={visual.width}
+          height={visual.height}
+          sizes={sizes}
+          buttonClassName="flex size-full items-center justify-center"
+          className="h-auto max-h-full w-auto max-w-full rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
+        />
+      </div>
       {visual.caption && (
-        <figcaption className="mt-3 text-[14px] leading-snug text-black/50">
+        <figcaption
+          className={cn(
+            dmMono.className,
+            "mt-3 text-[13px] leading-snug text-black/50",
+          )}
+        >
           {visual.caption}
         </figcaption>
       )}
@@ -362,35 +302,41 @@ function ChapterVisuals({ chapter }: { chapter: StoryChapter }) {
   );
 }
 
-function Chapter({
-  chapter,
-  number,
-}: {
-  chapter: StoryChapter;
-  number: number;
-}) {
+function Chapter({ chapter }: { chapter: StoryChapter }) {
   return (
     <>
-      <ChapterText number={number} label={chapter.label}>
+      <ChapterText label={chapter.label}>
         <Statement text={chapter.statement} />
         {chapter.paragraphs && (
-          <div className={cn(prose, "mt-6")}>
-            {chapter.paragraphs.map((paragraph) => (
-              <p key={paragraph}>
-                <Rich text={paragraph} tone="body" />
+          <div className="mt-6 flex flex-col gap-5 [text-wrap:pretty]">
+            {chapter.paragraphs.map((paragraph, i) => (
+              <p
+                key={paragraph}
+                // The first paragraph leads, a step brighter and larger.
+                className={
+                  i === 0
+                    ? "text-[19px] leading-[1.55] text-[#111]/85 md:text-[20px]"
+                    : "text-[17px] leading-[1.7] text-black/65"
+                }
+              >
+                {noBreakHyphens(paragraph)}
               </p>
             ))}
           </div>
         )}
         {chapter.cards && (
-          <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+          <ul
+            className={cn(
+              "mt-10 grid gap-x-8 gap-y-6 border-t border-black/[0.08] pt-6",
+              chapter.cards.length === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2",
+            )}
+          >
             {chapter.cards.map((card) => (
-              <li
-                key={card.title}
-                className="rounded-xl bg-black/[0.03] p-5 ring-1 ring-inset ring-black/[0.04]"
-              >
-                <h3 className="font-semibold">{card.title}</h3>
-                <p className="mt-1.5 text-[15px] leading-[1.55] text-black/65">
+              <li key={card.title}>
+                <h3 className="text-[16px] font-medium text-[#111]">
+                  {card.title}
+                </h3>
+                <p className="mt-1.5 text-[15px] leading-[1.55] text-black/60">
                   {card.body}
                 </p>
               </li>
@@ -398,13 +344,9 @@ function Chapter({
           </ul>
         )}
         {chapter.bullets && (
-          <ul className="mt-8 grid gap-x-8 gap-y-3 text-[15px] leading-snug text-black/75 sm:grid-cols-2">
+          <ul className="mt-8 border-b border-black/[0.08] text-[17px] leading-snug text-black/75">
             {chapter.bullets.map((item) => (
-              <li key={item} className="flex gap-3">
-                <span
-                  aria-hidden="true"
-                  className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[#2D2DC3]"
-                />
+              <li key={item} className="border-t border-black/[0.08] py-3.5">
                 {item}
               </li>
             ))}
@@ -427,19 +369,15 @@ function MetaItem({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-// Matches the TODO text in ~/data/work until real problem statements land.
-const TODO_PROBLEM_PREFIX = "The problem statement";
-
 export default async function ProjectPage({ params }: Props) {
   const project = getProject((await params).slug);
   if (!project) notFound();
+  // Link-only projects have no case study; send visitors to the site.
+  if (project.linkOnly && project.url) redirect(project.url);
 
   const quote = project.quote;
   const [before, after] = quote ? quote.text.split(quote.highlight) : ["", ""];
   const story = project.story;
-  const problem = project.problem.startsWith(TODO_PROBLEM_PREFIX)
-    ? undefined
-    : project.problem;
 
   return (
     <main
@@ -454,7 +392,7 @@ export default async function ProjectPage({ params }: Props) {
         </div>
 
         <header className="mt-14 text-center md:mt-20">
-          <Headline text={project.headline} />
+          <Headline text={project.headline} accent={false} />
           <p className="mx-auto mt-6 max-w-[640px] text-[17px] leading-[1.6] text-black/65 [text-wrap:pretty] md:text-lg">
             {project.whatWeDid}
           </p>
@@ -494,7 +432,39 @@ export default async function ProjectPage({ params }: Props) {
         {/* Hero visual: the real cover when there is one, else a soft block.
             Same column as the text and screens below. */}
         <div className={cn(column, "mt-10")}>
-          {project.coverImage ? (
+          {project.heroVideo ? (
+            <VideoEmbed {...project.heroVideo} />
+          ) : project.heroProfile && project.coverImage && project.icon ? (
+            // Like the client's X profile: their banner, with the round
+            // logo overlapping its bottom-left corner.
+            <div className="relative pb-12 md:pb-16">
+              <div
+                style={{
+                  backgroundColor: project.coverImageBg,
+                  aspectRatio: project.coverImageSize
+                    ? `${project.coverImageSize.width} / ${project.coverImageSize.height}`
+                    : "3 / 1",
+                }}
+                className="relative overflow-hidden rounded-2xl ring-1 ring-inset ring-black/[0.06]"
+              >
+                <Image
+                  src={project.coverImage}
+                  alt={`${project.name} banner`}
+                  fill
+                  priority
+                  sizes="(min-width: 1040px) 1000px, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              <Image
+                src={project.icon}
+                alt={`${project.name} logo`}
+                width={160}
+                height={160}
+                className="absolute bottom-0 left-5 size-24 rounded-full bg-black ring-4 ring-[#fafafd] md:left-8 md:size-32"
+              />
+            </div>
+          ) : project.coverImage ? (
             <div
               style={{ backgroundColor: project.coverImageBg }}
               className="relative aspect-video overflow-hidden rounded-2xl ring-1 ring-inset ring-black/[0.06]"
@@ -508,82 +478,67 @@ export default async function ProjectPage({ params }: Props) {
                 className="object-contain"
               />
             </div>
-          ) : (
-            <VisualPlaceholder className="aspect-video" />
-          )}
+          ) : // Nothing to show yet: no grey block.
+          null}
         </div>
 
         {story ? (
-          story.chapters.map((chapter, i) => (
-            <Chapter key={chapter.label} chapter={chapter} number={i + 1} />
+          story.chapters.map((chapter) => (
+            <Chapter key={chapter.label} chapter={chapter} />
           ))
         ) : (
-          // Draft projects: the same shape, with soft placeholders.
-          <>
-            <ChapterText number={1} label="The brief">
-              {problem ? (
-                <Statement text={problem} />
-              ) : (
-                <TextPlaceholder lines={2} />
-              )}
-              <div className="mt-6">
-                <TextPlaceholder lines={3} />
-              </div>
-            </ChapterText>
-            <ChapterText number={2} label="What we built">
-              <TextPlaceholder lines={2} />
-              <div className="mt-6">
-                <TextPlaceholder lines={3} />
-              </div>
-            </ChapterText>
-            <VisualPlaceholder className={cn(column, "mt-12 aspect-[21/9]")} />
-          </>
+          // No story written yet: say so plainly, in the Result's style.
+          <section className="mx-auto mt-24 max-w-[760px] text-center md:mt-32">
+            <p className={label}>Case study</p>
+            <p className="mx-auto mt-4 max-w-[620px] text-[24px] leading-[1.3] tracking-[-0.01em] [text-wrap:balance] md:text-[28px]">
+              The full story is coming soon.
+            </p>
+            {quote && (
+              <p className="mt-4 text-[17px] text-black/55">
+                Until then, here's what they said.
+              </p>
+            )}
+          </section>
         )}
 
         {/* Result stays centred: a closing moment, not another chapter. */}
-        <section className="mx-auto mt-28 max-w-[760px] text-center md:mt-36">
-          <p className={label}>Result</p>
-          <div className="mx-auto mt-4 max-w-[620px]">
-            {story?.result ? (
-              <p
-                className={cn(
-                  "text-[24px] leading-[1.3] tracking-[-0.01em] [text-wrap:balance] md:text-[28px]",
-                  story.result.includes("**") && "text-black/40",
-                )}
-              >
-                <Rich text={story.result} tone="statement" />
-              </p>
-            ) : (
-              <TextPlaceholder lines={2} center />
+        {story && (
+          <section className="mx-auto mt-28 max-w-[760px] text-center md:mt-36">
+            <p className={label}>Result</p>
+            <div className="mx-auto mt-4 max-w-[620px]">
+              {story?.result ? (
+                <p
+                  className={cn(
+                    "text-[24px] leading-[1.3] tracking-[-0.01em] [text-wrap:balance] md:text-[28px]",
+                  )}
+                >
+                  {noBreakHyphens(story.result)}
+                </p>
+              ) : null}
+            </div>
+            {project.results.length > 0 && (
+              <dl className="mx-auto mt-10 grid max-w-[860px] grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-4">
+                {project.results.map((result) => (
+                  <div key={result.label}>
+                    <dt className="sr-only">{result.label}</dt>
+                    <dd>
+                      <span className="block text-[40px] font-semibold leading-none tracking-[-0.04em] md:text-[52px]">
+                        {result.value}
+                      </span>
+                      <span className="mx-auto mt-2 block max-w-[180px] text-[15px] leading-snug text-black/60">
+                        {result.label}
+                      </span>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             )}
-          </div>
-          {project.results.length > 0 && (
-            <dl className="mx-auto mt-10 grid max-w-[860px] grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-4">
-              {project.results.map((result) => (
-                <div key={result.label}>
-                  <dt className="sr-only">{result.label}</dt>
-                  <dd>
-                    <span className="block text-[40px] font-semibold leading-none tracking-[-0.04em] md:text-[52px]">
-                      {result.value}
-                    </span>
-                    <span className="mx-auto mt-2 block max-w-[180px] text-[15px] leading-snug text-black/60">
-                      {result.label}
-                    </span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          )}
-        </section>
+          </section>
+        )}
 
         {quote && (
           <figure className="mx-auto mt-28 max-w-[860px] text-center md:mt-36">
-            <blockquote
-              className={cn(
-                serif.className,
-                "text-[24px] leading-[1.4] [text-wrap:pretty] md:text-[32px]",
-              )}
-            >
+            <blockquote className="text-[24px] leading-[1.35] tracking-[-0.015em] [text-wrap:pretty] md:text-[30px]">
               “{before}
               <mark className="bg-[#ff66ff] px-1 text-black [box-decoration-break:clone]">
                 {quote.highlight}

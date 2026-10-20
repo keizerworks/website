@@ -1,9 +1,11 @@
 "use client";
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import ZoomImage from "~/components/zoom-image";
+import { dmMono } from "~/config/font";
 import type { Visual } from "~/data/work";
+import { cn } from "~/lib/utils";
 
 // A row of images at one height, each at its own width. Native scroll-snap
 // does the swiping; the arrows just step to the next image.
@@ -80,7 +82,7 @@ export default function ImageCarousel({
       <ul
         ref={track}
         aria-label={label}
-        className="flex items-start snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth [scrollbar-width:none] motion-reduce:scroll-auto [&::-webkit-scrollbar]:hidden"
+        className="flex items-start snap-x snap-mandatory gap-4 [container-type:inline-size] overflow-x-auto scroll-smooth [scrollbar-width:none] motion-reduce:scroll-auto [&::-webkit-scrollbar]:hidden"
       >
         {visuals.map((visual, index) => (
           <li
@@ -88,21 +90,40 @@ export default function ImageCarousel({
             ref={(el) => {
               items.current[index] = el;
             }}
-            // One height for all; width follows each image's own shape. Wide
-            // banners shrink so none is wider than 85% of the screen.
-            style={{
-              aspectRatio: `${visual.width} / ${visual.height}`,
-              height: `min(var(--h), ${((85 * visual.height) / visual.width).toFixed(2)}vw)`,
-            }}
-            className="relative shrink-0 snap-start overflow-hidden rounded-2xl ring-1 ring-inset ring-black/[0.06] [--h:280px] md:[--h:380px]"
+            className="shrink-0 snap-start"
           >
-            <Image
-              src={visual.src}
-              alt={visual.alt}
-              fill
-              sizes="(min-width: 768px) 860px, 640px"
-              className="object-cover"
-            />
+            <figure>
+              {/* One height for all; width follows each image's own shape.
+                  Wide banners shrink so none is wider than 85% of the
+                  carousel, so the next slide always peeks in. */}
+              <div
+                style={{
+                  aspectRatio: `${visual.width} / ${visual.height}`,
+                  height: `min(var(--h), ${((85 * visual.height) / visual.width).toFixed(2)}cqw)`,
+                }}
+                className="relative overflow-hidden rounded-2xl ring-1 ring-inset ring-black/[0.06] [--h:280px] md:[--h:380px]"
+              >
+                <ZoomImage
+                  src={visual.src}
+                  alt={visual.alt}
+                  width={visual.width}
+                  height={visual.height}
+                  sizes="(min-width: 768px) 860px, 640px"
+                  buttonClassName="size-full rounded-2xl"
+                  className="size-full object-cover"
+                />
+              </div>
+              {visual.caption && (
+                <figcaption
+                  className={cn(
+                    dmMono.className,
+                    "mt-3 text-[13px] leading-snug text-black/50",
+                  )}
+                >
+                  {visual.caption}
+                </figcaption>
+              )}
+            </figure>
           </li>
         ))}
       </ul>

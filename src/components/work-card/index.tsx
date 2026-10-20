@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import type { Project } from "~/data/work";
 import { cn } from "~/lib/utils";
 
@@ -158,11 +159,40 @@ function QuoteSnippet({ project }: { project: Project }) {
   );
 }
 
+// Projects without a case study open their own site in a new tab.
+function CardLink({
+  project,
+  className,
+  children,
+}: {
+  project: Project;
+  className: string;
+  children: ReactNode;
+}) {
+  if (project.linkOnly && project.url) {
+    return (
+      <a
+        href={project.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+      >
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={`/v2/work/${project.slug}`} className={className}>
+      {children}
+    </Link>
+  );
+}
+
 function Meta({ project }: { project: Project }) {
   return (
     <p className="mt-3 text-[13px] text-black/50">
       {project.url
-        ? project.url.replace(/^https?:\/\//, "")
+        ? `${project.url.replace(/^https?:\/\//, "")}${project.linkOnly ? " ↗" : ""}`
         : project.tags.join(", ")}
     </p>
   );
@@ -186,8 +216,8 @@ export default function WorkCard({
 
   if (wide) {
     return (
-      <Link
-        href={`/v2/work/${project.slug}`}
+      <CardLink
+        project={project}
         className={cn(card, "flex-col gap-5 md:flex-row md:gap-8")}
       >
         <Panel
@@ -210,18 +240,18 @@ export default function WorkCard({
             <Meta project={project} />
           </div>
         </div>
-      </Link>
+      </CardLink>
     );
   }
 
   return (
-    <Link href={`/v2/work/${project.slug}`} className={cn(card, "flex-col")}>
+    <CardLink project={project} className={cn(card, "flex-col")}>
       <Panel project={project} priority={priority} className="aspect-[16/10]" />
       <div className="mt-4 px-1 pb-1">
         <Title project={project} />
         <QuoteSnippet project={project} />
         <Meta project={project} />
       </div>
-    </Link>
+    </CardLink>
   );
 }
