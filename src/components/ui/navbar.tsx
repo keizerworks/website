@@ -8,10 +8,10 @@ import BookCallLink from "~/components/book-call-link";
 import { inter } from "~/config/font";
 import { cn } from "~/lib/utils";
 
-// Home uses "/#hero" so it also works from other pages.
+// Home sections use "/#id" so they also work from other pages.
 const links = [
   { label: "Home", href: "/#hero" },
-  { label: "Services", href: "/services" },
+  { label: "Services", href: "/#services" },
   { label: "Work", href: "/work" },
   { label: "Gallery", href: "/gallery" },
   { label: "Blogs", href: "/blogs" },
