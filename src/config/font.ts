@@ -1,9 +1,4 @@
-import {
-  DM_Mono,
-  Inter,
-  Source_Serif_4,
-  Space_Grotesk,
-} from "next/font/google";
+import { DM_Mono, Source_Serif_4, Space_Grotesk } from "next/font/google";
 import localFont from "next/font/local";
 
 export const spaceGrotesk = Space_Grotesk({
@@ -27,9 +22,13 @@ export const gotham_font = localFont({
 });
 
 // HEX-style sections: free stand-in for HEX's licensed Lausanne.
-export const inter = Inter({
-  subsets: ["latin"],
-  weight: ["500", "600"],
+// Served from our own files: building with Inter from next/font/google
+// failed on Vercel (Turbopack couldn't resolve the fetched font files).
+export const inter = localFont({
+  src: [
+    { path: "./fonts/inter-500.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/inter-600.woff2", weight: "600", style: "normal" },
+  ],
   display: "swap",
 });
 
