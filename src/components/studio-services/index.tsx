@@ -1,13 +1,12 @@
 import StringList from "./string-list";
 
-// Shared by the home page and /services. Draft copy: to be corrected.
+// The home page's intro and services list. Draft copy: to be corrected.
 export const services = [
   "Web Design",
   "Web Development",
   "Product Design (UI/UX)",
   "MVP Development",
   "AI Products",
-  "MCP Servers",
   "iOS & Android Apps",
   "SaaS Development",
   "Web3 Development",

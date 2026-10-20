@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/v2/info", destination: "/", permanent: true },
+      // Services is a section of the home page, not a page of its own.
+      { source: "/services", destination: "/#services", permanent: true },
       { source: "/v2/:path*", destination: "/:path*", permanent: true },
       { source: "/k25", destination: "/careers", permanent: true },
       { source: "/k25/form", destination: "/careers", permanent: true },

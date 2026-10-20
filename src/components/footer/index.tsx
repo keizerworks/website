@@ -6,7 +6,7 @@ import { cn } from "~/lib/utils";
 
 // Absolute links, so they work from every page, matching the navbar.
 const navigate = [
-  { label: "Services", href: "/services" },
+  { label: "Services", href: "/#services" },
   { label: "Work", href: "/work" },
   { label: "Careers", href: "/careers" },
 ];
