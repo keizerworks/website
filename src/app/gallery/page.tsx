@@ -30,10 +30,51 @@ const hidden = new Set([
   "/assets/work/tael/partner-x-tael.webp",
 ]);
 
+// Designs that live only in the gallery: concepts and landing pages that
+// aren't part of a case study.
+const extras: Item[] = [
+  {
+    src: "/assets/work/edulume/concept-content-cards.webp",
+    alt: "Edulume concept: the content library as cards, with courses, quizzes, assignments, and wikis",
+    caption: "Concept: the content library, as cards.",
+    width: 2880,
+    height: 1800,
+    project: "Edulume · Concept",
+  },
+  {
+    src: "/assets/work/edulume/concept-content-list.webp",
+    alt: "Edulume concept: the content library in a compact grid with a folder sidebar",
+    caption: "Concept: the content library, compact, with folders.",
+    width: 2880,
+    height: 1800,
+    project: "Edulume · Concept",
+  },
+  {
+    src: "/assets/gallery/airbills-landing.webp",
+    alt: "Airbills landing page: Pay for everything, with airtime, data, and bills paid in USDC on Solana",
+    caption: "Pay for everything: airtime, data, and bills in USDC.",
+    width: 2880,
+    height: 1800,
+    project: "Airbills",
+  },
+  {
+    src: "/assets/gallery/fiatrouter-landing.webp",
+    alt: "Fiatrouter landing page: Making Crypto Simple, your gateway to Solana",
+    caption: "Making Crypto Simple: a gateway to Solana.",
+    width: 2880,
+    height: 1800,
+    project: "Fiatrouter",
+  },
+];
+
 // The newest designs, shown first in this order; everything else follows.
 const newest = [
   "/assets/work/chem0/landing-site.webp",
   "/assets/work/plobbo/ocean-dashboard.webp",
+  "/assets/gallery/fiatrouter-landing.webp",
+  "/assets/work/edulume/concept-content-cards.webp",
+  "/assets/gallery/airbills-landing.webp",
+  "/assets/work/edulume/concept-content-list.webp",
   "/assets/work/chem0/book-a-call.webp",
   "/assets/work/plobbo/created-post.webp",
   "/assets/work/plobbo/schedule.webp",
@@ -70,6 +111,7 @@ function galleryItems(): Item[] {
       }
     }
   }
+  for (const extra of extras) add(extra);
   const rank = (item: Item) => {
     const i = newest.indexOf(item.src);
     return i === -1 ? newest.length : i;
