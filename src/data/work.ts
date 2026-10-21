@@ -449,8 +449,8 @@ export const projects: Project[] = [
     year: "2024–2025",
     icon: "/assets/portfolio/edulume-cover.png",
     coverColor: "black",
-    coverImage: "/assets/work/chem0/research-mode.webp",
-    coverImageSize: { width: 1170, height: 666 },
+    coverImage: "/assets/work/chem0/landing-site.webp",
+    coverImageSize: { width: 2880, height: 1800 },
     coverImageBg: "#ffffff",
     heroVideo: {
       youtubeId: "kTaOAV3Tfw8",
@@ -581,6 +581,24 @@ export const projects: Project[] = [
           paragraphs: [
             "Under the hood, a gateway on AWS Lambda runs the app's API and LabMate, powered by Gemini, while a separate service serves the Graph Neural Network models.",
           ],
+          visuals: [
+            {
+              src: "/assets/work/chem0/landing-site.webp",
+              alt: "Chem0 landing page: Formulate any chemical reaction and visualize, with a molecule graph and LabMate explaining a one-pot cascade",
+              caption:
+                "The marketing site: the pitch, the waitlist, and LabMate at work beside it.",
+              width: 2880,
+              height: 1800,
+            },
+            {
+              src: "/assets/work/chem0/book-a-call.webp",
+              alt: "Chem0 Book a Call page with a calendar, time and timezone scheduler",
+              caption:
+                "Book a Call: labs pick a date, time, and timezone in one step.",
+              width: 2880,
+              height: 1800,
+            },
+          ],
           bullets: [
             "Prediction of previously unseen chemical interactions",
             "AI chemistry assistant for scientific exploration",
@@ -624,7 +642,7 @@ export const projects: Project[] = [
   {
     slug: "plobbo",
     name: "Plobbo",
-    headline: "the MVP of an AI platform that distributes content everywhere",
+    headline: "one founder update, posted to every platform",
     tags: ["AI", "Product"],
     year: "2025",
     icon: "/assets/work/plobbo/logo.webp",
@@ -679,22 +697,29 @@ export const projects: Project[] = [
           ],
           visuals: [
             {
-              src: "/assets/work/plobbo/ocean-generate.webp",
-              alt: "Plobbo Ocean drafting posts for X, Reddit, Threads, and LinkedIn from one update",
-              caption:
-                "Ocean drafting one update for X, Reddit, Threads, and LinkedIn.",
-              width: 1774,
-              height: 994,
+              src: "/assets/work/plobbo/ocean-dashboard.webp",
+              alt: "Plobbo Ocean dashboard: every post for X, Threads, Medium and Pinterest, filtered by All, Posted, Draft and Scheduled",
+              caption: "Ocean: every post in one place, posted, draft, or scheduled.",
+              width: 2880,
+              height: 1800,
             },
             {
-              src: "/assets/work/plobbo/ocean-posts.webp",
-              alt: "Plobbo Ocean list of posts filtered by All, Posted, Draft, and Schedule",
-              caption: "Every post in one place: posted, draft, or scheduled.",
-              width: 1714,
-              height: 964,
+              src: "/assets/work/plobbo/created-post.webp",
+              alt: "Plobbo created post: the description, generated images, and the platforms it was posted to",
+              caption: "A post written once, with its images, sent to every platform.",
+              width: 1770,
+              height: 1158,
+            },
+            {
+              src: "/assets/work/plobbo/schedule.webp",
+              alt: "Plobbo schedule dialog: a calendar, time and timezone, and the platforms to post to",
+              caption: "Schedule it: pick a day, time, and timezone, then the platforms.",
+              width: 1770,
+              height: 1158,
             },
           ],
-          layout: "pair",
+          // Dashboard full width, then the post and the scheduler side by side.
+          layout: "gallery",
         },
         {
           label: "Plobbo AI",
@@ -704,37 +729,59 @@ export const projects: Project[] = [
           ],
           visuals: [
             {
-              src: "/assets/work/plobbo/ai-start.webp",
-              alt: "Plobbo AI start screen: Let's have a talk",
-              caption: "Plobbo AI, ready for a question.",
-              width: 1988,
-              height: 1118,
-            },
-            {
-              src: "/assets/work/plobbo/ai-answer.webp",
-              alt: "Plobbo AI answering with a list of top achievements and a button to send it to Ocean",
-              caption: "An answer from your journey, one click from Ocean.",
-              width: 2000,
-              height: 1122,
+              src: "/assets/work/plobbo/onboarding.webp",
+              alt: "Welcome to Plobbo onboarding: create with Plobbo AI, write your journey, publish via Ocean",
+              caption: "Onboarding: create with Plobbo AI, write your journey, publish via Ocean.",
+              width: 2134,
+              height: 1344,
             },
           ],
-          layout: "pair",
         },
         {
           label: "The MVP",
           statement: "We designed every screen and built the MVP end to end.",
           paragraphs: [
-            "Onboarding, the journey, Ocean, and Plobbo AI, from the first empty state to a scheduled post.",
+            "Onboarding, the journey, Ocean, Plobbo AI, a content calendar, settings, and pricing, from the first empty state to a scheduled post.",
           ],
           visuals: [
             {
-              src: "/assets/work/plobbo/figma-screens.webp",
-              alt: "The Plobbo MVP's screens laid out in Figma",
-              caption: "The MVP's screens in Figma.",
-              width: 2000,
-              height: 1010,
+              src: "/assets/work/plobbo/calendar.webp",
+              alt: "Plobbo content calendar: a week of scheduled posts with the platforms each goes to",
+              caption: "The calendar: a week of scheduled posts, and where each one goes.",
+              width: 2880,
+              height: 1800,
+            },
+            {
+              src: "/assets/work/plobbo/pricing.webp",
+              alt: "Plobbo pricing: Free, Pro at $30, and Enterprise plans",
+              caption: "Pricing: Free, Pro, and Enterprise.",
+              width: 2880,
+              height: 1800,
+            },
+            {
+              src: "/assets/work/plobbo/language-region.webp",
+              alt: "Plobbo settings: Language and Region, with language, currency, and timezone",
+              caption: "Settings: language, currency, and timezone.",
+              width: 2192,
+              height: 1592,
+            },
+            {
+              src: "/assets/work/plobbo/payment-methods.webp",
+              alt: "Plobbo Payments and Billing: credit card and bank transfer payment methods",
+              caption: "Payments and Billing: card or bank transfer.",
+              width: 2192,
+              height: 1592,
+            },
+            {
+              src: "/assets/work/plobbo/billing-currency.webp",
+              alt: "Plobbo Payments and Billing: currency and currency format settings",
+              caption: "Currency settings for billing.",
+              width: 2192,
+              height: 1592,
             },
           ],
+          // Calendar full width, then the rest in pairs.
+          layout: "gallery",
         },
       ],
       result:

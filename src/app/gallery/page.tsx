@@ -25,13 +25,28 @@ type Item = GalleryItem;
 // Left out of the gallery (they stay on their case study pages).
 const hidden = new Set([
   "/assets/work/betteridea-cover.png",
-  "/assets/work/plobbo/figma-screens.webp",
   "/assets/work/chem0/research-mode.webp",
   "/assets/work/arlink-cover.png",
   "/assets/work/tael/partner-x-tael.webp",
 ]);
 
-// Every image from the work, cover first, in project order, each once.
+// The newest designs, shown first in this order; everything else follows.
+const newest = [
+  "/assets/work/chem0/landing-site.webp",
+  "/assets/work/plobbo/ocean-dashboard.webp",
+  "/assets/work/chem0/book-a-call.webp",
+  "/assets/work/plobbo/created-post.webp",
+  "/assets/work/plobbo/schedule.webp",
+  "/assets/work/plobbo/onboarding.webp",
+  "/assets/work/plobbo/calendar.webp",
+  "/assets/work/plobbo/pricing.webp",
+  "/assets/work/plobbo/language-region.webp",
+  "/assets/work/plobbo/payment-methods.webp",
+  "/assets/work/plobbo/billing-currency.webp",
+];
+
+// Every image from the work, each once: the newest designs first, then the
+// rest in project order (cover first).
 function galleryItems(): Item[] {
   const seen = new Set<string>();
   const items: Item[] = [];
@@ -55,7 +70,12 @@ function galleryItems(): Item[] {
       }
     }
   }
-  return items;
+  const rank = (item: Item) => {
+    const i = newest.indexOf(item.src);
+    return i === -1 ? newest.length : i;
+  };
+  // A stable sort keeps project order among everything not listed.
+  return items.sort((a, b) => rank(a) - rank(b));
 }
 
 // A wall of the work: masonry columns; open any image to browse them all.
