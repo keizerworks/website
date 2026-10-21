@@ -34,14 +34,6 @@ const hidden = new Set([
 // aren't part of a case study.
 const extras: Item[] = [
   {
-    src: "/assets/work/edulume/concept-content-cards.webp",
-    alt: "Edulume concept: the content library as cards, with courses, quizzes, assignments, and wikis",
-    caption: "Concept: the content library, as cards.",
-    width: 2880,
-    height: 1800,
-    project: "Edulume · Concept",
-  },
-  {
     src: "/assets/work/edulume/concept-content-list.webp",
     alt: "Edulume concept: the content library in a compact grid with a folder sidebar",
     caption: "Concept: the content library, compact, with folders.",
@@ -72,8 +64,6 @@ const newest = [
   "/assets/work/chem0/landing-site.webp",
   "/assets/work/plobbo/ocean-dashboard.webp",
   "/assets/gallery/fiatrouter-landing.webp",
-  "/assets/work/edulume/concept-content-cards.webp",
-  "/assets/gallery/airbills-landing.webp",
   "/assets/work/edulume/concept-content-list.webp",
   "/assets/work/chem0/book-a-call.webp",
   "/assets/work/plobbo/created-post.webp",
